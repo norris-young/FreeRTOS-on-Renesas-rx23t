@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>Renesas_FreeRTOS</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>com.renesas.cdt.core.genmakebuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
+			<triggers>full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.cdt.core.cnature</nature>
+		<nature>com.renesas.cdt.core.kpitcnature</nature>
+		<nature>com.renesas.cdt.core.kpitccnature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>FreeRTOS_Source</name>
+			<type>2</type>
+			<locationURI>FreeRTOS_ROOT/Source</locationURI>
+		</link>
+	</linkedResources>
+	<variableList>
+		<variable>
+			<name>FreeRTOS_ROOT</name>
+			<value>$%7BPARENT-2-PROJECT_LOC%7D</value>
+		</variable>
+	</variableList>
+</projectDescription>

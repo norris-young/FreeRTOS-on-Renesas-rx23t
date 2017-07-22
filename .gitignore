@@ -30,3 +30,9 @@
 
 # Debug files
 *.dSYM/
+
+# e2studio FIT module trash files
+trash/
+
+# e2studio HardwareDebug files
+HardwareDebug/
