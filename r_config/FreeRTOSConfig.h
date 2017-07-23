@@ -104,8 +104,8 @@
 #define configUSE_16_BIT_TICKS          0
 
 /* Configure the heap to be used in heap_x.c. */
-#define configMINIMAL_STACK_SIZE		( ( unsigned short ) 128 )
-#define configTOTAL_HEAP_SIZE			( ( size_t ) ( 7 * 1024 ) )
+#define configMINIMAL_STACK_SIZE		( ( unsigned short ) 64 )
+#define configTOTAL_HEAP_SIZE			( ( size_t ) ( 6 * 1024 ) )
 
 /* The maximum length can be used as a task name. */
 #define configMAX_TASK_NAME_LEN			( 12 )
