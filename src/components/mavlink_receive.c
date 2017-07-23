@@ -105,10 +105,10 @@ static void mavlink_receive_task_entry(void *pvParameters)
         for (i = 0; i < RX_BUFFER_LENGTH; i++) {
             if (rx_buffer[rx_buffer_point][i] == MAVLINK_STX) {
                 Rx_Buffer_point = 0;
-                LED0 = LED_ON;
                 start_receive = true;
             }
             if(start_receive == true) {
+                LED0 = LED_ON;
                 Rx_Buffer[Rx_Buffer_point++] = rx_buffer[rx_buffer_point][i];
                 if(Rx_Buffer[MSG_LEN]==MSG_ALTITUDE_LENGTH && Rx_Buffer[MSG_ID]==MSG_ALTITUDE_ID && Rx_Buffer[HEIGHT_BUFFER_END]!=0) {
                     memcpy(Buffer, Rx_Buffer, MSG_HEIGHT_LENGTH);
@@ -130,10 +130,6 @@ static void mavlink_receive_task_entry(void *pvParameters)
                     Rx_Buffer_point = 0;
                     start_receive = false;
                     calculate_angle();
-
-//                    if(current_Roll>45.0 || current_Roll<-45.0 || current_Pitch>45.0 || current_Pitch<-45.0)
-//                        is_Emergency();
-
                     is_Angle = false;
                     memset(Rx_Buffer, 0, 40);
                     memset(Buffer, 0, 40);
@@ -143,11 +139,11 @@ static void mavlink_receive_task_entry(void *pvParameters)
                     memset(Rx_Buffer, 0, 40);
                     memset(Buffer, 0, 40);
                 }
+                //
+                // Turn off the LED
+                //
+                LED0 = LED_OFF;
             }
-            //
-            // Turn off the LED
-            //
-            LED0 = LED_OFF;
         }
     }
 }
