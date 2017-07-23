@@ -74,23 +74,29 @@
 
 /*-----------------------------------------------------------*/
 /* User include files. */
+#include "printf-stdarg.h"
 #include "mavlink_receive.h"
 
 /*-----------------------------------------------------------*/
-
+#define INIT_TASK_PRI   1
 /*
  * Configure the hardware as necessary to run this demo.
  */
 static void prvSetupHardware( void );
-static void initialize(void);
+static void init_task_entry(void *pvParameters);
 
 /* See http://www.freertos.org/RX231_RTOS_Renesas_GCC_IAR.html */
-void main( void )
+void main(void)
 {
 	/* Configure the hardware ready to run the demo. */
 	prvSetupHardware();
 
-	initialize();
+	xTaskCreate(init_task_entry,
+	                      "init",
+	                      configMINIMAL_STACK_SIZE * 2,
+	                      NULL,
+	                      INIT_TASK_PRI,
+	                      NULL);
 
 	vTaskStartScheduler();
 
@@ -110,8 +116,11 @@ uint16_t usProtectDummy = ( uint16_t ) ( SYSTEM.PRCR.WORD & 0x000FU );
 }
 /*-----------------------------------------------------------*/
 
-static void initialize(void)
+static void init_task_entry(void *pvParameters)
 {
     mavlink_receive_init();
+    printf("\nInitialization is done!\n");
+    /* When initialization is done ,this task can be deleted. */
+    vTaskDelete(NULL);
 }
 /*-----------------------------------------------------------*/
