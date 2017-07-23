@@ -18,11 +18,11 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_hardware_setup.c
+* File Name    : r_cg_tmr_user.c
 * Version      : Code Generator for RX23T V1.00.04.02 [29 Nov 2016]
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
-* Description  : This file implements system initializing function.
+* Description  : This file implements device driver for TMR module.
 * Creation Date: 17.7.23
 ***********************************************************************************************************************/
 
@@ -36,9 +36,7 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "r_cg_cgc.h"
 #include "r_cg_tmr.h"
-#include "r_cg_sci.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -47,58 +45,25 @@ Includes
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
+extern void TMR2_IntHandler();
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
-* Function Name: r_undefined_exception
-* Description  : This function is undefined interrupt service routine.
+* Function Name: r_tmr_cmia2_interrupt
+* Description  : None
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void r_undefined_exception(void)
+#if FAST_INTERRUPT_VECTOR == VECT_TMR2_CMIA2
+#pragma interrupt r_tmr_cmia2_interrupt(vect=VECT(TMR2,CMIA2),fint)
+#else
+#pragma interrupt r_tmr_cmia2_interrupt(vect=VECT(TMR2,CMIA2))
+#endif
+static void r_tmr_cmia2_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
+    TMR2_IntHandler();
     /* End user code. Do not edit comment generated here */
-}
-/***********************************************************************************************************************
-* Function Name: R_Systeminit
-* Description  : This function initializes every macro.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-void R_Systeminit(void)
-{
-    /* Enable writing to registers related to operating modes, LPC, CGC and software reset */
-    SYSTEM.PRCR.WORD = 0xA50FU; 
-
-    /* Enable writing to MPC pin function control registers */
-    MPC.PWPR.BIT.B0WI = 0U;
-    MPC.PWPR.BIT.PFSWE = 1U;
-
-    /* Set peripheral settings */
-    R_CGC_Create();
-    R_TMR_Create();
-    R_SCI1_Create();
-
-    /* Register undefined interrupt */
-    R_BSP_InterruptWrite(BSP_INT_SRC_UNDEFINED_INTERRUPT,(bsp_int_cb_t)r_undefined_exception);
-
-    /* Disable writing to MPC pin function control registers */
-    MPC.PWPR.BIT.PFSWE = 0U;    
-    MPC.PWPR.BIT.B0WI = 1U;     
-
-    /* Enable protection */
-    SYSTEM.PRCR.WORD = 0xA500U;  
-}
-/***********************************************************************************************************************
-* Function Name: HardwareSetup
-* Description  : This function initializes hardware setting.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-void HardwareSetup(void)
-{
-    R_Systeminit();
 }
 
 /* Start user code for adding. Do not edit comment generated here */

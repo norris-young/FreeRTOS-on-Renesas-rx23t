@@ -18,11 +18,11 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_hardware_setup.c
+* File Name    : r_cg_tmr.c
 * Version      : Code Generator for RX23T V1.00.04.02 [29 Nov 2016]
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
-* Description  : This file implements system initializing function.
+* Description  : This file implements device driver for TMR module.
 * Creation Date: 17.7.23
 ***********************************************************************************************************************/
 
@@ -36,9 +36,7 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "r_cg_cgc.h"
 #include "r_cg_tmr.h"
-#include "r_cg_sci.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -50,56 +48,83 @@ Global variables and functions
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
-* Function Name: r_undefined_exception
-* Description  : This function is undefined interrupt service routine.
+* Function Name: R_TMR_Create
+* Description  : This function initializes the TMR module.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void r_undefined_exception(void)
+void R_TMR_Create(void)
 {
-    /* Start user code. Do not edit comment generated here */
-    /* End user code. Do not edit comment generated here */
+    /* Disable TMR2 interrupts */
+    IEN(TMR2, CMIA2) = 0U;
+
+    /* Cancel TMR module stop state */
+    MSTP(TMR23) = 0U;
+
+    /* Set timer counter control setting */
+    TMR2.TCCR.BYTE = _18_TMR_CLK_TMR3_OVRF | _00_TMR_CLK_DISABLED;
+
+    /* Set counter clear and interrupt */
+    TMR2.TCR.BYTE = _40_TMR_CMIA_INT_ENABLE | _08_TMR_CNT_CLR_COMP_MATCH_A;
+
+    /* Set output */
+    TMR2.TCSR.BYTE = _00_TMR_COMP_MATCH_B_OUTPUT_RETAIN | _02_TMR_COMP_MATCH_A_OUTPUT_HIGH | _E0_TMR02_TCSR_DEFAULT;
+
+    /* Set compare match value */
+    TMR23.TCORA = _09C3_TMR23_COMP_MATCH_VALUE_A;
+    TMR23.TCORB = _0031_TMR23_COMP_MATCH_VALUE_B;
+
+    /* Configure TMR2 interrupts */
+    IPR(TMR2, CMIA2) = _0F_TMR_PRIORITY_LEVEL15;
+
+    /* Set TMO2 pin */
+    MPC.P23PFS.BYTE = 0x05U;
+    PORT2.PMR.BYTE |= 0x08U;
 }
 /***********************************************************************************************************************
-* Function Name: R_Systeminit
-* Description  : This function initializes every macro.
+* Function Name: R_TMR2_Start
+* Description  : This function starts TMR2 channel.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_Systeminit(void)
+void R_TMR2_Start(void)
 {
-    /* Enable writing to registers related to operating modes, LPC, CGC and software reset */
-    SYSTEM.PRCR.WORD = 0xA50FU; 
+    /* Enable TMR2 interrupts */
+    IR(TMR2, CMIA2) = 0U;
+    IEN(TMR2, CMIA2) = 1U;
 
-    /* Enable writing to MPC pin function control registers */
-    MPC.PWPR.BIT.B0WI = 0U;
-    MPC.PWPR.BIT.PFSWE = 1U;
-
-    /* Set peripheral settings */
-    R_CGC_Create();
-    R_TMR_Create();
-    R_SCI1_Create();
-
-    /* Register undefined interrupt */
-    R_BSP_InterruptWrite(BSP_INT_SRC_UNDEFINED_INTERRUPT,(bsp_int_cb_t)r_undefined_exception);
-
-    /* Disable writing to MPC pin function control registers */
-    MPC.PWPR.BIT.PFSWE = 0U;    
-    MPC.PWPR.BIT.B0WI = 1U;     
-
-    /* Enable protection */
-    SYSTEM.PRCR.WORD = 0xA500U;  
+    /* Start counting */
+    TMR3.TCCR.BYTE = _08_TMR_CLK_SRC_PCLK | _00_TMR_PCLK_DIV_1;
 }
 /***********************************************************************************************************************
-* Function Name: HardwareSetup
-* Description  : This function initializes hardware setting.
+* Function Name: R_TMR2_Stop
+* Description  : This function stops TMR2 channel.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void HardwareSetup(void)
+void R_TMR2_Stop(void)
 {
-    R_Systeminit();
+    /* Disable TMR2 interrupts */
+    IEN(TMR2, CMIA2) = 0U;
+
+    /* Stop counting */
+    TMR3.TCCR.BYTE = _00_TMR_CLK_DISABLED;
 }
 
 /* Start user code for adding. Do not edit comment generated here */
+void U_TMR2_SetCMPA(uint16_t compare_a_value)
+{
+    /* Set compare match value */
+    TMR23.TCORA = compare_a_value;
+}
+
+void U_TMR2_SetOUTA(bool is_high)
+{
+    /* Set output */
+    if (is_high) {
+        TMR2.TCSR.BYTE = _00_TMR_COMP_MATCH_B_OUTPUT_RETAIN | _02_TMR_COMP_MATCH_A_OUTPUT_HIGH | _E0_TMR02_TCSR_DEFAULT;
+    } else {
+        TMR2.TCSR.BYTE = _00_TMR_COMP_MATCH_B_OUTPUT_RETAIN | _01_TMR_COMP_MATCH_A_OUTPUT_LOW | _E0_TMR02_TCSR_DEFAULT;
+    }
+}
 /* End user code. Do not edit comment generated here */

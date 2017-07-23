@@ -124,7 +124,7 @@ Configuration Options
  * If the interrupt stack is the only stack being used then the user will likely want to increase the default size
  * below.
  */
-#pragma stacksize si=0x100 
+#pragma stacksize si=0x200
 #endif 
 
 /* Heap size in bytes.

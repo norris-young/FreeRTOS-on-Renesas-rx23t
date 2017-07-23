@@ -23,5 +23,13 @@
                 <pinOption>FIXED</pinOption>
             </pinInfo>
         </peripheralInfo>
+        <peripheralInfo>
+            <peripheralName>tmr0</peripheralName>
+            <pinInfo>
+                <pinName>TMO2</pinName>
+                <pinPort>P23</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+        </peripheralInfo>
     </cgModuleInfos>
 </RESOURCES>

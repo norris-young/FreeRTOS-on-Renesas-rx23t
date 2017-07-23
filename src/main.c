@@ -76,6 +76,7 @@
 /* User include files. */
 #include "printf-stdarg.h"
 #include "mavlink_receive.h"
+#include "ppm_encoder.h"
 
 /*-----------------------------------------------------------*/
 #define INIT_TASK_PRI   1
@@ -119,6 +120,7 @@ uint16_t usProtectDummy = ( uint16_t ) ( SYSTEM.PRCR.WORD & 0x000FU );
 static void init_task_entry(void *pvParameters)
 {
     mavlink_receive_init();
+    ppm_encoder_init();
     printf("\nInitialization is done!\n");
     /* When initialization is done ,this task can be deleted. */
     vTaskDelete(NULL);
