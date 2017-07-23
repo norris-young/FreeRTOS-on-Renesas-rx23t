@@ -88,7 +88,7 @@
 /* Use Pre-emptive mode Scheduling Algorithms, default use time slicing. */
 #define configUSE_PREEMPTION			1
 #define configUSE_CO_ROUTINES           0
-#define configMAX_PRIORITIES            ( 7 )
+#define configMAX_PRIORITIES            ( 8 )
 #define configMAX_CO_ROUTINE_PRIORITIES ( 2 )
 
 /* Use these hook function, the application must define them.  */

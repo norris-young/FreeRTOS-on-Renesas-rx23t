@@ -18,11 +18,11 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_hardware_setup.c
+* File Name    : r_cg_sci.c
 * Version      : Code Generator for RX23T V1.00.04.02 [29 Nov 2016]
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
-* Description  : This file implements system initializing function.
+* Description  : This file implements device driver for SCI module.
 * Creation Date: 17.7.23
 ***********************************************************************************************************************/
 
@@ -36,7 +36,6 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "r_cg_cgc.h"
 #include "r_cg_sci.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
@@ -45,58 +44,109 @@ Includes
 /***********************************************************************************************************************
 Global variables and functions
 ***********************************************************************************************************************/
+uint8_t * gp_sci1_rx_address;               /* SCI1 receive buffer address */
+uint16_t  g_sci1_rx_count;                  /* SCI1 receive data number */
+uint16_t  g_sci1_rx_length;                 /* SCI1 receive data length */
 /* Start user code for global. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
-* Function Name: r_undefined_exception
-* Description  : This function is undefined interrupt service routine.
+* Function Name: R_SCI1_Create
+* Description  : This function initializes SCI1.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void r_undefined_exception(void)
+void R_SCI1_Create(void)
 {
-    /* Start user code. Do not edit comment generated here */
-    /* End user code. Do not edit comment generated here */
+    /* Cancel SCI1 module stop state */
+    MSTP(SCI1) = 0U;
+
+    /* Set interrupt priority */
+    IPR(SCI1, ERI1) = _04_SCI_PRIORITY_LEVEL4;
+
+    /* Clear the control register */
+    SCI1.SCR.BYTE = 0x00U;
+
+    /* Set clock enable */
+    SCI1.SCR.BYTE = _00_SCI_INTERNAL_SCK_UNUSED;
+
+    /* Clear the SIMR1.IICM, SPMR.CKPH, and CKPOL bit, and set SPMR */
+    SCI1.SIMR1.BIT.IICM = 0U;
+    SCI1.SPMR.BYTE = _00_SCI_RTS | _00_SCI_CLOCK_NOT_INVERTED | _00_SCI_CLOCK_NOT_DELAYED;
+
+    /* Set control registers */
+    SCI1.SMR.BYTE = _00_SCI_CLOCK_PCLK | _00_SCI_PARITY_DISABLE | _00_SCI_DATA_LENGTH_8 | 
+                    _00_SCI_MULTI_PROCESSOR_DISABLE | _00_SCI_ASYNCHRONOUS_MODE;
+    SCI1.SCMR.BYTE = _00_SCI_SERIAL_MODE | _00_SCI_DATA_INVERT_NONE | _00_SCI_DATA_LSB_FIRST | 
+                     _10_SCI_DATA_LENGTH_8_OR_7 | _62_SCI_SCMR_DEFAULT;
+    SCI1.SEMR.BYTE = _00_SCI_LOW_LEVEL_START_BIT | _00_SCI_NOISE_FILTER_DISABLE | _10_SCI_8_BASE_CLOCK | 
+                     _00_SCI_BAUDRATE_SINGLE | _04_SCI_BIT_MODULATION_ENABLE;
+
+    /* Set bitrate */
+    SCI1.BRR = 0x04U;
+    SCI1.MDDR = 0xECU;
+
+    /* Set RXD1 pin */
+    MPC.PD5PFS.BYTE = 0x0AU;
+    PORTD.PMR.BYTE |= 0x20U;
 }
 /***********************************************************************************************************************
-* Function Name: R_Systeminit
-* Description  : This function initializes every macro.
+* Function Name: R_SCI1_Start
+* Description  : This function starts SCI1.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_Systeminit(void)
+void R_SCI1_Start(void)
 {
-    /* Enable writing to registers related to operating modes, LPC, CGC and software reset */
-    SYSTEM.PRCR.WORD = 0xA50FU; 
+    /* Clear interrupt flag */
+    IR(SCI1, RXI1) = 0U;
 
-    /* Enable writing to MPC pin function control registers */
-    MPC.PWPR.BIT.B0WI = 0U;
-    MPC.PWPR.BIT.PFSWE = 1U;
-
-    /* Set peripheral settings */
-    R_CGC_Create();
-    R_SCI1_Create();
-
-    /* Register undefined interrupt */
-    R_BSP_InterruptWrite(BSP_INT_SRC_UNDEFINED_INTERRUPT,(bsp_int_cb_t)r_undefined_exception);
-
-    /* Disable writing to MPC pin function control registers */
-    MPC.PWPR.BIT.PFSWE = 0U;    
-    MPC.PWPR.BIT.B0WI = 1U;     
-
-    /* Enable protection */
-    SYSTEM.PRCR.WORD = 0xA500U;  
+    /* Enable SCI interrupt */
+    IEN(SCI1, RXI1) = 1U;
 }
 /***********************************************************************************************************************
-* Function Name: HardwareSetup
-* Description  : This function initializes hardware setting.
+* Function Name: R_SCI1_Stop
+* Description  : This function stops SCI1.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void HardwareSetup(void)
+void R_SCI1_Stop(void)
 {
-    R_Systeminit();
+    SCI1.SCR.BIT.RE = 0U;      /* Disable serial receive */
+
+    /* Disable SCI interrupt */
+    SCI1.SCR.BIT.RIE = 0U;     /* Disable RXI and ERI interrupt */
+    IEN(SCI1, RXI1) = 0U;
+    IR(SCI1, RXI1) = 0U;
+}
+/***********************************************************************************************************************
+* Function Name: R_SCI1_Serial_Receive
+* Description  : This function receives SCI1 data.
+* Arguments    : rx_buf -
+*                    receive buffer pointer (Not used when receive data handled by DTC or DMAC)
+*                rx_num -
+*                    buffer size (Not used when receive data handled by DTC or DMAC)
+* Return Value : status -
+*                    MD_OK or MD_ARGERROR
+***********************************************************************************************************************/
+MD_STATUS R_SCI1_Serial_Receive(uint8_t * const rx_buf, uint16_t rx_num)
+{
+    MD_STATUS status = MD_OK;
+
+    if (1U > rx_num)
+    {
+        status = MD_ARGERROR;
+    }
+    else
+    {
+        g_sci1_rx_count = 0U;
+        g_sci1_rx_length = rx_num;
+        gp_sci1_rx_address = rx_buf;
+        SCI1.SCR.BIT.RIE = 1U;
+        SCI1.SCR.BIT.RE = 1U;
+    }
+
+    return (status);
 }
 
 /* Start user code for adding. Do not edit comment generated here */

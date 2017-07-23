@@ -18,11 +18,11 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_cgc.c
+* File Name    : r_cg_sci_user.c
 * Version      : Code Generator for RX23T V1.00.04.02 [29 Nov 2016]
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
-* Description  : This file implements device driver for CGC module.
+* Description  : This file implements device driver for SCI module.
 * Creation Date: 17.7.23
 ***********************************************************************************************************************/
 
@@ -36,7 +36,7 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "r_cg_cgc.h"
+#include "r_cg_sci.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -44,19 +44,50 @@ Includes
 /***********************************************************************************************************************
 Global variables and functions
 ***********************************************************************************************************************/
+extern uint8_t * gp_sci1_rx_address;                /* SCI1 receive buffer address */
+extern uint16_t  g_sci1_rx_count;                   /* SCI1 receive data number */
+extern uint16_t  g_sci1_rx_length;                  /* SCI1 receive data length */
 /* Start user code for global. Do not edit comment generated here */
+extern void u_sci1_receiveend_callback(void);
 /* End user code. Do not edit comment generated here */
 
+
 /***********************************************************************************************************************
-* Function Name: R_CGC_Create
-* Description  : This function initializes the clock generator.
+* Function Name: r_sci1_receive_interrupt
+* Description  : None
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_CGC_Create(void)
+#if FAST_INTERRUPT_VECTOR == VECT_SCI1_RXI1
+#pragma interrupt r_sci1_receive_interrupt(vect=VECT(SCI1,RXI1),fint)
+#else
+#pragma interrupt r_sci1_receive_interrupt(vect=VECT(SCI1,RXI1))
+#endif
+static void r_sci1_receive_interrupt(void)
 {
-    /* Set LOCO */
-    SYSTEM.LOCOCR.BIT.LCSTP = 1U;
+    if (g_sci1_rx_length > g_sci1_rx_count)
+    {
+        *gp_sci1_rx_address = SCI1.RDR;
+        gp_sci1_rx_address++;
+        g_sci1_rx_count++;
+
+        if (g_sci1_rx_length <= g_sci1_rx_count)
+        {
+            r_sci1_callback_receiveend();
+        }
+    }
+}
+/***********************************************************************************************************************
+* Function Name: r_sci1_callback_receiveend
+* Description  : This function is a callback function when SCI1 finishes reception.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+static void r_sci1_callback_receiveend(void)
+{
+    /* Start user code. Do not edit comment generated here */
+    u_sci1_receiveend_callback();
+    /* End user code. Do not edit comment generated here */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

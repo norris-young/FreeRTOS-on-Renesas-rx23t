@@ -73,23 +73,28 @@
 #include "semphr.h"
 
 /*-----------------------------------------------------------*/
+/* User include files. */
+#include "mavlink_receive.h"
 
-extern void main_blinky(void);
+/*-----------------------------------------------------------*/
 
 /*
  * Configure the hardware as necessary to run this demo.
  */
 static void prvSetupHardware( void );
+static void initialize(void);
 
 /* See http://www.freertos.org/RX231_RTOS_Renesas_GCC_IAR.html */
-int main( void )
+void main( void )
 {
 	/* Configure the hardware ready to run the demo. */
 	prvSetupHardware();
 
-	main_blinky();
+	initialize();
 
-	return 0;
+	vTaskStartScheduler();
+
+	while(1);
 }
 /*-----------------------------------------------------------*/
 
@@ -105,4 +110,8 @@ uint16_t usProtectDummy = ( uint16_t ) ( SYSTEM.PRCR.WORD & 0x000FU );
 }
 /*-----------------------------------------------------------*/
 
-
+static void initialize(void)
+{
+    mavlink_receive_init();
+}
+/*-----------------------------------------------------------*/

@@ -3,6 +3,14 @@
     <cgModuleInfos>
         <moduleName>CG</moduleName>
         <peripheralInfo>
+            <peripheralName>sci1</peripheralName>
+            <pinInfo>
+                <pinName>RXD1</pinName>
+                <pinPort>PD5</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+        </peripheralInfo>
+        <peripheralInfo>
             <peripheralName>cgc</peripheralName>
             <pinInfo>
                 <pinName>XTAL</pinName>
