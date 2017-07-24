@@ -5,13 +5,18 @@
  *      Author: Cotyledon
  */
 
+/* RTOS & rx23t include files. */
 #include "FreeRTOS.h"
 #include "task.h"
 #include "platform.h"
 #include "r_cg_sci.h"
 
+/*-----------------------------------------------------------*/
+/* User include files. */
 #include "cam_commu.h"
 
+/*-----------------------------------------------------------*/
+/* private variables, */
 static uint8_t rx_buffer[2][CAM_BUFFER_LENGTH];
 static int rx_buffer_pointer = 0;
 static int rx_pointer = 0;
@@ -19,10 +24,16 @@ static volatile bool start_receive = false;
 
 static TaskHandle_t cam_commu_taskhandle;
 
+/*-----------------------------------------------------------*/
+/* global variables. */
 volatile uint8_t mid_x = CAMERA_MID_X, mid_y = CAMERA_MID_Y;
 
+/*-----------------------------------------------------------*/
+/* private functions declaration. */
 static void cam_commu_task_entry(void *pvParameters);
 
+/*-----------------------------------------------------------*/
+/* global functions definition. */
 void cam_commu_init()
 {
     BaseType_t ret;
@@ -50,6 +61,8 @@ void u_sci5_receiveend_callback(void)
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
+/*-----------------------------------------------------------*/
+/* private functions definition. */
 static void cam_commu_task_entry(void *pvParameters)
 {
     int i;

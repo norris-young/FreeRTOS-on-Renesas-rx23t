@@ -16,6 +16,7 @@
 #include "mavlink_receive.h"
 #include "danger_check.h"
 #include "ppm_encoder.h"
+#include "pos_control.h"
 #include "matrix_key.h"
 #include "mission.h"
 
@@ -247,7 +248,9 @@ static void alt_hold(const float dest_Height)
 
     /* arrives the destination height and hold for x milliseconds. */
     send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
+    position_ctl_start();
     vTaskDelay(pdMS_TO_TICKS(6000));
+    position_ctl_stop();
 
     /* drop down & disarm. */
     while(current_Height > 0.1)

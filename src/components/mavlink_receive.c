@@ -5,14 +5,22 @@
  *      Author: Cotyledon
  */
 
+/* System include files. */
 #include <string.h>
+
+/*-----------------------------------------------------------*/
+/* RTOS & rx23t include files. */
 #include "FreeRTOS.h"
 #include "task.h"
 #include "platform.h"
 #include "r_cg_sci.h"
 
+/*-----------------------------------------------------------*/
+/* User include files. */
 #include "mavlink_receive.h"
 
+/*-----------------------------------------------------------*/
+/* private variables */
 static uint8_t Buffer[40];
 static uint8_t Rx_Buffer[40];
 static uint8_t rx_buffer[2][MAV_BUFFER_LENGTH];
@@ -24,13 +32,19 @@ static volatile bool is_Angle = false;
 
 static TaskHandle_t mavlink_taskhandle;
 
+/*-----------------------------------------------------------*/
+/* global variables */
 volatile float current_Height;
 volatile float current_Roll, current_Pitch, current_Yaw;
 
+/*-----------------------------------------------------------*/
+/* private functions declaration. */
 static void mavlink_receive_task_entry(void *pvParameters);
 static void calculate_angle(void);
 static void calculate_height(void);
 
+/*-----------------------------------------------------------*/
+/* global functions definition. */
 
 void mavlink_receive_init(void)
 {
@@ -59,6 +73,9 @@ void u_sci1_receiveend_callback(void)
         R_SCI1_Serial_Receive(rx_buffer[1], MAV_BUFFER_LENGTH);
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
+
+/*-----------------------------------------------------------*/
+/* private functions definition. */
 
 /*
  * calculate current_Roll,current_Pitch,current_Yaw

@@ -10,8 +10,6 @@
 
 #define CAMERA_W            80
 #define CAMERA_H            58
-#define DEAD_ZONE_X         9
-#define DEAD_ZONE_Y         5
 #define CAMERA_MID_X        39
 #define CAMERA_MID_Y        28
 
