@@ -68,6 +68,10 @@
     </DataElement>
     <DataElement key="mtioc4dcondition_MacroName" value="">
     </DataElement>
+    <DataElement key="irq1condition" value="0">
+    </DataElement>
+    <DataElement key="irq1condition_MacroName" value="">
+    </DataElement>
     <DataElement key="cacrefcondition" value="0">
     </DataElement>
     <DataElement key="cacrefcondition_MacroName" value="">
@@ -87,10 +91,6 @@
     <DataElement key="cts5#condition" value="0">
     </DataElement>
     <DataElement key="cts5#condition_MacroName" value="">
-    </DataElement>
-    <DataElement key="mtioc3ccondition" value="0">
-    </DataElement>
-    <DataElement key="mtioc3ccondition_MacroName" value="">
     </DataElement>
     <DataElement key="txd5condition" value="0">
     </DataElement>
@@ -180,9 +180,9 @@
     </DataElement>
     <DataElement key="tmo3condition_MacroName" value="">
     </DataElement>
-    <DataElement key="irq1condition" value="0">
+    <DataElement key="piorfixed" value="True">
     </DataElement>
-    <DataElement key="irq1condition_MacroName" value="">
+    <DataElement key="piorfixed_MacroName" value="">
     </DataElement>
     <DataElement key="mtioc1bcondition" value="0">
     </DataElement>
@@ -220,9 +220,9 @@
     </DataElement>
     <DataElement key="ssda5condition_MacroName" value="">
     </DataElement>
-    <DataElement key="mtioc0bcondition" value="0">
+    <DataElement key="mtioc3ccondition" value="0">
     </DataElement>
-    <DataElement key="mtioc0bcondition_MacroName" value="">
+    <DataElement key="mtioc3ccondition_MacroName" value="">
     </DataElement>
     <DataElement key="mtioc4bcondition" value="0">
     </DataElement>
@@ -316,9 +316,9 @@
     </DataElement>
     <DataElement key="sscl5condition_MacroName" value="">
     </DataElement>
-    <DataElement key="piorfixed" value="True">
+    <DataElement key="mtioc0bcondition" value="0">
     </DataElement>
-    <DataElement key="piorfixed_MacroName" value="">
+    <DataElement key="mtioc0bcondition_MacroName" value="">
     </DataElement>
     <DataElement key="clkoutcondition" value="0">
     </DataElement>
@@ -1523,6 +1523,18 @@
         <DataElement key="TTLBuffer" value="False">
         </DataElement>
       </SerializableData>
+      <SerializableData name="RXD5">
+        <DataElement key="NChannelOpenDrain" value="False">
+        </DataElement>
+        <DataElement key="NoiseFilterFunction" value="False">
+        </DataElement>
+        <DataElement key="PinInOut" value="I">
+        </DataElement>
+        <DataElement key="PullUp" value="False">
+        </DataElement>
+        <DataElement key="TTLBuffer" value="False">
+        </DataElement>
+      </SerializableData>
       <SerializableData name="PB5">
         <DataElement key="NChannelOpenDrain" value="False">
         </DataElement>
@@ -1697,18 +1709,6 @@
         <DataElement key="NoiseFilterFunction" value="False">
         </DataElement>
         <DataElement key="PinInOut" value="IO">
-        </DataElement>
-        <DataElement key="PullUp" value="False">
-        </DataElement>
-        <DataElement key="TTLBuffer" value="False">
-        </DataElement>
-      </SerializableData>
-      <SerializableData name="RXD5">
-        <DataElement key="NChannelOpenDrain" value="False">
-        </DataElement>
-        <DataElement key="NoiseFilterFunction" value="False">
-        </DataElement>
-        <DataElement key="PinInOut" value="I">
         </DataElement>
         <DataElement key="PullUp" value="False">
         </DataElement>
@@ -32658,7 +32658,7 @@
             </DataElement>
             <DataElement key="Visible" value="True">
             </DataElement>
-            <DataElement key="CustomValid" value="Valid">
+            <DataElement key="CustomValid" value="Valid, InternalInvalid">
             </DataElement>
           </SerializableData>
         </SerializableData>
@@ -32714,7 +32714,7 @@
             </DataElement>
             <DataElement key="Visible" value="True">
             </DataElement>
-            <DataElement key="CustomValid" value="Valid">
+            <DataElement key="CustomValid" value="Valid, InternalInvalid">
             </DataElement>
           </SerializableData>
         </SerializableData>
@@ -32870,7 +32870,7 @@
           <SerializableData name="TRANSFER_RATE_VALUE">
             <DataElement key="ContentItemCount" value="8">
             </DataElement>
-            <DataElement key="SelectedContentText" value="57600">
+            <DataElement key="SelectedContentText" value="115200">
             </DataElement>
             <SerializableData name="ContentItem1">
               <DataElement key="Pin" value="">

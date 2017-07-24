@@ -9,7 +9,7 @@
 #define COMPONENTS_DANGER_CHECK_H_
 
 #define MISSION_TOUT_TIME   pdMS_TO_TICKS(30000)
-#define DANGER_CHECK_TIME    pdMS_TO_TICKS(100)
+#define DANGER_CHECK_TIME    pdMS_TO_TICKS(250)
 #define DANGER_TASK_PRI     6
 
 extern void danger_check_init(void);
