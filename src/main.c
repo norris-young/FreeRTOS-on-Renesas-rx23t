@@ -77,6 +77,7 @@
 #include "mavlink_receive.h"
 #include "danger_check.h"
 #include "ppm_encoder.h"
+#include "cam_commu.h"
 #include "mission.h"
 
 /*-----------------------------------------------------------*/
@@ -129,6 +130,7 @@ uint16_t usProtectDummy = ( uint16_t ) ( SYSTEM.PRCR.WORD & 0x000FU );
 static void init_task_entry(void *pvParameters)
 {
     mavlink_receive_init();
+    cam_commu_init();
     ppm_encoder_init();
     danger_check_init();
     mission_init();

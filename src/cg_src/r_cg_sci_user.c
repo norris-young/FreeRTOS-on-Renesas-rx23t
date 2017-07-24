@@ -47,8 +47,14 @@ Global variables and functions
 extern uint8_t * gp_sci1_rx_address;                /* SCI1 receive buffer address */
 extern uint16_t  g_sci1_rx_count;                   /* SCI1 receive data number */
 extern uint16_t  g_sci1_rx_length;                  /* SCI1 receive data length */
+extern uint8_t * gp_sci5_tx_address;                /* SCI5 send buffer address */
+extern uint16_t  g_sci5_tx_count;                   /* SCI5 send data number */
+extern uint8_t * gp_sci5_rx_address;                /* SCI5 receive buffer address */
+extern uint16_t  g_sci5_rx_count;                   /* SCI5 receive data number */
+extern uint16_t  g_sci5_rx_length;                  /* SCI5 receive data length */
 /* Start user code for global. Do not edit comment generated here */
 extern void u_sci1_receiveend_callback(void);
+extern void u_sci5_receiveend_callback(void);
 /* End user code. Do not edit comment generated here */
 
 
@@ -87,6 +93,101 @@ static void r_sci1_callback_receiveend(void)
 {
     /* Start user code. Do not edit comment generated here */
     u_sci1_receiveend_callback();
+    /* End user code. Do not edit comment generated here */
+}
+/***********************************************************************************************************************
+* Function Name: r_sci5_transmit_interrupt
+* Description  : None
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+#if FAST_INTERRUPT_VECTOR == VECT_SCI5_TXI5
+#pragma interrupt r_sci5_transmit_interrupt(vect=VECT(SCI5,TXI5),fint)
+#else
+#pragma interrupt r_sci5_transmit_interrupt(vect=VECT(SCI5,TXI5))
+#endif
+static void r_sci5_transmit_interrupt(void)
+{
+    if (0U < g_sci5_tx_count)
+    {
+        SCI5.TDR = *gp_sci5_tx_address;
+        gp_sci5_tx_address++;
+        g_sci5_tx_count--;
+    }
+    else
+    {
+        SCI5.SCR.BIT.TIE = 0U;
+        SCI5.SCR.BIT.TEIE = 1U;
+    }
+}
+
+/***********************************************************************************************************************
+* Function Name: r_sci5_transmitend_interrupt
+* Description  : None
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+#if FAST_INTERRUPT_VECTOR == VECT_SCI5_TEI5
+#pragma interrupt r_sci5_transmitend_interrupt(vect=VECT(SCI5,TEI5),fint)
+#else
+#pragma interrupt r_sci5_transmitend_interrupt(vect=VECT(SCI5,TEI5))
+#endif
+static void r_sci5_transmitend_interrupt(void)
+{
+    /* Set TXD5 pin */
+    PORTB.PMR.BYTE &= 0xFBU;
+    SCI5.SCR.BIT.TIE = 0U;
+    SCI5.SCR.BIT.TE = 0U;
+    SCI5.SCR.BIT.TEIE = 0U;
+
+    r_sci5_callback_transmitend();
+}
+/***********************************************************************************************************************
+* Function Name: r_sci5_receive_interrupt
+* Description  : None
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+#if FAST_INTERRUPT_VECTOR == VECT_SCI5_RXI5
+#pragma interrupt r_sci5_receive_interrupt(vect=VECT(SCI5,RXI5),fint)
+#else
+#pragma interrupt r_sci5_receive_interrupt(vect=VECT(SCI5,RXI5))
+#endif
+static void r_sci5_receive_interrupt(void)
+{
+    if (g_sci5_rx_length > g_sci5_rx_count)
+    {
+        *gp_sci5_rx_address = SCI5.RDR;
+        gp_sci5_rx_address++;
+        g_sci5_rx_count++;
+
+        if (g_sci5_rx_length <= g_sci5_rx_count)
+        {
+            r_sci5_callback_receiveend();
+        }
+    }
+}
+/***********************************************************************************************************************
+* Function Name: r_sci5_callback_transmitend
+* Description  : This function is a callback function when SCI5 finishes transmission.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+static void r_sci5_callback_transmitend(void)
+{
+    /* Start user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
+}
+/***********************************************************************************************************************
+* Function Name: r_sci5_callback_receiveend
+* Description  : This function is a callback function when SCI5 finishes reception.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+static void r_sci5_callback_receiveend(void)
+{
+    /* Start user code. Do not edit comment generated here */
+    u_sci5_receiveend_callback();
     /* End user code. Do not edit comment generated here */
 }
 

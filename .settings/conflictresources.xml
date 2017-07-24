@@ -16,10 +16,15 @@
             </pinInfo>
         </peripheralInfo>
         <peripheralInfo>
-            <peripheralName>port2</peripheralName>
+            <peripheralName>sci5</peripheralName>
             <pinInfo>
-                <pinName>P23</pinName>
-                <pinPort>P23</pinPort>
+                <pinName>RXD5</pinName>
+                <pinPort>PB6</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>TXD5</pinName>
+                <pinPort>PB2</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
         </peripheralInfo>
@@ -74,6 +79,14 @@
             <pinInfo>
                 <pinName>P70</pinName>
                 <pinPort>POE0#</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+        </peripheralInfo>
+        <peripheralInfo>
+            <peripheralName>port2</peripheralName>
+            <pinInfo>
+                <pinName>P23</pinName>
+                <pinPort>P23</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
         </peripheralInfo>

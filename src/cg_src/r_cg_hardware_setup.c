@@ -83,6 +83,7 @@ void R_Systeminit(void)
     R_PORT_Create();
     R_TMR_Create();
     R_SCI1_Create();
+    R_SCI5_Create();
 
     /* Register undefined interrupt */
     R_BSP_InterruptWrite(BSP_INT_SRC_UNDEFINED_INTERRUPT,(bsp_int_cb_t)r_undefined_exception);
