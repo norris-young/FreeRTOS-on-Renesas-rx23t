@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for TMR module.
-* Creation Date: 17.7.23
+* Creation Date: 17.7.24
 ***********************************************************************************************************************/
 #ifndef TMR_H
 #define TMR_H
@@ -118,8 +118,8 @@ Macro definitions (Register bit)
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
-#define _09C3_TMR23_COMP_MATCH_VALUE_A              (0x09C3U) /* TCORA value */
-#define _0031_TMR23_COMP_MATCH_VALUE_B              (0x0031U) /* TCORB value */
+#define _09C3_TMR01_COMP_MATCH_VALUE_A              (0x09C3U) /* TCORA value */
+#define _0031_TMR01_COMP_MATCH_VALUE_B              (0x0031U) /* TCORB value */
 
 /***********************************************************************************************************************
 Typedef definitions
@@ -129,11 +129,11 @@ Typedef definitions
 Global functions
 ***********************************************************************************************************************/
 void R_TMR_Create(void);
-void R_TMR2_Start(void);
-void R_TMR2_Stop(void);
+void R_TMR0_Start(void);
+void R_TMR0_Stop(void);
 
 /* Start user code for function. Do not edit comment generated here */
-extern void U_TMR2_SetCMPA(uint16_t compare_a_value);
-extern void U_TMR2_SetOUTA(bool is_high);
+extern void U_TMR0_SetCMPA(uint16_t compare_a_value);
+extern void U_TMR0_SetOUTA(bool is_high);
 /* End user code. Do not edit comment generated here */
 #endif

@@ -18,11 +18,11 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_cgc_user.c
+* File Name    : r_cg_icu_user.c
 * Version      : Code Generator for RX23T V1.00.04.02 [29 Nov 2016]
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
-* Description  : This file implements device driver for CGC module.
+* Description  : This file implements device driver for ICU module.
 * Creation Date: 17.7.24
 ***********************************************************************************************************************/
 
@@ -36,7 +36,7 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "r_cg_cgc.h"
+#include "r_cg_icu.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -45,8 +45,44 @@ Includes
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
+extern void IRQ0_IntHandler(void);
+extern void IRQ1_IntHandler(void);
 /* End user code. Do not edit comment generated here */
 
+/***********************************************************************************************************************
+* Function Name: r_icu_irq0_interrupt
+* Description  : None
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+#if FAST_INTERRUPT_VECTOR == VECT_ICU_IRQ0
+#pragma interrupt r_icu_irq0_interrupt(vect=VECT(ICU,IRQ0),fint)
+#else
+#pragma interrupt r_icu_irq0_interrupt(vect=VECT(ICU,IRQ0))
+#endif
+static void r_icu_irq0_interrupt(void)
+{
+    /* Start user code. Do not edit comment generated here */
+    IRQ0_IntHandler();
+    /* End user code. Do not edit comment generated here */
+}
+/***********************************************************************************************************************
+* Function Name: r_icu_irq1_interrupt
+* Description  : None
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+#if FAST_INTERRUPT_VECTOR == VECT_ICU_IRQ1
+#pragma interrupt r_icu_irq1_interrupt(vect=VECT(ICU,IRQ1),fint)
+#else
+#pragma interrupt r_icu_irq1_interrupt(vect=VECT(ICU,IRQ1))
+#endif
+static void r_icu_irq1_interrupt(void)
+{
+    /* Start user code. Do not edit comment generated here */
+    IRQ1_IntHandler();
+    /* End user code. Do not edit comment generated here */
+}
 
 /* Start user code for adding. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */

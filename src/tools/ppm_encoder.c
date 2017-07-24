@@ -24,7 +24,7 @@
 #define PPM_GPIO_HIGH   true
 #define PPM_GPIO_LOW    false
 //timer configure:TMR2 input clock 5MHz
-#define TMR2_CLK    (5000000)
+#define TMR0_CLK    (5000000)
 
 
 ppm_data_t ppm_data; //for send_ppm().
@@ -97,12 +97,12 @@ static void ppm_gpio_init(void)
 
 static void ppm_gpio_negative(void)
 {
-    U_TMR2_SetOUTA(PPM_GPIO_LOW);
+    U_TMR0_SetOUTA(PPM_GPIO_LOW);
 }
 
 static void ppm_gpio_positive(void)
 {
-    U_TMR2_SetOUTA(PPM_GPIO_HIGH);
+    U_TMR0_SetOUTA(PPM_GPIO_HIGH);
 }
 
 static void ppm_gpio_set_next(bool is_pos)
@@ -129,18 +129,18 @@ static void ppm_gpio_set_next(bool is_pos)
 
 static void ppm_timer_config(void)
 {
-    ppm_period_us = TMR2_CLK / 1000000;
+    ppm_period_us = TMR0_CLK / 1000000;
 
     //
     // Configure the two 32-bit periodic timers.
     //
 
-    U_TMR2_SetCMPA(CAL_ARR(PPM_ENCODER_NEG_CH_VAL));
+    U_TMR0_SetCMPA(CAL_ARR(PPM_ENCODER_NEG_CH_VAL));
 
     //
     // Enable the timers.
     //
-    R_TMR2_Start();
+    R_TMR0_Start();
 }
 
 //*****************************************************************************
@@ -148,7 +148,7 @@ static void ppm_timer_config(void)
 // The interrupt handler for the first timer interrupt.
 //
 //*****************************************************************************
-void TMR2_IntHandler(void)
+void TMR0_IntHandler(void)
 {
     if(first_time)
     {
@@ -252,7 +252,7 @@ static void handle_negative(void)
 {
     //ppm_gpio_negative();
     ppm_gpio_set_next(false);
-    U_TMR2_SetCMPA(CAL_ARR(PPM_ENCODER_NEG_CH_VAL));
+    U_TMR0_SetCMPA(CAL_ARR(PPM_ENCODER_NEG_CH_VAL));
     ppm_shadow_state = PPM_STATE_CH_POS;
 
 }
@@ -261,7 +261,7 @@ static void handle_positive(void)
 {
     //ppm_gpio_positive();
     ppm_gpio_set_next(true);
-    U_TMR2_SetCMPA(CAL_ARR(ppm_data_shadow.ch_val[ppm_shadow_ch_idx]));
+    U_TMR0_SetCMPA(CAL_ARR(ppm_data_shadow.ch_val[ppm_shadow_ch_idx]));
     ppm_shadow_ch_idx++;
     if(ppm_shadow_ch_idx >= PPM_ENCODER_CHANNEL_NUM)
     {
@@ -278,7 +278,7 @@ static void handle_idle_neg(void)
 {
     //ppm_gpio_negative();
     ppm_gpio_set_next(false);
-    U_TMR2_SetCMPA(CAL_ARR(PPM_ENCODER_NEG_CH_VAL));
+    U_TMR0_SetCMPA(CAL_ARR(PPM_ENCODER_NEG_CH_VAL));
     ppm_shadow_state = PPM_STATE_IDLE_POS;
 }
 
@@ -286,7 +286,7 @@ static void handle_idle_pos(void)
 {
     //ppm_gpio_positive();
     ppm_gpio_set_next(true);
-    U_TMR2_SetCMPA(CAL_ARR(ppm_data_shadow.idle_val));
+    U_TMR0_SetCMPA(CAL_ARR(ppm_data_shadow.idle_val));
 }
 
 

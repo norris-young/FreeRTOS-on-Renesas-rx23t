@@ -5,9 +5,17 @@
  *      Author: Cotyledon
  */
 
+/* System include files. */
+/* RTOS include files. */
 #include "FreeRTOS.h"
 #include "platform.h"
 #include "task.h"
+/* User include files. */
+#include "mavlink_receive.h"
+/* Tool include files. */
+#include "printf-stdarg.h"
+
+volatile size_t xFreeHeapSpace;
 
 /* Prototypes for the standard FreeRTOS callback/hook functions implemented
 within this file. */
@@ -47,8 +55,6 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName )
 
 void vApplicationIdleHook( void )
 {
-volatile size_t xFreeHeapSpace;
-
     /* This is just a trivial example of an idle hook.  It is called on each
     cycle of the idle task.  It must *NOT* attempt to block.  In this case the
     idle task just queries the amount of FreeRTOS heap that remains.  See the
@@ -60,13 +66,14 @@ volatile size_t xFreeHeapSpace;
 
     /* Remove compiler warning about xFreeHeapSpace being set but never used. */
     ( void ) xFreeHeapSpace;
+//    debug_printf("\nFreeHeapSpace:%d bytes\n", xFreeHeapSpace);
 }
 /*-----------------------------------------------------------*/
 
-void vApplicationTickHook( void )
-{
-    ;
-}
+//void vApplicationTickHook( void )
+//{
+//    ;
+//}
 /*-----------------------------------------------------------*/
 
 /* The RX port uses this callback function to configure its tick interrupt.

@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for TMR module.
-* Creation Date: 17.7.23
+* Creation Date: 17.7.24
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -55,76 +55,76 @@ Global variables and functions
 ***********************************************************************************************************************/
 void R_TMR_Create(void)
 {
-    /* Disable TMR2 interrupts */
-    IEN(TMR2, CMIA2) = 0U;
+    /* Disable TMR0 interrupts */
+    IEN(TMR0, CMIA0) = 0U;
 
     /* Cancel TMR module stop state */
-    MSTP(TMR23) = 0U;
+    MSTP(TMR01) = 0U;
 
     /* Set timer counter control setting */
-    TMR2.TCCR.BYTE = _18_TMR_CLK_TMR3_OVRF | _00_TMR_CLK_DISABLED;
+    TMR0.TCCR.BYTE = _18_TMR_CLK_TMR1_OVRF | _00_TMR_CLK_DISABLED;
 
     /* Set counter clear and interrupt */
-    TMR2.TCR.BYTE = _40_TMR_CMIA_INT_ENABLE | _08_TMR_CNT_CLR_COMP_MATCH_A;
+    TMR0.TCR.BYTE = _40_TMR_CMIA_INT_ENABLE | _08_TMR_CNT_CLR_COMP_MATCH_A;
 
     /* Set output */
-    TMR2.TCSR.BYTE = _00_TMR_COMP_MATCH_B_OUTPUT_RETAIN | _02_TMR_COMP_MATCH_A_OUTPUT_HIGH | _E0_TMR02_TCSR_DEFAULT;
+    TMR0.TCSR.BYTE = _00_TMR_COMP_MATCH_B_OUTPUT_RETAIN | _02_TMR_COMP_MATCH_A_OUTPUT_HIGH | _E0_TMR02_TCSR_DEFAULT;
 
     /* Set compare match value */
-    TMR23.TCORA = _09C3_TMR23_COMP_MATCH_VALUE_A;
-    TMR23.TCORB = _0031_TMR23_COMP_MATCH_VALUE_B;
+    TMR01.TCORA = _09C3_TMR01_COMP_MATCH_VALUE_A;
+    TMR01.TCORB = _0031_TMR01_COMP_MATCH_VALUE_B;
 
-    /* Configure TMR2 interrupts */
-    IPR(TMR2, CMIA2) = _0F_TMR_PRIORITY_LEVEL15;
+    /* Configure TMR0 interrupts */
+    IPR(TMR0, CMIA0) = _0F_TMR_PRIORITY_LEVEL15;
 
-    /* Set TMO2 pin */
-    MPC.P23PFS.BYTE = 0x05U;
-    PORT2.PMR.BYTE |= 0x08U;
+    /* Set TMO0 pin */
+    MPC.PD3PFS.BYTE = 0x05U;
+    PORTD.PMR.BYTE |= 0x08U;
 }
 /***********************************************************************************************************************
-* Function Name: R_TMR2_Start
-* Description  : This function starts TMR2 channel.
+* Function Name: R_TMR0_Start
+* Description  : This function starts TMR0 channel.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_TMR2_Start(void)
+void R_TMR0_Start(void)
 {
-    /* Enable TMR2 interrupts */
-    IR(TMR2, CMIA2) = 0U;
-    IEN(TMR2, CMIA2) = 1U;
+    /* Enable TMR0 interrupts */
+    IR(TMR0, CMIA0) = 0U;
+    IEN(TMR0, CMIA0) = 1U;
 
     /* Start counting */
-    TMR3.TCCR.BYTE = _08_TMR_CLK_SRC_PCLK | _00_TMR_PCLK_DIV_1;
+    TMR1.TCCR.BYTE = _08_TMR_CLK_SRC_PCLK | _00_TMR_PCLK_DIV_1;
 }
 /***********************************************************************************************************************
-* Function Name: R_TMR2_Stop
-* Description  : This function stops TMR2 channel.
+* Function Name: R_TMR0_Stop
+* Description  : This function stops TMR0 channel.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_TMR2_Stop(void)
+void R_TMR0_Stop(void)
 {
-    /* Disable TMR2 interrupts */
-    IEN(TMR2, CMIA2) = 0U;
+    /* Disable TMR0 interrupts */
+    IEN(TMR0, CMIA0) = 0U;
 
     /* Stop counting */
-    TMR3.TCCR.BYTE = _00_TMR_CLK_DISABLED;
+    TMR1.TCCR.BYTE = _00_TMR_CLK_DISABLED;
 }
 
 /* Start user code for adding. Do not edit comment generated here */
-void U_TMR2_SetCMPA(uint16_t compare_a_value)
+void U_TMR0_SetCMPA(uint16_t compare_a_value)
 {
     /* Set compare match value */
-    TMR23.TCORA = compare_a_value;
+    TMR01.TCORA = compare_a_value;
 }
 
-void U_TMR2_SetOUTA(bool is_high)
+void U_TMR0_SetOUTA(bool is_high)
 {
     /* Set output */
     if (is_high) {
-        TMR2.TCSR.BYTE = _00_TMR_COMP_MATCH_B_OUTPUT_RETAIN | _02_TMR_COMP_MATCH_A_OUTPUT_HIGH | _E0_TMR02_TCSR_DEFAULT;
+        TMR0.TCSR.BYTE = _00_TMR_COMP_MATCH_B_OUTPUT_RETAIN | _02_TMR_COMP_MATCH_A_OUTPUT_HIGH | _E0_TMR02_TCSR_DEFAULT;
     } else {
-        TMR2.TCSR.BYTE = _00_TMR_COMP_MATCH_B_OUTPUT_RETAIN | _01_TMR_COMP_MATCH_A_OUTPUT_LOW | _E0_TMR02_TCSR_DEFAULT;
+        TMR0.TCSR.BYTE = _00_TMR_COMP_MATCH_B_OUTPUT_RETAIN | _01_TMR_COMP_MATCH_A_OUTPUT_LOW | _E0_TMR02_TCSR_DEFAULT;
     }
 }
 /* End user code. Do not edit comment generated here */

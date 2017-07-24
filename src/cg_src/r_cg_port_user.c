@@ -18,11 +18,11 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_cgc_user.c
+* File Name    : r_cg_port_user.c
 * Version      : Code Generator for RX23T V1.00.04.02 [29 Nov 2016]
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
-* Description  : This file implements device driver for CGC module.
+* Description  : This file implements device driver for Port module.
 * Creation Date: 17.7.24
 ***********************************************************************************************************************/
 
@@ -36,7 +36,7 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "r_cg_cgc.h"
+#include "r_cg_port.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"

@@ -117,14 +117,14 @@ Configuration Options
 #if (BSP_CFG_USER_STACK_ENABLE == 1) 
 
 /* User Stack size in bytes. The Renesas RX toolchain sets the stack size using the #pragma stacksize directive. */
-#pragma stacksize su=0x200
+#pragma stacksize su=0x200 
 #endif 
 
 /* Interrupt Stack size in bytes. The Renesas RX toolchain sets the stack size using the #pragma stacksize directive.
  * If the interrupt stack is the only stack being used then the user will likely want to increase the default size
  * below.
  */
-#pragma stacksize si=0x200
+#pragma stacksize si=0x200 
 #endif 
 
 /* Heap size in bytes.

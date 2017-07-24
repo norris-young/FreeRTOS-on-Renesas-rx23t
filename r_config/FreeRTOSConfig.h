@@ -93,7 +93,7 @@
 
 /* Use these hook function, the application must define them.  */
 #define configUSE_IDLE_HOOK				1
-#define configUSE_TICK_HOOK				1
+#define configUSE_TICK_HOOK				0
 #define configUSE_MALLOC_FAILED_HOOK    1
 #define configCHECK_FOR_STACK_OVERFLOW  2
 
@@ -140,7 +140,7 @@ the pended interrupt.  This would normally be the lowest priority. */
 /* The maximum interrupt priority from which FreeRTOS API calls can be made.
 Interrupts that use a priority above this will not be effected by anything the
 kernel is doing. */
-#define configMAX_SYSCALL_INTERRUPT_PRIORITY    4
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY    5
 
 /* The peripheral used to generate the tick interrupt is configured as part of
 the application code.  This constant should be set to the vector number of the
@@ -166,36 +166,5 @@ to exclude the API function. */
 
 void vAssertCalled( void );
 #define configASSERT( x ) if( ( x ) == 0 ) { brk(); taskDISABLE_INTERRUPTS(); for( ;; ); }
-
-/* Override some of the priorities set in the common demo tasks.  This is
-required to ensure false positive timing errors are not reported. */
-#define bktPRIMARY_PRIORITY		( configMAX_PRIORITIES - 3 )
-#define bktSECONDARY_PRIORITY	( configMAX_PRIORITIES - 4 )
-#define intqHIGHER_PRIORITY		( configMAX_PRIORITIES - 3 )
-
-
-/*-----------------------------------------------------------
- * Ethernet configuration.
- *-----------------------------------------------------------*/
-
-/* MAC address configuration. */
-#define configMAC_ADDR0	0x00
-#define configMAC_ADDR1	0x12
-#define configMAC_ADDR2	0x13
-#define configMAC_ADDR3	0x10
-#define configMAC_ADDR4	0x15
-#define configMAC_ADDR5	0x11
-
-/* IP address configuration. */
-#define configIP_ADDR0		192
-#define configIP_ADDR1		168
-#define configIP_ADDR2		0
-#define configIP_ADDR3		200
-
-/* Netmask configuration. */
-#define configNET_MASK0		255
-#define configNET_MASK1		255
-#define configNET_MASK2		255
-#define configNET_MASK3		0
 
 #endif /* FREERTOS_CONFIG_H */

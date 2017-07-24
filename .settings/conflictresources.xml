@@ -3,14 +3,6 @@
     <cgModuleInfos>
         <moduleName>CG</moduleName>
         <peripheralInfo>
-            <peripheralName>sci1</peripheralName>
-            <pinInfo>
-                <pinName>RXD1</pinName>
-                <pinPort>PD5</pinPort>
-                <pinOption>FIXED</pinOption>
-            </pinInfo>
-        </peripheralInfo>
-        <peripheralInfo>
             <peripheralName>cgc</peripheralName>
             <pinInfo>
                 <pinName>XTAL</pinName>
@@ -24,10 +16,85 @@
             </pinInfo>
         </peripheralInfo>
         <peripheralInfo>
+            <peripheralName>port2</peripheralName>
+            <pinInfo>
+                <pinName>P23</pinName>
+                <pinPort>P23</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+        </peripheralInfo>
+        <peripheralInfo>
+            <peripheralName>port3</peripheralName>
+            <pinInfo>
+                <pinName>P32</pinName>
+                <pinPort>P32</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>P31</pinName>
+                <pinPort>P31</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>P30</pinName>
+                <pinPort>P30</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+        </peripheralInfo>
+        <peripheralInfo>
+            <peripheralName>sci1</peripheralName>
+            <pinInfo>
+                <pinName>RXD1</pinName>
+                <pinPort>PD5</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+        </peripheralInfo>
+        <peripheralInfo>
+            <peripheralName>port7</peripheralName>
+            <pinInfo>
+                <pinName>P76</pinName>
+                <pinPort>P76</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>P74</pinName>
+                <pinPort>P74</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>P72</pinName>
+                <pinPort>P72</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>P70</pinName>
+                <pinPort>P70</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>P70</pinName>
+                <pinPort>POE0#</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+        </peripheralInfo>
+        <peripheralInfo>
+            <peripheralName>icu</peripheralName>
+            <pinInfo>
+                <pinName>IRQ1</pinName>
+                <pinPort>P11</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>IRQ0</pinName>
+                <pinPort>P10</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+        </peripheralInfo>
+        <peripheralInfo>
             <peripheralName>tmr0</peripheralName>
             <pinInfo>
-                <pinName>TMO2</pinName>
-                <pinPort>P23</pinPort>
+                <pinName>TMO0</pinName>
+                <pinPort>PD3</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
         </peripheralInfo>

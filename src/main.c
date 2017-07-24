@@ -74,19 +74,28 @@
 
 /*-----------------------------------------------------------*/
 /* User include files. */
-#include "printf-stdarg.h"
 #include "mavlink_receive.h"
+#include "danger_check.h"
 #include "ppm_encoder.h"
+#include "mission.h"
 
 /*-----------------------------------------------------------*/
+/* Tool include files. */
+#include "printf-stdarg.h"
+
+/*-----------------------------------------------------------*/
+/* define macros. */
 #define INIT_TASK_PRI   1
+
+/*-----------------------------------------------------------*/
 /*
  * Configure the hardware as necessary to run this demo.
  */
 static void prvSetupHardware( void );
 static void init_task_entry(void *pvParameters);
 
-/* See http://www.freertos.org/RX231_RTOS_Renesas_GCC_IAR.html */
+/*-----------------------------------------------------------*/
+
 void main(void)
 {
 	/* Configure the hardware ready to run the demo. */
@@ -121,7 +130,9 @@ static void init_task_entry(void *pvParameters)
 {
     mavlink_receive_init();
     ppm_encoder_init();
-    printf("\nInitialization is done!\n");
+    danger_check_init();
+    mission_init();
+    debug_printf("\nInitialization is done!\n");
     /* When initialization is done ,this task can be deleted. */
     vTaskDelete(NULL);
 }

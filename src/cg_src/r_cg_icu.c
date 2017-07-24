@@ -18,11 +18,11 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_tmr_user.c
+* File Name    : r_cg_icu.c
 * Version      : Code Generator for RX23T V1.00.04.02 [29 Nov 2016]
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
-* Description  : This file implements device driver for TMR module.
+* Description  : This file implements device driver for ICU module.
 * Creation Date: 17.7.24
 ***********************************************************************************************************************/
 
@@ -36,7 +36,7 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "r_cg_tmr.h"
+#include "r_cg_icu.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -45,26 +45,99 @@ Includes
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
-extern void TMR0_IntHandler();
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
-* Function Name: r_tmr_cmia0_interrupt
-* Description  : None
+* Function Name: R_ICU_Create
+* Description  : This function initializes ICU module.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-#if FAST_INTERRUPT_VECTOR == VECT_TMR0_CMIA0
-#pragma interrupt r_tmr_cmia0_interrupt(vect=VECT(TMR0,CMIA0),fint)
-#else
-#pragma interrupt r_tmr_cmia0_interrupt(vect=VECT(TMR0,CMIA0))
-#endif
-static void r_tmr_cmia0_interrupt(void)
+void R_ICU_Create(void)
 {
-    /* Start user code. Do not edit comment generated here */
-    TMR0_IntHandler();
-    /* End user code. Do not edit comment generated here */
+    /* Disable IRQ0~5 interrupts */
+    ICU.IER[0x08].BYTE = _00_ICU_IRQ0_DISABLE | _00_ICU_IRQ1_DISABLE | _00_ICU_IRQ2_DISABLE | _00_ICU_IRQ3_DISABLE | 
+                         _00_ICU_IRQ4_DISABLE | _00_ICU_IRQ5_DISABLE;
+
+    /* Set IRQ digital filter clock */
+    ICU.IRQFLTC0.WORD = _0003_ICU_IRQ0_FILTER_PCLK_64 | _000C_ICU_IRQ1_FILTER_PCLK_64;
+
+    /* Set IRQ settings */
+    ICU.IRQCR[0].BYTE = _08_ICU_IRQ_EDGE_RISING;
+    ICU.IRQCR[1].BYTE = _08_ICU_IRQ_EDGE_RISING;
+
+    /* Set IRQ digital filter */
+    ICU.IRQFLTE0.BYTE = _01_ICU_IRQ0_FILTER_ENABLE | _02_ICU_IRQ1_FILTER_ENABLE;    
+
+    /* Set IRQ0 priority level */
+    IPR(ICU,IRQ0) = _05_ICU_PRIORITY_LEVEL5;
+
+    /* Set IRQ1 priority level */
+    IPR(ICU,IRQ1) = _05_ICU_PRIORITY_LEVEL5;
+
+    /* Set IRQ0 pin */
+    MPC.P10PFS.BYTE = 0x40U;
+    PORT1.PDR.BYTE &= 0xFEU;
+    PORT1.PMR.BYTE &= 0xFEU;
+
+    /* Set IRQ1 pin */
+    MPC.P11PFS.BYTE = 0x40U;
+    PORT1.PDR.BYTE &= 0xFDU;
+    PORT1.PMR.BYTE &= 0xFDU;
+}
+/***********************************************************************************************************************
+* Function Name: R_ICU_IRQ0_Start
+* Description  : This function enables IRQ0 interrupt.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_ICU_IRQ0_Start(void)
+{
+    /* Enable IRQ0 interrupt */
+    IEN(ICU,IRQ0) = 1U; 
+}
+/***********************************************************************************************************************
+* Function Name: R_ICU_IRQ0_Stop
+* Description  : This function disables IRQ0 interrupt.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_ICU_IRQ0_Stop(void)
+{
+    /* Disable IRQ0 interrupt */
+    IEN(ICU,IRQ0) = 0U; 
+}
+/***********************************************************************************************************************
+* Function Name: R_ICU_IRQ1_Start
+* Description  : This function enables IRQ1 interrupt.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_ICU_IRQ1_Start(void)
+{
+    /* Enable IRQ1 interrupt */
+    IEN(ICU,IRQ1) = 1U; 
+}
+/***********************************************************************************************************************
+* Function Name: R_ICU_IRQ1_Stop
+* Description  : This function disables IRQ1 interrupt.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_ICU_IRQ1_Stop(void)
+{
+    /* Disable IRQ1 interrupt */
+    IEN(ICU,IRQ1) = 0U; 
 }
 
 /* Start user code for adding. Do not edit comment generated here */
+unsigned char U_IRQ0_Pin_Read(void)
+{
+    return PORT1.PIDR.BIT.B0;
+}
+
+unsigned char U_IRQ1_Pin_Read(void)
+{
+    return PORT1.PIDR.BIT.B1;
+}
 /* End user code. Do not edit comment generated here */

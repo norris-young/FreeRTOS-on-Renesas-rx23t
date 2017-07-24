@@ -182,7 +182,7 @@ static int print( char **out, const char *format, va_list args )
 	return pc;
 }
 
-int printf(const char *format, ...)
+int debug_printf(const char *format, ...)
 {
         va_list args;
         
@@ -190,7 +190,7 @@ int printf(const char *format, ...)
         return print( 0, format, args );
 }
 
-int sprintf(char *out, const char *format, ...)
+int debug_sprintf(char *out, const char *format, ...)
 {
         va_list args;
         
@@ -199,7 +199,7 @@ int sprintf(char *out, const char *format, ...)
 }
 
 
-int snprintf( char *buf, unsigned int count, const char *format, ... )
+int debug_snprintf( char *buf, unsigned int count, const char *format, ... )
 {
         va_list args;
         
