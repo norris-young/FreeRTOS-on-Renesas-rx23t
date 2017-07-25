@@ -19,6 +19,7 @@ void pid_init(struct pid_param *pp, struct pid_cfg *pc)
     pp->dt          = (float)(1/DEFAULT_PID_FREQ);
     pp->d_lpf_alpha = DEFAULT_LPFITER;
     pp->i_max       = DEFAULT_I_MAX;
+    pp->out_max     = DEFAULT_OUT_MAX;
 
     pc->last_error      = 0.0;
     pc->error           = 0.0;
@@ -62,4 +63,9 @@ void pid_update(struct pid_param *pp, struct pid_cfg *pc)
     }
 
     pc->pid_out = pc->proportion + pc->integrator + pc->derivative;
+    if (pc->pid_out > pp->out_max) {
+        pc->pid_out = pp->out_max;
+    } else if (pc->pid_out < -(pp->out_max)) {
+        pc->pid_out = -(pp->out_max);
+    }
 }

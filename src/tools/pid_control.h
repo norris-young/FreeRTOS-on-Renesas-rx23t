@@ -13,6 +13,7 @@
 #define DEFAULT_KD          0.01f
 #define DEFAULT_ERROR_MIN   5.0f
 #define DEFAULT_I_MAX       50.0f
+#define DEFAULT_OUT_MAX     100.0f
 #define DEFAULT_PID_FREQ    50
 
 #define DEFAULT_LPFITER         7.9577e-3
@@ -32,6 +33,7 @@ struct pid_param {
     float dt;   //unit:s
     float d_lpf_alpha;
     float i_max;
+    float out_max;
 };
 
 struct pid_cfg {
