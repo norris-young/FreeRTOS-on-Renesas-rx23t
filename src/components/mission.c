@@ -46,6 +46,7 @@ static void red_led_warning();
  * --------------------------------------------------------*/
 void is_emergency_now(void)
 {
+    LED2 = LED_ON;
     send_ppm(channel_val_MID,channel_val_MID,channel_val_MIN,channel_val_MID,Stabilize,EMERGENCY_ON);
     vTaskDelay(pdMS_TO_TICKS(1000));
     disarm();
@@ -61,11 +62,12 @@ void mission_init(void)
     BaseType_t ret;
     ret = xTaskCreate(mission_task_entry,
                       "mission",
-                      configMINIMAL_STACK_SIZE,
+                      configMINIMAL_STACK_SIZE * 2,
                       NULL,
                       MISSION_TASK_PRI,
                       &mission_taskhandle);
     configASSERT(ret == pdPASS);
+
     R_ICU_IRQ0_Start();
 }
 
@@ -104,6 +106,7 @@ static void mission_task_entry(void *pvParameters)
             dest_Height = ((float)read_dest_Height())/100.0;
             LED2 = LED_ON;
             /* wait for start signal from IRQ which connected to a remote control. */
+            xTaskNotifyStateClear(NULL);
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
             red_led_warning();
             start_mission_timer();
@@ -113,6 +116,7 @@ static void mission_task_entry(void *pvParameters)
         case MISSION_2:
             dest_Height = ((float)read_dest_Height())/100.0;
             /* wait for start signal from IRQ which connected to a remote control. */
+            xTaskNotifyStateClear(NULL);
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
             red_led_warning();
             start_mission_timer();
@@ -121,6 +125,7 @@ static void mission_task_entry(void *pvParameters)
         case MISSION_3:
             dest_Height = ((float)read_dest_Height())/100.0;
             /* wait for start signal from IRQ which connected to a remote control. */
+            xTaskNotifyStateClear(NULL);
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
             red_led_warning();
             start_mission_timer();

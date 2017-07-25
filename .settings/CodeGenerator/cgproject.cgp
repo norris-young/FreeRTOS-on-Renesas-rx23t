@@ -3060,6 +3060,10 @@
     </DataElement>
     <DataElement key="FAST_INT_USED" value="False">
     </DataElement>
+    <DataElement key="LPC_USED" value="False">
+    </DataElement>
+    <DataElement key="BSC_ERR_DETECT_INTERRUPT" value="False">
+    </DataElement>
   </SerializableData>
   <SerializableData name="e442c8d2-3b9a-42d0-8be8-81eb898f6f62">
     <SerializableData name="DeviceCreadedMacros">
@@ -20414,7 +20418,7 @@
           <SerializableData name="ICU_IRQ_DIGITAL">
             <DataElement key="ContentItemCount" value="5">
             </DataElement>
-            <DataElement key="SelectedContentItem" value="PCLK_64">
+            <DataElement key="SelectedContentItem" value="PCLK_8">
             </DataElement>
             <SerializableData name="ContentItem1">
               <DataElement key="Pin" value="">
@@ -20528,7 +20532,7 @@
             </SerializableData>
           </SerializableData>
           <SerializableData name="txtDigitalValue">
-            <DataElement key="Text" value="0.078">
+            <DataElement key="Text" value="0.625">
             </DataElement>
           </SerializableData>
           <SerializableData name="ICU_IRQ_EDGE">
@@ -21042,7 +21046,7 @@
           <SerializableData name="ICU_IRQ_DIGITAL">
             <DataElement key="ContentItemCount" value="5">
             </DataElement>
-            <DataElement key="SelectedContentItem" value="PCLK_64">
+            <DataElement key="SelectedContentItem" value="PCLK_8">
             </DataElement>
             <SerializableData name="ContentItem1">
               <DataElement key="Pin" value="">
@@ -21156,7 +21160,7 @@
             </SerializableData>
           </SerializableData>
           <SerializableData name="txtDigitalValue">
-            <DataElement key="Text" value="0.078">
+            <DataElement key="Text" value="0.625">
             </DataElement>
           </SerializableData>
           <SerializableData name="ICU_IRQ_EDGE">
@@ -31584,7 +31588,7 @@
             </DataElement>
             <DataElement key="Visible" value="True">
             </DataElement>
-            <DataElement key="CustomValid" value="Valid, InternalInvalid">
+            <DataElement key="CustomValid" value="Valid">
             </DataElement>
           </SerializableData>
         </SerializableData>
@@ -31640,7 +31644,7 @@
             </DataElement>
             <DataElement key="Visible" value="True">
             </DataElement>
-            <DataElement key="CustomValid" value="Valid, InternalInvalid">
+            <DataElement key="CustomValid" value="Valid">
             </DataElement>
           </SerializableData>
         </SerializableData>
@@ -85030,6 +85034,76 @@
       <SerializableData name="AsynchronousMode_TransmitReceive5">
         <SerializableData name="PCLKB">
           <DataElement key="DataValue" value="5000">
+          </DataElement>
+        </SerializableData>
+      </SerializableData>
+      <SerializableData name="CAC">
+        <SerializableData name="CACMCLK">
+          <DataElement key="DataValue" value="10000">
+          </DataElement>
+        </SerializableData>
+        <SerializableData name="CACLCLK">
+          <DataElement key="DataValue" value="0">
+          </DataElement>
+        </SerializableData>
+        <SerializableData name="CACHCLK">
+          <DataElement key="DataValue" value="0">
+          </DataElement>
+        </SerializableData>
+        <SerializableData name="CACILCLK">
+          <DataElement key="DataValue" value="0">
+          </DataElement>
+        </SerializableData>
+        <SerializableData name="PCLKB">
+          <DataElement key="DataValue" value="5000">
+          </DataElement>
+        </SerializableData>
+      </SerializableData>
+      <SerializableData name="LPC">
+        <SerializableData name="ICLK">
+          <DataElement key="DataValue" value="40000">
+          </DataElement>
+        </SerializableData>
+        <SerializableData name="FCLK">
+          <DataElement key="DataValue" value="20000">
+          </DataElement>
+        </SerializableData>
+        <SerializableData name="PCLKA">
+          <DataElement key="DataValue" value="40000">
+          </DataElement>
+        </SerializableData>
+        <SerializableData name="PCLKB">
+          <DataElement key="DataValue" value="5000">
+          </DataElement>
+        </SerializableData>
+        <SerializableData name="PCLKD">
+          <DataElement key="DataValue" value="10000">
+          </DataElement>
+        </SerializableData>
+      </SerializableData>
+      <SerializableData name="MTU3_U0">
+        <SerializableData name="PCLKA">
+          <DataElement key="DataValue" value="40000">
+          </DataElement>
+        </SerializableData>
+      </SerializableData>
+      <SerializableData name="LVD1">
+        <SerializableData name="ICLK">
+          <DataElement key="DataValue" value="40000">
+          </DataElement>
+        </SerializableData>
+        <SerializableData name="LOCO">
+          <DataElement key="DataValue" value="0">
+          </DataElement>
+        </SerializableData>
+      </SerializableData>
+      <SerializableData name="LVD2">
+        <SerializableData name="ICLK">
+          <DataElement key="DataValue" value="40000">
+          </DataElement>
+        </SerializableData>
+        <SerializableData name="LOCO">
+          <DataElement key="DataValue" value="0">
           </DataElement>
         </SerializableData>
       </SerializableData>

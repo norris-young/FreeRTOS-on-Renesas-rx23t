@@ -60,7 +60,7 @@ void R_ICU_Create(void)
                          _00_ICU_IRQ4_DISABLE | _00_ICU_IRQ5_DISABLE;
 
     /* Set IRQ digital filter clock */
-    ICU.IRQFLTC0.WORD = _0003_ICU_IRQ0_FILTER_PCLK_64 | _000C_ICU_IRQ1_FILTER_PCLK_64;
+    ICU.IRQFLTC0.WORD = _0001_ICU_IRQ0_FILTER_PCLK_8 | _0004_ICU_IRQ1_FILTER_PCLK_8;
 
     /* Set IRQ settings */
     ICU.IRQCR[0].BYTE = _08_ICU_IRQ_EDGE_RISING;
