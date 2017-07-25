@@ -22,6 +22,7 @@ int read_one_number(void)
     int i = 0;
     int row_val;
     int col_val;
+    LED0 = LED_ON;
     while(1) {
         row_val = i%4;
         U_PORT_Row_Write(row_val);
@@ -30,8 +31,13 @@ int read_one_number(void)
         if (col_val) {
             vTaskDelay(pdMS_TO_TICKS(200));
             if (col_val == U_PORT_Col_Read()) {
+                LED0 = LED_OFF;
                 /* wait for button is loosen. */
                 while(U_PORT_Col_Read() == col_val);
+                LED0 = LED_ON;
+                vTaskDelay(pdMS_TO_TICKS(500));
+                LED0 = LED_OFF;
+                vTaskDelay(pdMS_TO_TICKS(500));
                 break;
             }
         }

@@ -69,7 +69,9 @@ static void pos_ctl_task_entry(void *pvParameters)
         pid_update(&position_x_pp, &position_x_pc);
         pid_update(&position_y_pp, &position_y_pc);
 
-        send_ppm((uint16_t)(int)position_x_pc.pid_out, (uint16_t)(int)position_y_pc.pid_out, 0, 0, 0, 0);
+        send_ppm(channel_val_MID + channel_val_RANGE*(uint16_t)(int)position_x_pc.pid_out/100,
+                 channel_val_MID + channel_val_RANGE*(uint16_t)(int)position_y_pc.pid_out/100,
+                 0, 0, 0, 0);
 
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000/POS_PID_FREQ));
     }

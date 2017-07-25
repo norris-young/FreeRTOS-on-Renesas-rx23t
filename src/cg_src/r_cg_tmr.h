@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for TMR module.
-* Creation Date: 17.7.24
+* Creation Date: 17.7.25
 ***********************************************************************************************************************/
 #ifndef TMR_H
 #define TMR_H

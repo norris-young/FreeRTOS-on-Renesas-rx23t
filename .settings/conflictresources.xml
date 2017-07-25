@@ -62,13 +62,28 @@
                 <pinOption>FIXED</pinOption>
             </pinInfo>
             <pinInfo>
+                <pinName>P75</pinName>
+                <pinPort>P75</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
                 <pinName>P74</pinName>
                 <pinPort>P74</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
             <pinInfo>
+                <pinName>P73</pinName>
+                <pinPort>P73</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
                 <pinName>P72</pinName>
                 <pinPort>P72</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>P71</pinName>
+                <pinPort>P71</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
             <pinInfo>

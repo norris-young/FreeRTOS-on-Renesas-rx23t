@@ -113,7 +113,7 @@ static void mavlink_receive_task_entry(void *pvParameters)
                 start_receive = true;
             }
             if(start_receive == true) {
-                LED0 = LED_ON;
+                LED1 = LED_ON;
                 Rx_Buffer[Rx_Buffer_pointer++] = rx_buffer[rx_buffer_pointer][i];
                 if(Rx_Buffer[MSG_LEN]==MSG_ALTITUDE_LENGTH && Rx_Buffer[MSG_ID]==MSG_ALTITUDE_ID && Rx_Buffer[HEIGHT_BUFFER_END]!=0) {
                     memcpy(Buffer, Rx_Buffer, MSG_HEIGHT_LENGTH);
@@ -147,7 +147,7 @@ static void mavlink_receive_task_entry(void *pvParameters)
                 //
                 // Turn off the LED
                 //
-                LED0 = LED_OFF;
+                LED1 = LED_OFF;
             }
         }
         rx_buffer_pointer = rx_buffer_pointer ? 0 : 1;

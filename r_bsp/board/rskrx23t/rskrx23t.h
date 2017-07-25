@@ -43,5 +43,9 @@
 /* LEDs */
 #define LED0                PORT7.PODR.BIT.B6
 #define LED0_PDR            PORT7.PDR.BIT.B6
+#define LED1                PORT7.PODR.BIT.B3
+#define LED1_PDR            PORT7.PDR.BIT.B3
+#define LED2                PORT7.PODR.BIT.B1
+#define LED2_PDR            PORT7.PDR.BIT.B1
 
 #endif /* RSKRX23T */
