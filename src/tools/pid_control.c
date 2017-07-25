@@ -39,21 +39,27 @@ void pid_update(struct pid_param *pp, struct pid_cfg *pc)
     pc->proportion = pp->kp * pc->error;
 
     // calculate integrator constrain in i_max.
-    pc->integrator += pp->ki * pc->error * pp->dt;
-    if (pc->integrator < -(pp->i_max)) {
-        pc->integrator = -(pp->i_max);
-    } else if (pc->integrator > pp->i_max) {
-        pc->integrator = pp->i_max;
+    if((pp->ki != 0) && (pp->dt != 0)) {
+        pc->integrator += pp->ki * pc->error * pp->dt;
+        if (pc->integrator < -(pp->i_max)) {
+            pc->integrator = -(pp->i_max);
+        } else if (pc->integrator > pp->i_max) {
+            pc->integrator = pp->i_max;
+        }
+    } else {
+        pc->integrator = 0;
     }
 
     // calculate instantaneous derivative.
-    pc->derivative = pp->kd * (pc->error - pc->last_error) / pp->dt;
-    // discrete low pass filter, cuts out the
-    // high frequency noise that can drive the controller crazy.
-    pc->derivative = pc->last_derivative + pp->d_lpf_alpha * (pc->derivative - pc->last_derivative);
-    // update state
-    pc->last_error = pc->error;
-    pc->last_derivative = pc->derivative;
+    if((pp->kd != 0) && (pp->dt != 0)) {
+        pc->derivative = pp->kd * (pc->error - pc->last_error) / pp->dt;
+        // discrete low pass filter, cuts out the
+        // high frequency noise that can drive the controller crazy.
+        pc->derivative = pc->last_derivative + pp->d_lpf_alpha * (pc->derivative - pc->last_derivative);
+        // update state
+        pc->last_error = pc->error;
+        pc->last_derivative = pc->derivative;
+    }
 
     pc->pid_out = pc->proportion + pc->integrator + pc->derivative;
 }

@@ -64,9 +64,9 @@ static void pos_ctl_task_entry(void *pvParameters)
 
     while (1) {
         position_x_pc.error = (float)(CAMERA_MID_X - mid_x);
-        pid_update(&position_x_pp, &position_x_pc);
-
         position_y_pc.error = (float)(CAMERA_MID_Y - mid_y);
+
+        pid_update(&position_x_pp, &position_x_pc);
         pid_update(&position_y_pp, &position_y_pc);
 
         send_ppm((uint16_t)(int)position_x_pc.pid_out, (uint16_t)(int)position_y_pc.pid_out, 0, 0, 0, 0);
