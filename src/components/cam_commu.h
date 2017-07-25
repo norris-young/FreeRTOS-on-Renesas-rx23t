@@ -14,9 +14,9 @@
 #define CAMERA_MID_Y        28
 
 #define COMMUNI_STX         0xFE
-#define CAM_BUFFER_LENGTH   5
+#define CAM_BUFFER_LENGTH   3
 
-#define CAM_COMMU_TASK_PRI  3
+#define CAM_COMMU_TASK_PRI  5
 
 extern volatile uint8_t mid_x, mid_y;
 
