@@ -72,6 +72,17 @@ void start_mission_timer(void)
 
 /* ------------------------------------------------------------
  *
+ * the function provide for mission task to stop mission time
+ * out TIMER, when mission is done in time limit.
+ *
+ * ----------------------------------------------------------*/
+void stop_mission_timer(void)
+{
+    xTimerStop(mission_tout_timerhandle, portMAX_DELAY);
+}
+
+/* ------------------------------------------------------------
+ *
  * sends emergency remote signal to danger check task.
  *
  * ----------------------------------------------------------*/

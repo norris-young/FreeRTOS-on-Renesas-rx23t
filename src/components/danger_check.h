@@ -14,5 +14,6 @@
 
 extern void danger_check_init(void);
 extern void start_mission_timer(void);
+extern void stop_mission_timer(void);
 
 #endif /* COMPONENTS_DANGER_CHECK_H_ */

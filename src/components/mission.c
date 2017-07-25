@@ -32,6 +32,7 @@ static void arm(uint16_t flight_mode);
 static void disarm(void);
 static int read_dest_Height(void);
 static void alt_hold(const float dest_Height);
+static void red_led_warning();
 
 /*-----------------------------------------------------------*/
 /* global functions definition. */
@@ -101,22 +102,29 @@ static void mission_task_entry(void *pvParameters)
         switch(mission) {
         case MISSION_1:
             dest_Height = ((float)read_dest_Height())/100.0;
+            LED2 = LED_ON;
             /* wait for start signal from IRQ which connected to a remote control. */
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+            red_led_warning();
             start_mission_timer();
             alt_hold(dest_Height);
+            stop_mission_timer();
             break;
         case MISSION_2:
             dest_Height = ((float)read_dest_Height())/100.0;
             /* wait for start signal from IRQ which connected to a remote control. */
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+            red_led_warning();
             start_mission_timer();
+            stop_mission_timer();
             break;
         case MISSION_3:
             dest_Height = ((float)read_dest_Height())/100.0;
             /* wait for start signal from IRQ which connected to a remote control. */
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+            red_led_warning();
             start_mission_timer();
+            stop_mission_timer();
             break;
         default:
             /* select a mission number which does not exist. */
@@ -258,4 +266,13 @@ static void alt_hold(const float dest_Height)
     while(current_Height > 0.1)
         send_ppm(0,0,channel_percent(37),0,Alt_Hold,0);
     disarm();
+}
+
+static void red_led_warning()
+{
+    LED2 = LED_OFF;
+    vTaskDelay(pdMS_TO_TICKS(2000));
+    LED2 = LED_ON;
+    vTaskDelay(pdMS_TO_TICKS(10000));
+    LED2 = LED_OFF;
 }
