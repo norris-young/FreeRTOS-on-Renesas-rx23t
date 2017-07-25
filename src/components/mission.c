@@ -269,7 +269,7 @@ static void alt_hold(const float dest_Height)
 
     /* drop down & disarm. */
     while(current_Height > 0.1)
-        send_ppm(0,0,channel_percent(37),0,Alt_Hold,0);
+        send_ppm(channel_val_MID,channel_val_MID,channel_percent(37),0,Alt_Hold,0);
     disarm();
 }
 

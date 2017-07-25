@@ -61,7 +61,7 @@ void position_ctl_stop(void)
 static void pos_ctl_task_entry(void *pvParameters)
 {
     TickType_t xLastWakeTime;
-
+    xLastWakeTime = xTaskGetTickCount();
     while (1) {
         position_x_pc.error = (float)(CAMERA_MID_X - mid_x);
         position_y_pc.error = (float)(CAMERA_MID_Y - mid_y);
