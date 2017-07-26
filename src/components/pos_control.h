@@ -8,11 +8,11 @@
 #ifndef COMPONENTS_POS_CONTROL_H_
 #define COMPONENTS_POS_CONTROL_H_
 
-#define POS_KP          5.0f
+#define POS_KP          2.7f
 #define POS_KI          0.0f
-#define POS_KD          0.0f
-#define POS_I_MAX       50.0f
-#define POS_OUT_MAX     80.0f
+#define POS_KD          0.15f
+#define POS_I_MAX       25.0f
+#define POS_OUT_MAX     50.0f
 #define POS_PID_FREQ    50
 #define POS_X_ERROR_MIN 0
 #define POS_Y_ERROR_MIN 0
