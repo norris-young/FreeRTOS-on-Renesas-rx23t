@@ -24,7 +24,7 @@
             </pinInfo>
             <pinInfo>
                 <pinName>TXD5</pinName>
-                <pinPort>PB2</pinPort>
+                <pinPort>PB5</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
         </peripheralInfo>

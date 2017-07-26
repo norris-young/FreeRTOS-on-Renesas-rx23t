@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for SCI module.
-* Creation Date: 17.7.25
+* Creation Date: 17.7.26
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -194,10 +194,10 @@ void R_SCI5_Create(void)
     PORTB.PMR.BYTE |= 0x40U;
 
     /* Set TXD5 pin */
-    MPC.PB2PFS.BYTE = 0x0AU;
-    PORTB.PODR.BYTE |= 0x04U;
-    PORTB.PDR.BYTE |= 0x04U;
-    PORTB.PMR.BYTE |= 0x04U;
+    MPC.PB5PFS.BYTE = 0x0AU;
+    PORTB.PODR.BYTE |= 0x20U;
+    PORTB.PDR.BYTE |= 0x20U;
+    PORTB.PMR.BYTE |= 0x20U;
 }
 /***********************************************************************************************************************
 * Function Name: R_SCI5_Start
@@ -225,7 +225,7 @@ void R_SCI5_Start(void)
 void R_SCI5_Stop(void)
 {
     /* Set TXD5 pin */
-    PORTB.PMR.BYTE &= 0xFBU;
+    PORTB.PMR.BYTE &= 0xDFU;
     SCI5.SCR.BIT.TE = 0U;      /* Disable serial transmit */
     SCI5.SCR.BIT.RE = 0U;      /* Disable serial receive */
 
@@ -291,7 +291,7 @@ MD_STATUS R_SCI5_Serial_Send(uint8_t * const tx_buf, uint16_t tx_num)
         g_sci5_tx_count = tx_num;
 
         /* Set TXD5 pin */
-        PORTB.PMR.BYTE |= 0x04U;
+        PORTB.PMR.BYTE |= 0x20U;
         SCI5.SCR.BIT.TIE = 1U;
         SCI5.SCR.BIT.TE = 1U;
     }
