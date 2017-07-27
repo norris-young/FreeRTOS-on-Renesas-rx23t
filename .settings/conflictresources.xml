@@ -3,6 +3,24 @@
     <cgModuleInfos>
         <moduleName>CG</moduleName>
         <peripheralInfo>
+            <peripheralName>portb</peripheralName>
+            <pinInfo>
+                <pinName>PB7</pinName>
+                <pinPort>PB7</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>PB4</pinName>
+                <pinPort>PB4</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>PB4</pinName>
+                <pinPort>POE8#</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+        </peripheralInfo>
+        <peripheralInfo>
             <peripheralName>cgc</peripheralName>
             <pinInfo>
                 <pinName>XTAL</pinName>
@@ -51,6 +69,19 @@
             <pinInfo>
                 <pinName>RXD1</pinName>
                 <pinPort>PD5</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+        </peripheralInfo>
+        <peripheralInfo>
+            <peripheralName>rspi0</peripheralName>
+            <pinInfo>
+                <pinName>RSPCKA</pinName>
+                <pinPort>PB3</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>MOSIA</pinName>
+                <pinPort>PB0</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
         </peripheralInfo>

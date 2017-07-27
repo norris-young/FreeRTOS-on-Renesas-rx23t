@@ -165,5 +165,7 @@ void R_PORT_Create(void);
 /* Start user code for function. Do not edit comment generated here */
 extern void U_PORT_Row_Write(int row);
 extern int U_PORT_Col_Read(void);
+extern void U_PORT_Oled_RST_Pin_Write(unsigned char value);
+extern void U_PORT_Oled_DC_Pin_Write(unsigned char value);
 /* End user code. Do not edit comment generated here */
 #endif
