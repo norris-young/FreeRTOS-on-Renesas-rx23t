@@ -261,10 +261,11 @@ static void alt_hold(const float dest_Height)
 
     /* arrives the destination height and hold for x milliseconds. */
     send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
+    LED0 = LED_ON;
     position_ctl_start();
     vTaskDelay(pdMS_TO_TICKS(10000));
     position_ctl_stop();
-
+    LED0 = LED_OFF;
     /* drop down & disarm. */
     while(current_Height > 0.1)
         send_ppm(channel_val_MID,channel_val_MID,channel_percent(37),0,Alt_Hold,0);
