@@ -34,10 +34,6 @@ int read_one_number(void)
                 LED0 = LED_OFF;
                 /* wait for button is loosen. */
                 while(U_PORT_Col_Read() == col_val);
-                LED0 = LED_ON;
-                vTaskDelay(pdMS_TO_TICKS(500));
-                LED0 = LED_OFF;
-                vTaskDelay(pdMS_TO_TICKS(500));
                 break;
             }
         }

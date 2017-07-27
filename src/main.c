@@ -79,6 +79,7 @@
 #include "ppm_encoder.h"
 #include "cam_commu.h"
 #include "mission.h"
+#include "io.h"
 
 /*-----------------------------------------------------------*/
 /* Tool include files. */
@@ -129,6 +130,7 @@ uint16_t usProtectDummy = ( uint16_t ) ( SYSTEM.PRCR.WORD & 0x000FU );
 
 static void init_task_entry(void *pvParameters)
 {
+    io_init();
     mavlink_receive_init();
     cam_commu_init();
     ppm_encoder_init();

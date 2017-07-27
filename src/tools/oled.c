@@ -122,7 +122,6 @@ static uint32_t oled_txbuf;
 static void OLED_WB(uint8_t data);
 static void OLED_WrDat(unsigned char dat);
 static void OLED_WrCmd(unsigned char cmd);
-static void OLED_CLS(void);
 static void oled_Set_Pos(unsigned char x, unsigned char y);
 static void oled_Set_StartColumn(unsigned char d);
 static void oled_Set_AddressingMode(unsigned char d);
@@ -174,13 +173,29 @@ void oled_init(void)
     oled_Set_Entire_Display(0x00);          // Disable Entire Display On (0x00/0x01)
     oled_Set_Inverse_Display(0x00);         // Disable Inverse Display On (0x00/0x01)
     oled_Set_Display_On_Off(0x01);          // Display On (0x00/0x01)
-    OLED_CLS();                             // Clear Screen
+    oled_CLS();                             // Clear Screen
     oled_Set_Pos(0,0);
 }
 
 void oled_callback(void)
 {
     last_send_finish = pdTRUE;
+}
+
+/* clear the screen(fill with black). */
+void oled_CLS(void)
+{
+    /********************更新显存到OLED**********************/
+    unsigned char y,x;
+
+    for(y=0;y<8;y++)
+    {
+        OLED_WrCmd(0xb0+y);      //0xb0+0~7表示页0~页7?
+        OLED_WrCmd(0x00);        //0x00+0~16表示将128列分成16组其地址在某组中的第几列
+        OLED_WrCmd(0x10);        //0x10+0~16表示将128列分成16组其地址所在第几组
+        for(x=0;x<128;x++)
+            OLED_WrDat(0x00);    //fill screen with 0(black), so the screen is cleared.
+    }
 }
 
 /* display a 6*8 standard ASCII character. */
@@ -357,8 +372,9 @@ static void OLED_WB(uint8_t data)
     while (!last_send_finish);
     /* Send byte through the SPI peripheral */
     last_send_finish = pdFALSE;
-    oled_txbuf = (uint32_t)data << 24;
+    oled_txbuf = (uint32_t)data;
     R_RSPI0_Send(&oled_txbuf, 1);
+    R_BSP_SoftwareDelay(8, BSP_DELAY_MICROSECS);
 }
 
 /* write a byte data to OLED. */
@@ -373,22 +389,6 @@ static void OLED_WrCmd(unsigned char cmd)
 {
     OLED_DC(0);
     OLED_WB(cmd);
-}
-
-/* clear the screen(fill with black). */
-static void OLED_CLS(void)
-{
-    /********************更新显存到OLED**********************/
-    unsigned char y,x;
-
-    for(y=0;y<8;y++)
-    {
-        OLED_WrCmd(0xb0+y);      //0xb0+0~7表示页0~页7?
-        OLED_WrCmd(0x00);        //0x00+0~16表示将128列分成16组其地址在某组中的第几列
-        OLED_WrCmd(0x10);        //0x10+0~16表示将128列分成16组其地址所在第几组
-        for(x=0;x<128;x++)
-            OLED_WrDat(0x00);    //fill screen with 0(black), so the screen is cleared.
-    }
 }
 
 /* OLED private functions. */

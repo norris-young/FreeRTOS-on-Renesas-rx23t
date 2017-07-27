@@ -19,18 +19,21 @@
 #include "pos_control.h"
 #include "matrix_key.h"
 #include "mission.h"
+#include "io.h"
 
 /*-----------------------------------------------------------*/
 /* private variables */
 /* mission task handle structure, used for IRQ send task notification. */
 static TaskHandle_t mission_taskhandle;
+static volatile float dest_Height;
+static volatile int8_t mission = -1;
+static volatile float mission_kp, mission_ki, mission_kd;
 
 /*-----------------------------------------------------------*/
 /* private functions declaration. */
 static void mission_task_entry(void *pvParameters);
 static void arm(uint16_t flight_mode);
 static void disarm(void);
-static int read_dest_Height(void);
 static void alt_hold(const float dest_Height);
 static void red_led_warning();
 
@@ -71,6 +74,16 @@ void mission_init(void)
     R_ICU_IRQ0_Start();
 }
 
+void send_mission_params(int8_t _mission, float _dest_Height, float kp, float ki, float kd)
+{
+    mission = _mission;
+    dest_Height = _dest_Height;
+    mission_kp = kp;
+    mission_ki = ki;
+    mission_kd = kd;
+    xTaskNotifyGive(mission_taskhandle);
+}
+
 /* ----------------------------------------------------------
  *
  * send start signal to the mission task.
@@ -97,14 +110,11 @@ void IRQ0_IntHandler(void)
  * --------------------------------------------------------*/
 static void mission_task_entry(void *pvParameters)
 {
-    int mission = -1;
-    float dest_Height;
     while(1) {
-        mission = read_one_number();
-        switch(mission) {
+        io_input();
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        switch (mission) {
         case MISSION_1:
-            dest_Height = ((float)read_dest_Height())/100.0;
-            LED2 = LED_ON;
             /* wait for start signal from IRQ which connected to a remote control. */
             xTaskNotifyStateClear(NULL);
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
@@ -114,7 +124,6 @@ static void mission_task_entry(void *pvParameters)
             stop_mission_timer();
             break;
         case MISSION_2:
-            dest_Height = ((float)read_dest_Height())/100.0;
             /* wait for start signal from IRQ which connected to a remote control. */
             xTaskNotifyStateClear(NULL);
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
@@ -123,7 +132,6 @@ static void mission_task_entry(void *pvParameters)
             stop_mission_timer();
             break;
         case MISSION_3:
-            dest_Height = ((float)read_dest_Height())/100.0;
             /* wait for start signal from IRQ which connected to a remote control. */
             xTaskNotifyStateClear(NULL);
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
@@ -166,77 +174,6 @@ static void disarm(void)
 
 /* ----------------------------------------------------------
  *
- * base on the read_one_number, divide the 4*4 matrix keyboard
- * to a different function:
- * 1|2|3|A
- * 4|5|6|B
- * 7|8|9|C
- * ×|0|√|D
- *
- * --------------------------------------------------------*/
-static int read_dest_Height(void)
-{
-    int dest_Height = 0;
-    bool end_of_input = false;
-    while(!end_of_input){
-//        dest_h_int = dest_Height;
-        switch(read_one_number()){
-        case 1:
-            dest_Height += 1;
-            dest_Height *= 10;
-            break;
-        case 2:
-            dest_Height += 2;
-            dest_Height *= 10;
-            break;
-        case 3:
-            dest_Height += 3;
-            dest_Height *= 10;
-            break;
-        case 5:
-            dest_Height += 4;
-            dest_Height *= 10;
-            break;
-        case 6:
-            dest_Height += 5;
-            dest_Height *= 10;
-            break;
-        case 7:
-            dest_Height += 6;
-            dest_Height *= 10;
-            break;
-        case 9:
-            dest_Height += 7;
-            dest_Height *= 10;
-            break;
-        case 10:
-            dest_Height += 8;
-            dest_Height *= 10;
-            break;
-        case 11:
-            dest_Height += 9;
-            dest_Height *= 10;
-            break;
-        case 13:
-            dest_Height = 0;
-            break;
-        case 14:
-            dest_Height += 0;
-            dest_Height *= 10;
-            break;
-        case 15:
-            dest_Height /= 10;
-            end_of_input = true;
-            break;
-        default:
-            break;
-        }
-    }
-    return dest_Height;
-}
-
-/* ----------------------------------------------------------
- *
  * the process in altitude hold mode, it is called by mission
  * task, and it's PPM does not include emergency channel or
  * other unnecessary channels, so that the danger check or
@@ -262,7 +199,7 @@ static void alt_hold(const float dest_Height)
     /* arrives the destination height and hold for x milliseconds. */
     send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
     LED0 = LED_ON;
-    position_ctl_start();
+    position_ctl_start(pdFALSE, mission_kp, mission_ki, mission_kd);
     vTaskDelay(pdMS_TO_TICKS(10000));
     position_ctl_stop();
     LED0 = LED_OFF;

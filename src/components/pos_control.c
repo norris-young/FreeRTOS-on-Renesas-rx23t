@@ -32,7 +32,7 @@ static void pos_pid_init(struct pid_param *pp, struct pid_cfg *pc);
 
 /*-----------------------------------------------------------*/
 /* global functions definition. */
-void position_ctl_start(void)
+void position_ctl_start(int use_Default_PID, float kp, float ki, float kd)
 {
     BaseType_t ret;
 
@@ -40,6 +40,14 @@ void position_ctl_start(void)
     pos_pid_init(&position_y_pp, &position_y_pc);
     position_x_pc.error_min = (float)POS_X_ERROR_MIN;
     position_y_pc.error_min = (float)POS_Y_ERROR_MIN;
+    if (!use_Default_PID) {
+        position_x_pp.kp = kp;
+        position_y_pp.kp = kp;
+        position_x_pp.ki = ki;
+        position_y_pp.ki = ki;
+        position_x_pp.kd = kd;
+        position_y_pp.kd = kd;
+    }
 
     ret = xTaskCreate(pos_ctl_task_entry,
                       "pos_ctl",

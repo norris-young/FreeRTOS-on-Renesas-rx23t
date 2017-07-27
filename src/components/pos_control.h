@@ -19,7 +19,7 @@
 
 #define POS_CTL_TASK_PRI    5
 
-extern void position_ctl_start(void);
+extern void position_ctl_start(int use_Default_PID, float kp, float ki, float kd);
 extern void position_ctl_stop(void);
 
 #endif /* COMPONENTS_POS_CONTROL_H_ */
