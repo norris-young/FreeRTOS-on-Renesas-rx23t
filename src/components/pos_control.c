@@ -63,6 +63,7 @@ static void pos_ctl_task_entry(void *pvParameters)
     xLastWakeTime = xTaskGetTickCount();
 
     while (1) {
+        LED0 = LED_ON;
         position_x_pc.error = (float)(CAMERA_MID_X - mid_x);
         position_y_pc.error = (float)(CAMERA_MID_Y - mid_y);
 
@@ -74,6 +75,7 @@ static void pos_ctl_task_entry(void *pvParameters)
                  0, 0, 0, 0);
 
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000/POS_PID_FREQ));
+        LED0 = LED_OFF;
     }
 }
 
