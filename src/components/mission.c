@@ -115,6 +115,7 @@ static void mission_task_entry(void *pvParameters)
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         switch (mission) {
         case MISSION_1:
+            LED2 = LED_ON;
             /* wait for start signal from IRQ which connected to a remote control. */
             xTaskNotifyStateClear(NULL);
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
@@ -124,6 +125,7 @@ static void mission_task_entry(void *pvParameters)
             stop_mission_timer();
             break;
         case MISSION_2:
+            LED2 = LED_ON;
             /* wait for start signal from IRQ which connected to a remote control. */
             xTaskNotifyStateClear(NULL);
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
@@ -132,6 +134,7 @@ static void mission_task_entry(void *pvParameters)
             stop_mission_timer();
             break;
         case MISSION_3:
+            LED2 = LED_ON;
             /* wait for start signal from IRQ which connected to a remote control. */
             xTaskNotifyStateClear(NULL);
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
