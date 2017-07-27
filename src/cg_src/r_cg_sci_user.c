@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for SCI module.
-* Creation Date: 17.7.26
+* Creation Date: 17.7.27
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -82,6 +82,27 @@ static void r_sci1_receive_interrupt(void)
             r_sci1_callback_receiveend();
         }
     }
+}
+/***********************************************************************************************************************
+* Function Name: r_sci1_receiveerror_interrupt
+* Description  : None
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+#if FAST_INTERRUPT_VECTOR == VECT_SCI1_ERI1
+#pragma interrupt r_sci1_receiveerror_interrupt(vect=VECT(SCI1,ERI1),fint)
+#else
+#pragma interrupt r_sci1_receiveerror_interrupt(vect=VECT(SCI1,ERI1))
+#endif
+static void r_sci1_receiveerror_interrupt(void)
+{
+    uint8_t err_type;
+
+    /* Clear overrun, framing and parity error flags */
+    err_type = SCI1.SSR.BYTE;
+    err_type &= 0xC7U;
+    err_type |= 0xC0U;
+    SCI1.SSR.BYTE = err_type;
 }
 /***********************************************************************************************************************
 * Function Name: r_sci1_callback_receiveend
@@ -166,6 +187,27 @@ static void r_sci5_receive_interrupt(void)
             r_sci5_callback_receiveend();
         }
     }
+}
+/***********************************************************************************************************************
+* Function Name: r_sci5_receiveerror_interrupt
+* Description  : None
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+#if FAST_INTERRUPT_VECTOR == VECT_SCI5_ERI5
+#pragma interrupt r_sci5_receiveerror_interrupt(vect=VECT(SCI5,ERI5),fint)
+#else
+#pragma interrupt r_sci5_receiveerror_interrupt(vect=VECT(SCI5,ERI5))
+#endif
+static void r_sci5_receiveerror_interrupt(void)
+{
+    uint8_t err_type;
+
+    /* Clear overrun, framing and parity error flags */
+    err_type = SCI5.SSR.BYTE;
+    err_type &= 0xC7U;
+    err_type |= 0xC0U;
+    SCI5.SSR.BYTE = err_type;
 }
 /***********************************************************************************************************************
 * Function Name: r_sci5_callback_transmitend
