@@ -31,12 +31,13 @@ typedef enum {
 }course_state_e;
 
 typedef enum {
-    HUNDRED = 0,
-    DECADE = 1,
-    UNIT = 2,
-    DECIMAL_FIRST = 3,
-    DECIMAL_SECOND = 4,
-}course_bit_e;
+    IDLE = 0,
+    INTEGER = 1,
+    DECIMAL_1 = 2,
+    DECIMAL_2 = 3,
+    END = 4,
+    CANCEL = 5,
+}input_state_e;
 
 extern void io_init(void);
 extern void io_input(void);
