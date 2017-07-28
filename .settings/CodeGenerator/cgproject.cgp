@@ -800,11 +800,11 @@
         </DataElement>
       </SerializableData>
       <SerializableData name="PinNumber_12">
-        <DataElement key="InusedAs" value="">
+        <DataElement key="InusedAs" value="PortD##PD7">
         </DataElement>
       </SerializableData>
       <SerializableData name="PinNumber_13">
-        <DataElement key="InusedAs" value="">
+        <DataElement key="InusedAs" value="PortD##PD6">
         </DataElement>
       </SerializableData>
       <SerializableData name="PinNumber_14">
@@ -820,7 +820,7 @@
         </DataElement>
       </SerializableData>
       <SerializableData name="PinNumber_17">
-        <DataElement key="InusedAs" value="PortB##PB7">
+        <DataElement key="InusedAs" value="">
         </DataElement>
       </SerializableData>
       <SerializableData name="PinNumber_18">
@@ -836,7 +836,7 @@
         </DataElement>
       </SerializableData>
       <SerializableData name="PinNumber_21">
-        <DataElement key="InusedAs" value="PortB##PB4">
+        <DataElement key="InusedAs" value="">
         </DataElement>
       </SerializableData>
       <SerializableData name="PinNumber_22">
@@ -1296,7 +1296,7 @@
         </DataElement>
         <DataElement key="NoiseFilterFunction" value="False">
         </DataElement>
-        <DataElement key="PinInOut" value="IO">
+        <DataElement key="PinInOut" value="O">
         </DataElement>
         <DataElement key="PullUp" value="False">
         </DataElement>
@@ -1320,7 +1320,7 @@
         </DataElement>
         <DataElement key="NoiseFilterFunction" value="False">
         </DataElement>
-        <DataElement key="PinInOut" value="IO">
+        <DataElement key="PinInOut" value="O">
         </DataElement>
         <DataElement key="PullUp" value="False">
         </DataElement>
@@ -3199,7 +3199,7 @@
           </DataElement>
           <DataElement key="error" value="NoError">
           </DataElement>
-          <DataElement key="inuse" value="Used">
+          <DataElement key="inuse" value="Unused">
           </DataElement>
         </SerializableData>
         <SerializableData name="portD">
@@ -3207,7 +3207,7 @@
           </DataElement>
           <DataElement key="error" value="NoError">
           </DataElement>
-          <DataElement key="inuse" value="Unused">
+          <DataElement key="inuse" value="Used">
           </DataElement>
         </SerializableData>
         <SerializableData name="portE">
@@ -9814,18 +9814,12 @@
           <SerializableData name="ClassContent">
             <DataElement key="FunctionName" value="PB4">
             </DataElement>
-            <DataElement key="InUse" value="True">
+            <DataElement key="InUse" value="False">
             </DataElement>
             <DataElement key="FunctionIO" value="O">
             </DataElement>
             <DataElement key="FunctionState" value="0">
             </DataElement>
-            <SerializableData name="InUsePins">
-              <SerializableData name="CG">
-                <DataElement key="0" value="21">
-                </DataElement>
-              </SerializableData>
-            </SerializableData>
           </SerializableData>
         </SerializableData>
         <SerializableData name="PB5">
@@ -9868,18 +9862,12 @@
           <SerializableData name="ClassContent">
             <DataElement key="FunctionName" value="PB7">
             </DataElement>
-            <DataElement key="InUse" value="True">
+            <DataElement key="InUse" value="False">
             </DataElement>
             <DataElement key="FunctionIO" value="O">
             </DataElement>
             <DataElement key="FunctionState" value="0">
             </DataElement>
-            <SerializableData name="InUsePins">
-              <SerializableData name="CG">
-                <DataElement key="0" value="17">
-                </DataElement>
-              </SerializableData>
-            </SerializableData>
           </SerializableData>
         </SerializableData>
         <SerializableData name="PD3">
@@ -9938,12 +9926,18 @@
           <SerializableData name="ClassContent">
             <DataElement key="FunctionName" value="PD6">
             </DataElement>
-            <DataElement key="InUse" value="False">
+            <DataElement key="InUse" value="True">
             </DataElement>
-            <DataElement key="FunctionIO" value="None">
+            <DataElement key="FunctionIO" value="O">
             </DataElement>
             <DataElement key="FunctionState" value="0">
             </DataElement>
+            <SerializableData name="InUsePins">
+              <SerializableData name="CG">
+                <DataElement key="0" value="13">
+                </DataElement>
+              </SerializableData>
+            </SerializableData>
           </SerializableData>
         </SerializableData>
         <SerializableData name="PD7">
@@ -9954,12 +9948,18 @@
           <SerializableData name="ClassContent">
             <DataElement key="FunctionName" value="PD7">
             </DataElement>
-            <DataElement key="InUse" value="False">
+            <DataElement key="InUse" value="True">
             </DataElement>
-            <DataElement key="FunctionIO" value="None">
+            <DataElement key="FunctionIO" value="O">
             </DataElement>
             <DataElement key="FunctionState" value="0">
             </DataElement>
+            <SerializableData name="InUsePins">
+              <SerializableData name="CG">
+                <DataElement key="0" value="12">
+                </DataElement>
+              </SerializableData>
+            </SerializableData>
           </SerializableData>
         </SerializableData>
         <SerializableData name="PE2">
@@ -10516,7 +10516,7 @@
           <SerializableData name="ClassContent">
             <DataElement key="PinNumber" value="12">
             </DataElement>
-            <DataElement key="InUse" value="False">
+            <DataElement key="InUse" value="True">
             </DataElement>
             <DataElement key="PinIoDirty" value="True">
             </DataElement>
@@ -10528,6 +10528,10 @@
             </DataElement>
             <DataElement key="PinDlvDirty" value="False">
             </DataElement>
+            <SerializableData name="InUseFunctions">
+              <DataElement key="0" value="PD7">
+              </DataElement>
+            </SerializableData>
           </SerializableData>
         </SerializableData>
         <SerializableData name="13">
@@ -10538,7 +10542,7 @@
           <SerializableData name="ClassContent">
             <DataElement key="PinNumber" value="13">
             </DataElement>
-            <DataElement key="InUse" value="False">
+            <DataElement key="InUse" value="True">
             </DataElement>
             <DataElement key="PinIoDirty" value="True">
             </DataElement>
@@ -10550,6 +10554,10 @@
             </DataElement>
             <DataElement key="PinDlvDirty" value="False">
             </DataElement>
+            <SerializableData name="InUseFunctions">
+              <DataElement key="0" value="PD6">
+              </DataElement>
+            </SerializableData>
           </SerializableData>
         </SerializableData>
         <SerializableData name="14">
@@ -10634,7 +10642,7 @@
           <SerializableData name="ClassContent">
             <DataElement key="PinNumber" value="17">
             </DataElement>
-            <DataElement key="InUse" value="True">
+            <DataElement key="InUse" value="False">
             </DataElement>
             <DataElement key="PinIoDirty" value="True">
             </DataElement>
@@ -10646,10 +10654,6 @@
             </DataElement>
             <DataElement key="PinDlvDirty" value="False">
             </DataElement>
-            <SerializableData name="InUseFunctions">
-              <DataElement key="0" value="PB7">
-              </DataElement>
-            </SerializableData>
           </SerializableData>
         </SerializableData>
         <SerializableData name="18">
@@ -10734,7 +10738,7 @@
           <SerializableData name="ClassContent">
             <DataElement key="PinNumber" value="21">
             </DataElement>
-            <DataElement key="InUse" value="True">
+            <DataElement key="InUse" value="False">
             </DataElement>
             <DataElement key="PinIoDirty" value="True">
             </DataElement>
@@ -10746,10 +10750,6 @@
             </DataElement>
             <DataElement key="PinDlvDirty" value="False">
             </DataElement>
-            <SerializableData name="InUseFunctions">
-              <DataElement key="0" value="PB4">
-              </DataElement>
-            </SerializableData>
           </SerializableData>
         </SerializableData>
         <SerializableData name="22">
@@ -59486,7 +59486,7 @@
         </SerializableData>
         <SerializableData name="PB4">
           <SerializableData name="MODULE_UNUSED">
-            <DataElement key="Checked" value="False">
+            <DataElement key="Checked" value="True">
             </DataElement>
           </SerializableData>
           <SerializableData name="INPUT_MODE">
@@ -59494,7 +59494,7 @@
             </DataElement>
           </SerializableData>
           <SerializableData name="OUTPUT_MODE">
-            <DataElement key="Checked" value="True">
+            <DataElement key="Checked" value="False">
             </DataElement>
           </SerializableData>
           <SerializableData name="chkPU">
@@ -59780,7 +59780,7 @@
         </SerializableData>
         <SerializableData name="PB7">
           <SerializableData name="MODULE_UNUSED">
-            <DataElement key="Checked" value="False">
+            <DataElement key="Checked" value="True">
             </DataElement>
           </SerializableData>
           <SerializableData name="INPUT_MODE">
@@ -59788,7 +59788,7 @@
             </DataElement>
           </SerializableData>
           <SerializableData name="OUTPUT_MODE">
-            <DataElement key="Checked" value="True">
+            <DataElement key="Checked" value="False">
             </DataElement>
           </SerializableData>
           <SerializableData name="chkPU">
@@ -60174,7 +60174,7 @@
         </SerializableData>
         <SerializableData name="PD6">
           <SerializableData name="MODULE_UNUSED">
-            <DataElement key="Checked" value="True">
+            <DataElement key="Checked" value="False">
             </DataElement>
           </SerializableData>
           <SerializableData name="INPUT_MODE">
@@ -60182,7 +60182,7 @@
             </DataElement>
           </SerializableData>
           <SerializableData name="OUTPUT_MODE">
-            <DataElement key="Checked" value="False">
+            <DataElement key="Checked" value="True">
             </DataElement>
           </SerializableData>
           <SerializableData name="chkPU">
@@ -60262,7 +60262,7 @@
             </SerializableData>
           </SerializableData>
           <SerializableData name="OUTPUT_1">
-            <DataElement key="Checked" value="False">
+            <DataElement key="Checked" value="True">
             </DataElement>
           </SerializableData>
           <SerializableData name="chkHdr">
@@ -60272,7 +60272,7 @@
         </SerializableData>
         <SerializableData name="PD7">
           <SerializableData name="MODULE_UNUSED">
-            <DataElement key="Checked" value="True">
+            <DataElement key="Checked" value="False">
             </DataElement>
           </SerializableData>
           <SerializableData name="INPUT_MODE">
@@ -60280,7 +60280,7 @@
             </DataElement>
           </SerializableData>
           <SerializableData name="OUTPUT_MODE">
-            <DataElement key="Checked" value="False">
+            <DataElement key="Checked" value="True">
             </DataElement>
           </SerializableData>
           <SerializableData name="chkPU">
@@ -60360,7 +60360,7 @@
             </SerializableData>
           </SerializableData>
           <SerializableData name="OUTPUT_1">
-            <DataElement key="Checked" value="False">
+            <DataElement key="Checked" value="True">
             </DataElement>
           </SerializableData>
           <SerializableData name="chkHdr">
@@ -97433,7 +97433,7 @@
       </DataElement>
     </SerializableData>
     <SerializableData name="DataKey_PB4">
-      <DataElement key="DataValue" value="O">
+      <DataElement key="DataValue" value="">
       </DataElement>
     </SerializableData>
     <SerializableData name="DataKey_PB5">
@@ -97445,7 +97445,7 @@
       </DataElement>
     </SerializableData>
     <SerializableData name="DataKey_PB7">
-      <DataElement key="DataValue" value="O">
+      <DataElement key="DataValue" value="">
       </DataElement>
     </SerializableData>
     <SerializableData name="DataKey_PE0">

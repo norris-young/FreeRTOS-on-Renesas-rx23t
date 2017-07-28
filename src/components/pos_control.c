@@ -71,8 +71,8 @@ static void pos_ctl_task_entry(void *pvParameters)
     xLastWakeTime = xTaskGetTickCount();
 
     while (1) {
-        position_x_pc.error = (float)(CAMERA_MID_X - mid_x);
-        position_y_pc.error = (float)(CAMERA_MID_Y - mid_y);
+        position_x_pc.error = (float)(mid_x - CAMERA_MID_X);
+        position_y_pc.error = (float)(mid_y - CAMERA_MID_Y);
 
         pid_update(&position_x_pp, &position_x_pc);
         pid_update(&position_y_pp, &position_y_pc);
