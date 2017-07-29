@@ -118,6 +118,7 @@ static void io_task_entry(void *pvParameters)
                 }
             } else if (course_state == INPUT) {
                 process_input(key_tmp);
+
             }
         }
     }
@@ -170,6 +171,8 @@ static void key_enter(void)
         pageNum = MISSION_SETTING_PAGE;
         page_init(pageNum);
     } else if (pageNum == MISSION_SETTING_PAGE) {
+        oled_P6x8Char(0, (uint8_t)course, ' ');
+        oled_P6x8Char(0, (uint8_t)course, '>');
         course_state = INPUT;
     }
 }
@@ -251,10 +254,12 @@ static void process_input(int _key_tmp)
         input_tmp = 0.0f;
         input_state = IDLE;
         course_state = SELECT;
+        oled_P6x8Char(0, (uint8_t)course, '*');
     } else if (input_state == CANCEL) {
         input_tmp = 0.0f;
         input_state = IDLE;
         course_state = SELECT;
+        oled_P6x8Char(0, (uint8_t)course, '*');
         oled_P6x8Str(70, (uint8_t)course, "         ");
         oled_PrintValueF(70, (uint8_t)course, ScreenData[pageNum][course], 2);
     }

@@ -368,25 +368,26 @@ void oled_PrintValueF(unsigned char x, unsigned char y, float data, unsigned cha
 /* write a byte to OLED SPI. */
 static void OLED_WB(uint8_t data)
 {
-    /* Loop while last send does not finish */
-    while (!last_send_finish);
     /* Send byte through the SPI peripheral */
     last_send_finish = pdFALSE;
     oled_txbuf = (uint32_t)data;
     R_RSPI0_Send(&oled_txbuf, 1);
-    R_BSP_SoftwareDelay(8, BSP_DELAY_MICROSECS);
 }
 
 /* write a byte data to OLED. */
 static void OLED_WrDat(unsigned char dat)
 {
+    /* Loop while last send does not finish */
+    while (!last_send_finish);
     OLED_DC(1);
-      OLED_WB(dat);
+    OLED_WB(dat);
 }
 
 /* write a command to OLED. */
 static void OLED_WrCmd(unsigned char cmd)
 {
+    /* Loop while last send does not finish */
+    while (!last_send_finish);
     OLED_DC(0);
     OLED_WB(cmd);
 }
