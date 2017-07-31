@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for ICU module.
-* Creation Date: 17.7.28
+* Creation Date: 17.7.31
 ***********************************************************************************************************************/
 #ifndef ICU_H
 #define ICU_H
@@ -154,13 +154,13 @@ Typedef definitions
 Global functions
 ***********************************************************************************************************************/
 void R_ICU_Create(void);
-void R_ICU_IRQ0_Start(void);
-void R_ICU_IRQ0_Stop(void);
 void R_ICU_IRQ1_Start(void);
 void R_ICU_IRQ1_Stop(void);
+void R_ICU_IRQ2_Start(void);
+void R_ICU_IRQ2_Stop(void);
 
 /* Start user code for function. Do not edit comment generated here */
-extern unsigned char U_IRQ0_Pin_Read(void);
 extern unsigned char U_IRQ1_Pin_Read(void);
+extern unsigned char U_IRQ2_Pin_Read(void);
 /* End user code. Do not edit comment generated here */
 #endif

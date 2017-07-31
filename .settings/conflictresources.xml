@@ -29,19 +29,6 @@
             </pinInfo>
         </peripheralInfo>
         <peripheralInfo>
-            <peripheralName>icu</peripheralName>
-            <pinInfo>
-                <pinName>IRQ1</pinName>
-                <pinPort>P11</pinPort>
-                <pinOption>FIXED</pinOption>
-            </pinInfo>
-            <pinInfo>
-                <pinName>IRQ0</pinName>
-                <pinPort>P10</pinPort>
-                <pinOption>FIXED</pinOption>
-            </pinInfo>
-        </peripheralInfo>
-        <peripheralInfo>
             <peripheralName>sci5</peripheralName>
             <pinInfo>
                 <pinName>RXD5</pinName>
@@ -55,20 +42,15 @@
             </pinInfo>
         </peripheralInfo>
         <peripheralInfo>
-            <peripheralName>port3</peripheralName>
+            <peripheralName>icu</peripheralName>
             <pinInfo>
-                <pinName>P32</pinName>
-                <pinPort>P32</pinPort>
+                <pinName>IRQ2</pinName>
+                <pinPort>PB1</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
             <pinInfo>
-                <pinName>P31</pinName>
-                <pinPort>P31</pinPort>
-                <pinOption>FIXED</pinOption>
-            </pinInfo>
-            <pinInfo>
-                <pinName>P30</pinName>
-                <pinPort>P30</pinPort>
+                <pinName>IRQ1</pinName>
+                <pinPort>P94</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
         </peripheralInfo>
@@ -124,23 +106,41 @@
             </pinInfo>
         </peripheralInfo>
         <peripheralInfo>
-            <peripheralName>port2</peripheralName>
+            <peripheralName>port3</peripheralName>
             <pinInfo>
-                <pinName>P23</pinName>
-                <pinPort>P23</pinPort>
+                <pinName>P32</pinName>
+                <pinPort>P32</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>P31</pinName>
+                <pinPort>P31</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>P30</pinName>
+                <pinPort>P30</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
         </peripheralInfo>
         <peripheralInfo>
-            <peripheralName>portd</peripheralName>
+            <peripheralName>port1</peripheralName>
             <pinInfo>
-                <pinName>PD7</pinName>
-                <pinPort>PD7</pinPort>
+                <pinName>P11</pinName>
+                <pinPort>P11</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
             <pinInfo>
-                <pinName>PD6</pinName>
-                <pinPort>PD6</pinPort>
+                <pinName>P10</pinName>
+                <pinPort>P10</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+        </peripheralInfo>
+        <peripheralInfo>
+            <peripheralName>port2</peripheralName>
+            <pinInfo>
+                <pinName>P23</pinName>
+                <pinPort>P23</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
         </peripheralInfo>

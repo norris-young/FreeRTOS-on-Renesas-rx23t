@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for ICU module.
-* Creation Date: 17.7.28
+* Creation Date: 17.7.31
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -60,52 +60,30 @@ void R_ICU_Create(void)
                          _00_ICU_IRQ4_DISABLE | _00_ICU_IRQ5_DISABLE;
 
     /* Set IRQ digital filter clock */
-    ICU.IRQFLTC0.WORD = _0001_ICU_IRQ0_FILTER_PCLK_8 | _0004_ICU_IRQ1_FILTER_PCLK_8;
+    ICU.IRQFLTC0.WORD = _0004_ICU_IRQ1_FILTER_PCLK_8 | _0010_ICU_IRQ2_FILTER_PCLK_8;
 
     /* Set IRQ settings */
-    ICU.IRQCR[0].BYTE = _08_ICU_IRQ_EDGE_RISING;
     ICU.IRQCR[1].BYTE = _08_ICU_IRQ_EDGE_RISING;
+    ICU.IRQCR[2].BYTE = _08_ICU_IRQ_EDGE_RISING;
 
     /* Set IRQ digital filter */
-    ICU.IRQFLTE0.BYTE = _01_ICU_IRQ0_FILTER_ENABLE | _02_ICU_IRQ1_FILTER_ENABLE;    
-
-    /* Set IRQ0 priority level */
-    IPR(ICU,IRQ0) = _05_ICU_PRIORITY_LEVEL5;
+    ICU.IRQFLTE0.BYTE = _02_ICU_IRQ1_FILTER_ENABLE | _04_ICU_IRQ2_FILTER_ENABLE;    
 
     /* Set IRQ1 priority level */
     IPR(ICU,IRQ1) = _05_ICU_PRIORITY_LEVEL5;
 
-    /* Set IRQ0 pin */
-    MPC.P10PFS.BYTE = 0x40U;
-    PORT1.PDR.BYTE &= 0xFEU;
-    PORT1.PMR.BYTE &= 0xFEU;
+    /* Set IRQ2 priority level */
+    IPR(ICU,IRQ2) = _05_ICU_PRIORITY_LEVEL5;
 
     /* Set IRQ1 pin */
-    MPC.P11PFS.BYTE = 0x40U;
-    PORT1.PDR.BYTE &= 0xFDU;
-    PORT1.PMR.BYTE &= 0xFDU;
-}
-/***********************************************************************************************************************
-* Function Name: R_ICU_IRQ0_Start
-* Description  : This function enables IRQ0 interrupt.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-void R_ICU_IRQ0_Start(void)
-{
-    /* Enable IRQ0 interrupt */
-    IEN(ICU,IRQ0) = 1U; 
-}
-/***********************************************************************************************************************
-* Function Name: R_ICU_IRQ0_Stop
-* Description  : This function disables IRQ0 interrupt.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-void R_ICU_IRQ0_Stop(void)
-{
-    /* Disable IRQ0 interrupt */
-    IEN(ICU,IRQ0) = 0U; 
+    MPC.P94PFS.BYTE = 0x40U;
+    PORT9.PDR.BYTE &= 0xEFU;
+    PORT9.PMR.BYTE &= 0xEFU;
+
+    /* Set IRQ2 pin */
+    MPC.PB1PFS.BYTE = 0x40U;
+    PORTB.PDR.BYTE &= 0xFDU;
+    PORTB.PMR.BYTE &= 0xFDU;
 }
 /***********************************************************************************************************************
 * Function Name: R_ICU_IRQ1_Start
@@ -129,15 +107,37 @@ void R_ICU_IRQ1_Stop(void)
     /* Disable IRQ1 interrupt */
     IEN(ICU,IRQ1) = 0U; 
 }
-
-/* Start user code for adding. Do not edit comment generated here */
-unsigned char U_IRQ0_Pin_Read(void)
+/***********************************************************************************************************************
+* Function Name: R_ICU_IRQ2_Start
+* Description  : This function enables IRQ2 interrupt.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_ICU_IRQ2_Start(void)
 {
-    return PORT1.PIDR.BIT.B0;
+    /* Enable IRQ2 interrupt */
+    IEN(ICU,IRQ2) = 1U; 
+}
+/***********************************************************************************************************************
+* Function Name: R_ICU_IRQ2_Stop
+* Description  : This function disables IRQ2 interrupt.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_ICU_IRQ2_Stop(void)
+{
+    /* Disable IRQ2 interrupt */
+    IEN(ICU,IRQ2) = 0U; 
 }
 
+/* Start user code for adding. Do not edit comment generated here */
 unsigned char U_IRQ1_Pin_Read(void)
 {
-    return PORT1.PIDR.BIT.B1;
+    return PORT9.PIDR.BIT.B4;
+}
+
+unsigned char U_IRQ2_Pin_Read(void)
+{
+    return PORTB.PIDR.BIT.B1;
 }
 /* End user code. Do not edit comment generated here */

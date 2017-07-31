@@ -94,6 +94,7 @@ static void io_task_entry(void *pvParameters)
     while (1) {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         page_init(0);
+        end = pdFALSE;
         while (!end) {
             int key_tmp = read_one_number();
             if (course_state == SELECT) {
