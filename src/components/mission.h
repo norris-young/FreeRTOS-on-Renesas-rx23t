@@ -8,6 +8,8 @@
 #ifndef COMPONENTS_MISSION_H_
 #define COMPONENTS_MISSION_H_
 
+#define DEST_HEIGHT_CUSHION 0.05    /* units: meter */
+
 #define MISSION_NUM         3
 #define MISSION_TASK_PRI    3
 

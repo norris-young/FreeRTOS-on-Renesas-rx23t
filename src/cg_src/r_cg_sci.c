@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for SCI module.
-* Creation Date: 17.7.31
+* Creation Date: 17.8.1
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -88,8 +88,8 @@ void R_SCI1_Create(void)
                      _40_SCI_BAUDRATE_DOUBLE | _04_SCI_BIT_MODULATION_ENABLE;
 
     /* Set bitrate */
-    SCI1.BRR = 0x04U;
-    SCI1.MDDR = 0xECU;
+    SCI1.BRR = 0x00U;
+    SCI1.MDDR = 0xCDU;
 
     /* Set RXD1 pin */
     MPC.PD5PFS.BYTE = 0x0AU;

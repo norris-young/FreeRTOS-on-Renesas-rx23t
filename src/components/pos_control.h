@@ -17,6 +17,8 @@
 #define POS_X_ERROR_MIN 0
 #define POS_Y_ERROR_MIN 0
 
+#define POS_CTL_MIN_HEIGHT  0.2
+
 #define POS_CTL_TASK_PRI    5
 
 extern void position_ctl_start(int use_Default_PID, float kp, float ki, float kd);

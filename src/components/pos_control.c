@@ -12,6 +12,7 @@
 
 /*-----------------------------------------------------------*/
 /* User include files. */
+#include "mavlink_receive.h"
 #include "cam_commu.h"
 #include "ppm_encoder.h"
 #include "pid_control.h"
@@ -71,15 +72,21 @@ static void pos_ctl_task_entry(void *pvParameters)
     xLastWakeTime = xTaskGetTickCount();
 
     while (1) {
-        position_x_pc.error = (float)(mid_x - CAMERA_MID_X);
-        position_y_pc.error = (float)(mid_y - CAMERA_MID_Y);
+        if(current_Height > POS_CTL_MIN_HEIGHT) {
+            LED0 = LED_ON;
+            position_x_pc.error = (float)(mid_x - CAMERA_MID_X);
+            position_y_pc.error = (float)(mid_y - CAMERA_MID_Y);
 
-        pid_update(&position_x_pp, &position_x_pc);
-        pid_update(&position_y_pp, &position_y_pc);
+            pid_update(&position_x_pp, &position_x_pc);
+            pid_update(&position_y_pp, &position_y_pc);
 
-        send_ppm((uint16_t)(channel_val_MID + (int)position_x_pc.pid_out),
-                 (uint16_t)(channel_val_MID + (int)position_y_pc.pid_out),
-                 0, 0, 0, 0);
+            send_ppm((uint16_t)(channel_val_MID + (int)position_x_pc.pid_out),
+                     (uint16_t)(channel_val_MID + (int)position_y_pc.pid_out),
+                     0, 0, 0, 0);
+        } else {
+            send_ppm(channel_val_MID, channel_val_MID, 0, 0, 0, 0);
+            LED0 = LED_OFF;
+        }
 
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000/POS_PID_FREQ));
     }

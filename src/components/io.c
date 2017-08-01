@@ -40,7 +40,7 @@ static uint8_t ScreenStr[3][8][30] = {
 };
 static float ScreenData[3][8] = {
                                  {0.0,},
-                                 {0.2,
+                                 {0.3,
                                   POS_KP,
                                   POS_KI,
                                   POS_KD,},

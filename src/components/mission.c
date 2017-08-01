@@ -51,8 +51,6 @@ void is_emergency_now(void)
 {
     LED2 = LED_ON;
     send_ppm(channel_val_MID,channel_val_MID,channel_val_MIN,channel_val_MID,Stabilize,EMERGENCY_ON);
-    vTaskDelay(pdMS_TO_TICKS(1000));
-    disarm();
 }
 
 /* ----------------------------------------------------------
@@ -171,8 +169,9 @@ static void arm(uint16_t flight_mode)
  * --------------------------------------------------------*/
 static void disarm(void)
 {
-    send_ppm(channel_val_MID,channel_val_MID,channel_val_MIN,channel_val_MIN,Stabilize,EMERGENCY_ON);
+    send_ppm(channel_val_MID,channel_val_MID,channel_val_MIN,channel_val_MIN,Stabilize,0);
     vTaskDelay(pdMS_TO_TICKS(5000));
+    send_ppm(channel_val_MID,channel_val_MID,channel_val_MIN,channel_val_MID,Stabilize,0);
 }
 
 /* ----------------------------------------------------------
@@ -185,6 +184,8 @@ static void disarm(void)
  * --------------------------------------------------------*/
 static void alt_hold(const float dest_Height)
 {
+    float up_throttle;
+
     /* arm & clime up. */
     arm(Alt_Hold);
     send_ppm(0,0,channel_percent(20),0,Alt_Hold,0);
@@ -195,20 +196,21 @@ static void alt_hold(const float dest_Height)
     vTaskDelay(pdMS_TO_TICKS(500));
     send_ppm(0,0,channel_percent(60),0,Alt_Hold,0);
     vTaskDelay(pdMS_TO_TICKS(500));
-    while(current_Height < dest_Height) {
-        send_ppm(0,0,channel_percent(64),0,Alt_Hold,0);
+
+    position_ctl_start(pdFALSE, mission_kp, mission_ki, mission_kd);
+    while(current_Height + DEST_HEIGHT_CUSHION < dest_Height) {
+        up_throttle = (1.0 - current_Height / dest_Height) * channel_val_RANGE * 3 / 100;
+        send_ppm(0,0,channel_percent(60) + (uint16_t)up_throttle,0,Alt_Hold,0);
     }
 
-    /* arrives the destination height and hold for x milliseconds. */
+    /* arrives the destination height, start position control & hold for x milliseconds. */
     send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
-    LED0 = LED_ON;
-    position_ctl_start(pdFALSE, mission_kp, mission_ki, mission_kd);
     vTaskDelay(pdMS_TO_TICKS(10000));
-    position_ctl_stop();
-    LED0 = LED_OFF;
+
     /* drop down & disarm. */
-    while(current_Height > 0.1)
-        send_ppm(channel_val_MID,channel_val_MID,channel_percent(37),0,Alt_Hold,0);
+    send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);
+    while(current_Height > 0.1);
+    position_ctl_stop();
     disarm();
 }
 

@@ -92,7 +92,7 @@ const uint32_t ulEnableRegisterWrite = 0xA50BUL, ulDisableRegisterWrite = 0xA500
     CMT0.CMCR.BIT.CMIE = 1;
 
     /* Set the compare match value. */
-    CMT0.CMCOR = ( unsigned short ) ( ( ( configPERIPHERAL_CLOCK_HZ / configTICK_RATE_HZ ) -1 ) / 8 );
+    CMT0.CMCOR = ( unsigned short ) ( ( ( configPERIPHERAL_CLOCK_HZ / configTICK_RATE_HZ ) / 8 ) - 1 );
 
     /* Divide the PCLK by 8. */
     CMT0.CMCR.BIT.CKS = 0;
