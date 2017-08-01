@@ -55,9 +55,26 @@ Global variables and functions
 ***********************************************************************************************************************/
 void R_ICU_Create(void)
 {
+    uint32_t * vector_location;
+
     /* Disable IRQ0~5 interrupts */
     ICU.IER[0x08].BYTE = _00_ICU_IRQ0_DISABLE | _00_ICU_IRQ1_DISABLE | _00_ICU_IRQ2_DISABLE | _00_ICU_IRQ3_DISABLE | 
                          _00_ICU_IRQ4_DISABLE | _00_ICU_IRQ5_DISABLE;
+
+    /* Set fast interrupt */
+    ICU.FIR.WORD = _00AE_FAST_VECTOR_NUM;
+
+    /* Find the start of the maskable interrupt vector table */
+    vector_location = (uint32_t *)get_intb();
+
+    /* Move to the location of the address of the selected interrupt */
+    vector_location += ICU.FIR.BIT.FVCT;
+
+    /* Store the address of this vector in the FINTV register */
+    set_fintv((void *) * vector_location);
+
+    /* Enable the fast interrupt feature */
+    ICU.FIR.BIT.FIEN = 1U;
 
     /* Set IRQ digital filter clock */
     ICU.IRQFLTC0.WORD = _0004_ICU_IRQ1_FILTER_PCLK_8 | _0010_ICU_IRQ2_FILTER_PCLK_8;

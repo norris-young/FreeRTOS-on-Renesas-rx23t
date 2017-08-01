@@ -31,7 +31,7 @@
 /***********************************************************************************************************************
 User definitions
 ***********************************************************************************************************************/
-#define FAST_INTERRUPT_VECTOR 0
+#define FAST_INTERRUPT_VECTOR 174
 
 /* Start user code for function. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
