@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for CGC module.
-* Creation Date: 17.8.1
+* Creation Date: 17.8.2
 ***********************************************************************************************************************/
 #ifndef CGC_H
 #define CGC_H
@@ -35,7 +35,7 @@ Macro definitions (Register bit)
     System Clock Control Register (SCKCR)
 */
 /* Reserved bits value (b19-b16) */
-#define _00030000_CGC_SCKCR_RESERVED        (0x00030000UL)
+#define _00000000_CGC_SCKCR_RESERVED        (0x00000000UL)
 /* Peripheral Module Clock D (PCLKD) */
 #define _00000000_CGC_PCLKD_DIV_1           (0x00000000UL) /* x1 */
 #define _00000001_CGC_PCLKD_DIV_2           (0x00000001UL) /* x1/2 */

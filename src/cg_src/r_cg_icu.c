@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for ICU module.
-* Creation Date: 17.8.1
+* Creation Date: 17.8.2
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -76,15 +76,9 @@ void R_ICU_Create(void)
     /* Enable the fast interrupt feature */
     ICU.FIR.BIT.FIEN = 1U;
 
-    /* Set IRQ digital filter clock */
-    ICU.IRQFLTC0.WORD = _0004_ICU_IRQ1_FILTER_PCLK_8 | _0010_ICU_IRQ2_FILTER_PCLK_8;
-
     /* Set IRQ settings */
     ICU.IRQCR[1].BYTE = _08_ICU_IRQ_EDGE_RISING;
     ICU.IRQCR[2].BYTE = _08_ICU_IRQ_EDGE_RISING;
-
-    /* Set IRQ digital filter */
-    ICU.IRQFLTE0.BYTE = _02_ICU_IRQ1_FILTER_ENABLE | _04_ICU_IRQ2_FILTER_ENABLE;    
 
     /* Set IRQ1 priority level */
     IPR(ICU,IRQ1) = _05_ICU_PRIORITY_LEVEL5;

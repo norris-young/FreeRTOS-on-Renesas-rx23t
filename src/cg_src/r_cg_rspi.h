@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for RSPI module.
-* Creation Date: 17.8.1
+* Creation Date: 17.8.2
 ***********************************************************************************************************************/
 #ifndef RSPI_H
 #define RSPI_H
@@ -249,7 +249,7 @@ Macro definitions (Register bit)
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
-#define _03_RSPI0_DIVISOR                       (0x03U) /* SPBR(RSPI bit rate) register value */
+#define _1F_RSPI0_DIVISOR                       (0x1FU) /* SPBR(RSPI bit rate) register value */
 
 /***********************************************************************************************************************
 Typedef definitions

@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for TMR module.
-* Creation Date: 17.8.1
+* Creation Date: 17.8.2
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -94,7 +94,7 @@ void R_TMR0_Start(void)
     IEN(TMR0, CMIA0) = 1U;
 
     /* Start counting */
-    TMR1.TCCR.BYTE = _08_TMR_CLK_SRC_PCLK | _00_TMR_PCLK_DIV_1;
+    TMR1.TCCR.BYTE = _08_TMR_CLK_SRC_PCLK | _02_TMR_PCLK_DIV_8;
 }
 /***********************************************************************************************************************
 * Function Name: R_TMR0_Stop

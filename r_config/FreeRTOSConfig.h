@@ -99,7 +99,7 @@
 
 /* Configure for tick interrupt. */
 #define configCPU_CLOCK_HZ				( 40000000UL )
-#define configPERIPHERAL_CLOCK_HZ		( 5000000UL )
+#define configPERIPHERAL_CLOCK_HZ		( 40000000UL )
 #define configTICK_RATE_HZ				( ( TickType_t ) 100 )
 #define configUSE_16_BIT_TICKS          0
 

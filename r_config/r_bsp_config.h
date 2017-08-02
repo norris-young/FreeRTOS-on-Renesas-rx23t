@@ -246,7 +246,7 @@ Configuration Options
 /* Peripheral Module Clock B Divider (PCKB). 
    Available divisors = /1 (no division), /2, /4, /8, /16, /32, /64
 */
-#define BSP_CFG_PCKB_DIV                                       (8)
+#define BSP_CFG_PCKB_DIV                                       (1)
 
 /* Peripheral Module Clock D Divider (PCKD). 
    Available divisors = /1 (no division), /2, /4, /8, /16, /32, /64

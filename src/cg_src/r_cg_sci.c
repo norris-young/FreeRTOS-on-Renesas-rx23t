@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for SCI module.
-* Creation Date: 17.8.1
+* Creation Date: 17.8.2
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -85,11 +85,10 @@ void R_SCI1_Create(void)
     SCI1.SCMR.BYTE = _00_SCI_SERIAL_MODE | _00_SCI_DATA_INVERT_NONE | _00_SCI_DATA_LSB_FIRST | 
                      _10_SCI_DATA_LENGTH_8_OR_7 | _62_SCI_SCMR_DEFAULT;
     SCI1.SEMR.BYTE = _00_SCI_LOW_LEVEL_START_BIT | _00_SCI_NOISE_FILTER_DISABLE | _10_SCI_8_BASE_CLOCK | 
-                     _40_SCI_BAUDRATE_DOUBLE | _04_SCI_BIT_MODULATION_ENABLE;
+                     _00_SCI_BAUDRATE_SINGLE | _00_SCI_BIT_MODULATION_DISABLE;
 
     /* Set bitrate */
-    SCI1.BRR = 0x00U;
-    SCI1.MDDR = 0xCDU;
+    SCI1.BRR = 0x04U;
 
     /* Set RXD1 pin */
     MPC.PD5PFS.BYTE = 0x0AU;
@@ -188,8 +187,8 @@ void R_SCI5_Create(void)
                      _40_SCI_BAUDRATE_DOUBLE | _04_SCI_BIT_MODULATION_ENABLE;
 
     /* Set bitrate */
-    SCI5.BRR = 0x04U;
-    SCI5.MDDR = 0xECU;
+    SCI5.BRR = 0x26U;
+    SCI5.MDDR = 0xE6U;
 
     /* Set RXD5 pin */
     MPC.PB6PFS.BYTE = 0x0AU;
