@@ -45,10 +45,27 @@ Includes
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
+extern void IRQ0_IntHandler(void);
 extern void IRQ1_IntHandler(void);
-extern void IRQ2_IntHandler(void);
 /* End user code. Do not edit comment generated here */
 
+/***********************************************************************************************************************
+* Function Name: r_icu_irq0_interrupt
+* Description  : None
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+#if FAST_INTERRUPT_VECTOR == VECT_ICU_IRQ0
+#pragma interrupt r_icu_irq0_interrupt(vect=VECT(ICU,IRQ0),fint)
+#else
+#pragma interrupt r_icu_irq0_interrupt(vect=VECT(ICU,IRQ0))
+#endif
+static void r_icu_irq0_interrupt(void)
+{
+    /* Start user code. Do not edit comment generated here */
+    IRQ0_IntHandler();
+    /* End user code. Do not edit comment generated here */
+}
 /***********************************************************************************************************************
 * Function Name: r_icu_irq1_interrupt
 * Description  : None
@@ -80,7 +97,6 @@ static void r_icu_irq1_interrupt(void)
 static void r_icu_irq2_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
-    IRQ2_IntHandler();
     /* End user code. Do not edit comment generated here */
 }
 

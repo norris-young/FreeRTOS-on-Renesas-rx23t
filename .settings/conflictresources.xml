@@ -3,15 +3,38 @@
     <cgModuleInfos>
         <moduleName>CG</moduleName>
         <peripheralInfo>
-            <peripheralName>rspi0</peripheralName>
+            <peripheralName>portb</peripheralName>
             <pinInfo>
-                <pinName>RSPCKA</pinName>
-                <pinPort>PB3</pinPort>
+                <pinName>PB4</pinName>
+                <pinPort>PB4</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
             <pinInfo>
-                <pinName>MOSIA</pinName>
-                <pinPort>PB0</pinPort>
+                <pinName>PB4</pinName>
+                <pinPort>POE8#</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+        </peripheralInfo>
+        <peripheralInfo>
+            <peripheralName>port4</peripheralName>
+            <pinInfo>
+                <pinName>P47</pinName>
+                <pinPort>P47</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>P45</pinName>
+                <pinPort>P45</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>P43</pinName>
+                <pinPort>P43</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>P41</pinName>
+                <pinPort>P41</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
         </peripheralInfo>
@@ -50,7 +73,12 @@
             </pinInfo>
             <pinInfo>
                 <pinName>IRQ1</pinName>
-                <pinPort>P94</pinPort>
+                <pinPort>P11</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>IRQ0</pinName>
+                <pinPort>P10</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
         </peripheralInfo>
@@ -59,6 +87,29 @@
             <pinInfo>
                 <pinName>RXD1</pinName>
                 <pinPort>PD5</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+        </peripheralInfo>
+        <peripheralInfo>
+            <peripheralName>rspi0</peripheralName>
+            <pinInfo>
+                <pinName>MOSIA</pinName>
+                <pinPort>PB0</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>SSLA0</pinName>
+                <pinPort>PA3</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>MISOA</pinName>
+                <pinPort>P94</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
+                <pinName>RSPCKA</pinName>
+                <pinPort>P93</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
         </peripheralInfo>
@@ -120,19 +171,6 @@
             <pinInfo>
                 <pinName>P30</pinName>
                 <pinPort>P30</pinPort>
-                <pinOption>FIXED</pinOption>
-            </pinInfo>
-        </peripheralInfo>
-        <peripheralInfo>
-            <peripheralName>port1</peripheralName>
-            <pinInfo>
-                <pinName>P11</pinName>
-                <pinPort>P11</pinPort>
-                <pinOption>FIXED</pinOption>
-            </pinInfo>
-            <pinInfo>
-                <pinName>P10</pinName>
-                <pinPort>P10</pinPort>
                 <pinOption>FIXED</pinOption>
             </pinInfo>
         </peripheralInfo>

@@ -249,7 +249,7 @@ Macro definitions (Register bit)
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
-#define _1F_RSPI0_DIVISOR                       (0x1FU) /* SPBR(RSPI bit rate) register value */
+#define _13_RSPI0_DIVISOR                       (0x13U) /* SPBR(RSPI bit rate) register value */
 
 /***********************************************************************************************************************
 Typedef definitions
@@ -261,8 +261,10 @@ Global functions
 void R_RSPI0_Create(void);
 void R_RSPI0_Start(void);
 void R_RSPI0_Stop(void);
-MD_STATUS R_RSPI0_Send(uint32_t * const txbuf, uint16_t txnum);
+MD_STATUS R_RSPI0_Send_Receive(uint32_t * const txbuf, uint16_t txnum, uint32_t * const rxbuf);
 static void r_rspi0_callback_transmitend(void);
+static void r_rspi0_callback_receiveend(void);
+static void r_rspi0_callback_error(uint8_t err_type);
 
 /* Start user code for function. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */

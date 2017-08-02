@@ -9,7 +9,6 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "platform.h"
-#include "r_cg_rspi.h"
 #include "r_cg_port.h"
 
 /*-----------------------------------------------------------*/
@@ -115,7 +114,6 @@ const unsigned char F6x8[][6] =
     { 0x14, 0x14, 0x14, 0x14, 0x14, 0x14 }    // horizontal lines
 };
 static BaseType_t last_send_finish = pdTRUE;
-static uint32_t oled_txbuf;
 
 /*-----------------------------------------------------------*/
 /* private functions declaration. */
@@ -150,8 +148,6 @@ static void oled_Set_NOP(void);
 /* this function uses vTaskDelay(). */
 void oled_init(void)
 {
-    R_RSPI0_Start();
-    vTaskDelay(pdMS_TO_TICKS(50));
     OLED_DC(0);
     OLED_RST(0);
     vTaskDelay(pdMS_TO_TICKS(100));
@@ -368,10 +364,20 @@ void oled_PrintValueF(unsigned char x, unsigned char y, float data, unsigned cha
 /* write a byte to OLED SPI. */
 static void OLED_WB(uint8_t data)
 {
-    /* Send byte through the SPI peripheral */
-    last_send_finish = pdFALSE;
-    oled_txbuf = (uint32_t)data;
-    R_RSPI0_Send(&oled_txbuf, 1);
+    int i = 8;
+    /* Send byte through the soft SPI peripheral */
+    OLED_SCL(0);
+    while (i--) {
+        if (data & 0x80) {
+            OLED_SDA(1);
+        } else {
+            OLED_SDA(0);
+        }
+        OLED_SCL(1);
+        nop();
+        OLED_SCL(0);
+        data <<= 1;
+    }
 }
 
 /* write a byte data to OLED. */

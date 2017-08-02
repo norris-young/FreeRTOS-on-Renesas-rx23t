@@ -8,8 +8,10 @@
 #ifndef TOOLS_OLED_H_
 #define TOOLS_OLED_H_
 
-#define OLED_RST(x)      U_PORT_Oled_RST_Pin_Write(x)
-#define OLED_DC(x)       U_PORT_Oled_DC_Pin_Write(x)
+#define OLED_SCL(x)     U_PORT_Oled_SCL_Pin_Write(x)
+#define OLED_SDA(x)     U_PORT_Oled_SDA_Pin_Write(x)
+#define OLED_RST(x)     U_PORT_Oled_RST_Pin_Write(x)
+#define OLED_DC(x)      U_PORT_Oled_DC_Pin_Write(x)
 
 extern void oled_init(void);
 extern void oled_CLS(void);

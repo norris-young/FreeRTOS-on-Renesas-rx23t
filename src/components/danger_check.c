@@ -56,7 +56,7 @@ void danger_check_init(void)
                                             (void *)0,
                                             mission_timer_callback);
 
-    R_ICU_IRQ1_Start();
+    R_ICU_IRQ0_Start();
 }
 
 /* ------------------------------------------------------------
@@ -86,9 +86,9 @@ void stop_mission_timer(void)
  * sends emergency remote signal to danger check task.
  *
  * ----------------------------------------------------------*/
-void IRQ1_IntHandler(void)
+void IRQ0_IntHandler(void)
 {
-    if(U_IRQ1_Pin_Read()) {
+    if(U_IRQ0_Pin_Read()) {
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
         vTaskNotifyGiveFromISR(danger_check_taskhandle, &xHigherPriorityTaskWoken);
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);

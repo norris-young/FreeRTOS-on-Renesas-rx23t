@@ -46,6 +46,9 @@ Global variables and functions
 ***********************************************************************************************************************/
 uint32_t * gp_rspi0_tx_address;         /* RSPI0 transmit buffer address */
 uint16_t   g_rspi0_tx_count;            /* RSPI0 transmit data number */
+uint32_t * gp_rspi0_rx_address;         /* RSPI0 receive buffer address */
+uint16_t   g_rspi0_rx_count;            /* RSPI0 receive data number */
+uint16_t   g_rspi0_rx_length;           /* RSPI0 receive data length */
 /* Start user code for global. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 
@@ -59,6 +62,8 @@ void R_RSPI0_Create(void)
 {
     /* Disable RSPI interrupts */
     IEN(RSPI0,SPTI0) = 0U;
+    IEN(RSPI0,SPRI0) = 0U;
+    IEN(RSPI0,SPEI0) = 0U;
     IEN(RSPI0,SPII0) = 0U;
 
     /* Cancel RSPI module stop state */
@@ -69,14 +74,15 @@ void R_RSPI0_Create(void)
 
     /* Set control registers */
     RSPI0.SPPCR.BYTE = _00_RSPI_MOSI_FIXING_PREV_TRANSFER | _00_RSPI_LOOPBACK_DISABLED | _00_RSPI_LOOPBACK2_DISABLED;
-    RSPI0.SPBR = _1F_RSPI0_DIVISOR;
+    RSPI0.SPBR = _13_RSPI0_DIVISOR;
     RSPI0.SPDCR.BYTE = _00_RSPI_ACCESS_WORD | _00_RSPI_FRAMES_1;
     RSPI0.SPSCR.BYTE = _00_RSPI_SEQUENCE_LENGTH_1;
+    RSPI0.SSLP.BYTE = _00_RSPI_SSL0_POLARITY_LOW;
     RSPI0.SPCKD.BYTE = _00_RSPI_RSPCK_DELAY_1;
     RSPI0.SSLND.BYTE = _00_RSPI_SSL_NEGATION_DELAY_1;
     RSPI0.SPND.BYTE = _00_RSPI_NEXT_ACCESS_DELAY_1;
     RSPI0.SPCR2.BYTE = _00_RSPI_PARITY_DISABLE;
-    RSPI0.SPCMD0.WORD = _0001_RSPI_RSPCK_SAMPLING_EVEN | _0002_RSPI_RSPCK_POLARITY_HIGH | _0000_RSPI_BASE_BITRATE_1 | 
+    RSPI0.SPCMD0.WORD = _0001_RSPI_RSPCK_SAMPLING_EVEN | _0000_RSPI_RSPCK_POLARITY_LOW | _000C_RSPI_BASE_BITRATE_8 | 
                         _0000_RSPI_SIGNAL_ASSERT_SSL0 | _0000_RSPI_SSL_KEEP_DISABLE | _0400_RSPI_DATA_LENGTH_BITS_8 | 
                         _0000_RSPI_MSB_FIRST | _0000_RSPI_NEXT_ACCESS_DELAY_DISABLE | 
                         _0000_RSPI_NEGATION_DELAY_DISABLE | _0000_RSPI_RSPCK_DELAY_DISABLE;
@@ -85,14 +91,22 @@ void R_RSPI0_Create(void)
     IPR(RSPI0,SPTI0) = _0F_RSPI_PRIORITY_LEVEL15;
 
     /* Set RSPCKA pin */
-    MPC.PB3PFS.BYTE = 0x0DU;
-    PORTB.PMR.BYTE |= 0x08U;
+    MPC.P93PFS.BYTE = 0x0DU;
+    PORT9.PMR.BYTE |= 0x08U;
 
     /* Set MOSIA pin */
     MPC.PB0PFS.BYTE = 0x0DU;
     PORTB.PMR.BYTE |= 0x01U;
 
-    RSPI0.SPCR.BYTE = _00_RSPI_MODE_SPI | _02_RSPI_TRANSMIT_ONLY | _08_RSPI_MASTER_MODE;
+    /* Set MISOA pin */
+    MPC.P94PFS.BYTE = 0x0DU;
+    PORT9.PMR.BYTE |= 0x10U;
+
+    /* Set SSLA0 pin */
+    MPC.PA3PFS.BYTE = 0x0DU;
+    PORTA.PMR.BYTE |= 0x08U;
+
+    RSPI0.SPCR.BYTE = _00_RSPI_MODE_SPI | _00_RSPI_FULL_DUPLEX_SYNCHRONOUS | _08_RSPI_MASTER_MODE;
 }
 
 /***********************************************************************************************************************
@@ -107,6 +121,8 @@ void R_RSPI0_Start(void)
 
     /* Enable RSPI interrupts */
     IEN(RSPI0,SPTI0) = 1U;
+    IEN(RSPI0,SPRI0) = 1U;
+    IEN(RSPI0,SPEI0) = 1U;
     IEN(RSPI0,SPII0) = 1U;
 
     /* Clear error sources */
@@ -127,22 +143,26 @@ void R_RSPI0_Stop(void)
 {
     /* Disable RSPI interrupts */
     IEN(RSPI0,SPTI0) = 0U;
+    IEN(RSPI0,SPRI0) = 0U;
+    IEN(RSPI0,SPEI0) = 0U;
     IEN(RSPI0,SPII0) = 0U;
 
     /* Disable RSPI function */
     RSPI0.SPCR.BIT.SPE = 0U;
 }
 /***********************************************************************************************************************
-* Function Name: R_RSPI0_Send
-* Description  : This function sends RSPI0 data.
+* Function Name: R_RSPI0_Send_Receive
+* Description  : This function sends and receives RSPI0 data.
 * Arguments    : tx_buf -
 *                    transfer buffer pointer (not used when data is handled by DTC)
 *                tx_num -
 *                    buffer size
+*                rx_buf -
+*                    receive buffer pointer (not used when data is handled by DTC)
 * Return Value : status -
 *                    MD_OK or MD_ARGERROR
 ***********************************************************************************************************************/
-MD_STATUS R_RSPI0_Send(uint32_t * const tx_buf, uint16_t tx_num)
+MD_STATUS R_RSPI0_Send_Receive(uint32_t * const tx_buf, uint16_t tx_num, uint32_t * const rx_buf)
 {
     MD_STATUS status = MD_OK;
 
@@ -152,11 +172,21 @@ MD_STATUS R_RSPI0_Send(uint32_t * const tx_buf, uint16_t tx_num)
     }
     else
     {
+        /* Initialize the global counters */
         gp_rspi0_tx_address = tx_buf;
         g_rspi0_tx_count = tx_num;
+        gp_rspi0_rx_address = rx_buf;
+        g_rspi0_rx_length = tx_num;
+        g_rspi0_rx_count = 0U;
 
         /* Enable transmit interrupt */
         RSPI0.SPCR.BIT.SPTIE = 1U;
+
+        /* Enable receive interrupt */
+        RSPI0.SPCR.BIT.SPRIE = 1U;
+
+        /* Enable error interrupt */
+        RSPI0.SPCR.BIT.SPEIE = 1U;
 
         /* Enable RSPI function */
         RSPI0.SPCR.BIT.SPE = 1U;

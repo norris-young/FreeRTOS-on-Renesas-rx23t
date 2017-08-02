@@ -46,6 +46,9 @@ Global variables and functions
 ***********************************************************************************************************************/
 extern uint32_t * gp_rspi0_tx_address;         /* RSPI0 transmit buffer address */
 extern uint16_t   g_rspi0_tx_count;            /* RSPI0 transmit data number */
+extern uint32_t * gp_rspi0_rx_address;         /* RSPI0 receive buffer address */
+extern uint16_t   g_rspi0_rx_count;            /* RSPI0 receive data number */
+extern uint16_t   g_rspi0_rx_length;           /* RSPI0 receive data length */
 /* Start user code for global. Do not edit comment generated here */
 extern void oled_callback(void);
 /* End user code. Do not edit comment generated here */
@@ -86,6 +89,83 @@ static void r_rspi0_transmit_interrupt(void)
     }
 }
 /***********************************************************************************************************************
+* Function Name: r_rspi0_receive_interrupt
+* Description  : None
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+#if FAST_INTERRUPT_VECTOR == VECT_RSPI0_SPRI0
+#pragma interrupt r_rspi0_receive_interrupt(vect=VECT(RSPI0,SPRI0),fint)
+#else
+#pragma interrupt r_rspi0_receive_interrupt(vect=VECT(RSPI0,SPRI0))
+#endif
+static void r_rspi0_receive_interrupt(void)
+{
+    uint16_t frame_cnt;
+    
+    for (frame_cnt = 0U; frame_cnt < (_00_RSPI_FRAMES_1 + 1U); frame_cnt++)
+    {
+        if (g_rspi0_rx_length > g_rspi0_rx_count)
+        {
+            *(uint16_t *)gp_rspi0_rx_address = RSPI0.SPDR.WORD.H;
+            gp_rspi0_rx_address++;
+            g_rspi0_rx_count++;
+
+            if (g_rspi0_rx_length == g_rspi0_rx_count)
+            {
+                /* Disable receive interrupt */
+                RSPI0.SPCR.BIT.SPRIE = 0U;
+                r_rspi0_callback_receiveend();
+                break;
+            }
+        }
+    }
+}
+/***********************************************************************************************************************
+* Function Name: r_rspi0_error_interrupt
+* Description  : None
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+#if FAST_INTERRUPT_VECTOR == VECT_RSPI0_SPEI0
+#pragma interrupt r_rspi0_error_interrupt(vect=VECT(RSPI0,SPEI0),fint)
+#else
+#pragma interrupt r_rspi0_error_interrupt(vect=VECT(RSPI0,SPEI0))
+#endif
+static void r_rspi0_error_interrupt(void)
+{
+    uint8_t err_type;
+
+    if (1U == RSPI0.SPSR.BIT.MODF)
+    {
+        /* Confirm that SSL0 pin is at inactive level */
+    }
+
+    /* Disable RSPI function */
+    RSPI0.SPCR.BIT.SPE = 0U;
+
+    /* Disable transmit interrupt */
+    RSPI0.SPCR.BIT.SPTIE = 0U;
+
+    /* Disable receive interrupt */
+    RSPI0.SPCR.BIT.SPRIE = 0U;
+
+    /* Disable error interrupt */
+    RSPI0.SPCR.BIT.SPEIE = 0U;
+
+    /* Disable idle interrupt */
+    RSPI0.SPCR2.BIT.SPIIE = 0U;
+
+    /* Clear error sources */
+    err_type = RSPI0.SPSR.BYTE;
+    RSPI0.SPSR.BYTE = 0xA0U;
+
+    if (0U != err_type)
+    {
+        r_rspi0_callback_error(err_type);
+    }
+}
+/***********************************************************************************************************************
 * Function Name: r_rspi0_idle_interrupt
 * Description  : None
 * Arguments    : None
@@ -119,7 +199,30 @@ static void r_rspi0_callback_transmitend(void)
     /* End user code. Do not edit comment generated here */
 }
 
+/***********************************************************************************************************************
+* Function Name: r_rspi0_callback_receiveend
+* Description  : This function is a callback function when RSPI0 finishes reception.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+static void r_rspi0_callback_receiveend(void)
+{
+    /* Start user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
+}
 
+/***********************************************************************************************************************
+* Function Name: r_rspi0_callback_error
+* Description  : This function is a callback function when RSPI0 error occurs.
+* Arguments    : err_type -
+*                    error type value
+* Return Value : None
+***********************************************************************************************************************/
+static void r_rspi0_callback_error(uint8_t err_type)
+{
+    /* Start user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
+}
 
 /* Start user code for adding. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */

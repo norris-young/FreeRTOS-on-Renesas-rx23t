@@ -69,7 +69,7 @@ void mission_init(void)
                       &mission_taskhandle);
     configASSERT(ret == pdPASS);
 
-    R_ICU_IRQ2_Start();
+    R_ICU_IRQ1_Start();
 }
 
 void send_mission_params(int8_t _mission, float _dest_Height, float kp, float ki, float kd)
@@ -87,9 +87,9 @@ void send_mission_params(int8_t _mission, float _dest_Height, float kp, float ki
  * send start signal to the mission task.
  *
  * --------------------------------------------------------*/
-void IRQ2_IntHandler(void)
+void IRQ1_IntHandler(void)
 {
-    if(U_IRQ2_Pin_Read()) {
+    if(U_IRQ1_Pin_Read()) {
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
         vTaskNotifyGiveFromISR(mission_taskhandle, &xHigherPriorityTaskWoken);
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);;
