@@ -70,8 +70,7 @@ static bool ppm_data_shadow_one_step(void);
 
 void set_ppm_channel(ppm_data_t *ppm_data, uint16_t* channel)
 {
-    int i;
-    for(i = 0; i < PPM_ENCODER_CHANNEL_NUM; i++)
+    for(int i = 0; i < PPM_ENCODER_CHANNEL_NUM; i++)
     {
         if (channel[i] >= channel_val_MIN && channel[i] <= channel_val_MAX)
             ppm_data->ch_val[i] = channel[i];

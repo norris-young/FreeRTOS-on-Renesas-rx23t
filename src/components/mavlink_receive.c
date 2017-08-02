@@ -104,10 +104,9 @@ static void mavlink_receive_task_entry(void *pvParameters)
     //
     // Blink the LED to show a character transfer is occuring.
     //
-    int i;
     while (1) {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-        for (i = 0; i < MAV_BUFFER_LENGTH; i++) {
+        for (int i = 0; i < MAV_BUFFER_LENGTH; i++) {
             if (rx_buffer[rx_buffer_pointer][i] == MAVLINK_STX) {
                 Rx_Buffer_pointer = 0;
                 start_receive = true;

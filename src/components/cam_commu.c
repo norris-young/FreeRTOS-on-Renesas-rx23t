@@ -65,10 +65,9 @@ void u_sci5_receiveend_callback(void)
 /* private functions definition. */
 static void cam_commu_task_entry(void *pvParameters)
 {
-    int i;
     while (1) {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-        for (i = 0; i < CAM_BUFFER_LENGTH; i++) {
+        for (int i = 0; i < CAM_BUFFER_LENGTH; i++) {
             if (cam_rx_buffer[cam_rx_buffer_pointer][i] == COMMUNI_STX) {
                 start_receive = true;
                 continue;

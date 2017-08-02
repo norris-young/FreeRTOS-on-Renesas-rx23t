@@ -141,7 +141,6 @@ static void end_process(void)
 
 static void page_init(uint8_t _pageNum)
 {
-    int i;
     pageNum = _pageNum;
 
     oled_CLS();
@@ -149,12 +148,12 @@ static void page_init(uint8_t _pageNum)
 
     switch (_pageNum) {
     case MISSION_SELECT_PAGE:
-        for (i = 0; i < 8; i++) {
+        for (int i = 0; i < 8; i++) {
             oled_P6x8Str(8, i, ScreenStr[MISSION_SELECT_PAGE][i]);
         }
         break;
     case MISSION_SETTING_PAGE:
-        for (i = 0; i < 8; i++) {
+        for (int i = 0; i < 8; i++) {
             oled_P6x8Str(8, i, ScreenStr[MISSION_SETTING_PAGE][i]);
             oled_PrintValueF(70, i, ScreenData[MISSION_SETTING_PAGE][i], 2);
         }
