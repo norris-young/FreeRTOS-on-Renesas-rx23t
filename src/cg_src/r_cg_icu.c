@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for ICU module.
-* Creation Date: 17.8.2
+* Creation Date: 17.8.7
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -79,7 +79,7 @@ void R_ICU_Create(void)
     /* Set IRQ settings */
     ICU.IRQCR[0].BYTE = _08_ICU_IRQ_EDGE_RISING;
     ICU.IRQCR[1].BYTE = _08_ICU_IRQ_EDGE_RISING;
-    ICU.IRQCR[2].BYTE = _08_ICU_IRQ_EDGE_RISING;
+    ICU.IRQCR[2].BYTE = _00_ICU_IRQ_EDGE_LOW_LEVEL;
 
     /* Set IRQ0 priority level */
     IPR(ICU,IRQ0) = _05_ICU_PRIORITY_LEVEL5;

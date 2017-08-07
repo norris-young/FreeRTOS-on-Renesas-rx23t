@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for RSPI module.
-* Creation Date: 17.8.2
+* Creation Date: 17.8.7
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -106,7 +106,8 @@ void R_RSPI0_Create(void)
     MPC.PA3PFS.BYTE = 0x0DU;
     PORTA.PMR.BYTE |= 0x08U;
 
-    RSPI0.SPCR.BYTE = _00_RSPI_MODE_SPI | _00_RSPI_FULL_DUPLEX_SYNCHRONOUS | _08_RSPI_MASTER_MODE;
+    RSPI0.SPCR.BYTE = _00_RSPI_MODE_SPI | _00_RSPI_FULL_DUPLEX_SYNCHRONOUS | _04_RSPI_MODE_FAULT_DETECT_ENABLED | 
+                      _08_RSPI_MASTER_MODE;
 }
 
 /***********************************************************************************************************************
