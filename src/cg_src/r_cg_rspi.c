@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for RSPI module.
-* Creation Date: 17.8.7
+* Creation Date: 17.8.10
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -74,21 +74,21 @@ void R_RSPI0_Create(void)
 
     /* Set control registers */
     RSPI0.SPPCR.BYTE = _00_RSPI_MOSI_FIXING_PREV_TRANSFER | _00_RSPI_LOOPBACK_DISABLED | _00_RSPI_LOOPBACK2_DISABLED;
-    RSPI0.SPBR = _13_RSPI0_DIVISOR;
+    RSPI0.SPBR = _09_RSPI0_DIVISOR;
     RSPI0.SPDCR.BYTE = _00_RSPI_ACCESS_WORD | _00_RSPI_FRAMES_1;
     RSPI0.SPSCR.BYTE = _00_RSPI_SEQUENCE_LENGTH_1;
     RSPI0.SSLP.BYTE = _00_RSPI_SSL0_POLARITY_LOW;
     RSPI0.SPCKD.BYTE = _00_RSPI_RSPCK_DELAY_1;
     RSPI0.SSLND.BYTE = _00_RSPI_SSL_NEGATION_DELAY_1;
     RSPI0.SPND.BYTE = _00_RSPI_NEXT_ACCESS_DELAY_1;
-    RSPI0.SPCR2.BYTE = _00_RSPI_PARITY_DISABLE;
-    RSPI0.SPCMD0.WORD = _0001_RSPI_RSPCK_SAMPLING_EVEN | _0000_RSPI_RSPCK_POLARITY_LOW | _000C_RSPI_BASE_BITRATE_8 | 
-                        _0000_RSPI_SIGNAL_ASSERT_SSL0 | _0000_RSPI_SSL_KEEP_DISABLE | _0400_RSPI_DATA_LENGTH_BITS_8 | 
+    RSPI0.SPCR2.BYTE = _00_RSPI_PARITY_DISABLE | _10_RSPI_AUTO_STOP_ENABLED;
+    RSPI0.SPCMD0.WORD = _0000_RSPI_RSPCK_SAMPLING_ODD | _0000_RSPI_RSPCK_POLARITY_LOW | _0000_RSPI_BASE_BITRATE_1 | 
+                        _0000_RSPI_SIGNAL_ASSERT_SSL0 | _0080_RSPI_SSL_KEEP_ENABLE | _0400_RSPI_DATA_LENGTH_BITS_8 | 
                         _0000_RSPI_MSB_FIRST | _0000_RSPI_NEXT_ACCESS_DELAY_DISABLE | 
                         _0000_RSPI_NEGATION_DELAY_DISABLE | _0000_RSPI_RSPCK_DELAY_DISABLE;
 
     /* Set SPEI0, SPRI0, SPTI0 and SPII0 priority level */
-    IPR(RSPI0,SPTI0) = _0F_RSPI_PRIORITY_LEVEL15;
+    IPR(RSPI0,SPTI0) = _04_RSPI_PRIORITY_LEVEL4;
 
     /* Set RSPCKA pin */
     MPC.P93PFS.BYTE = 0x0DU;
@@ -106,8 +106,7 @@ void R_RSPI0_Create(void)
     MPC.PA3PFS.BYTE = 0x0DU;
     PORTA.PMR.BYTE |= 0x08U;
 
-    RSPI0.SPCR.BYTE = _00_RSPI_MODE_SPI | _00_RSPI_FULL_DUPLEX_SYNCHRONOUS | _04_RSPI_MODE_FAULT_DETECT_ENABLED | 
-                      _08_RSPI_MASTER_MODE;
+    RSPI0.SPCR.BYTE = _00_RSPI_MODE_SPI | _00_RSPI_FULL_DUPLEX_SYNCHRONOUS | _08_RSPI_MASTER_MODE;
 }
 
 /***********************************************************************************************************************
