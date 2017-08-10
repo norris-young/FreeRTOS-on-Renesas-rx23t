@@ -169,5 +169,6 @@ extern void U_PORT_Oled_SCL_Pin_Write(unsigned char value);
 extern void U_PORT_Oled_SDA_Pin_Write(unsigned char value);
 extern void U_PORT_Oled_RST_Pin_Write(unsigned char value);
 extern void U_PORT_Oled_DC_Pin_Write(unsigned char value);
+extern void U_PORT_Camera_mode_select(unsigned char mode);
 /* End user code. Do not edit comment generated here */
 #endif

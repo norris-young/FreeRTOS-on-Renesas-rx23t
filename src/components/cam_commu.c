@@ -21,6 +21,7 @@ static uint8_t cam_rx_buffer[2][CAM_BUFFER_LENGTH];
 static int cam_rx_buffer_pointer = 0;
 static int cam_rx_pointer = 0;
 static volatile bool start_receive = false;
+volatile int finded_object = 0;
 
 static TaskHandle_t cam_commu_taskhandle;
 
@@ -84,6 +85,7 @@ static void cam_commu_task_entry(void *pvParameters)
                 } else if (cam_rx_pointer == 2) {
                     if (cam_rx_buffer[cam_rx_buffer_pointer][i] < CAMERA_H) {
                         mid_y = cam_rx_buffer[cam_rx_buffer_pointer][i];
+                        finded_object = 1;
                     }
                     cam_rx_pointer = 0;
                     start_receive = false;

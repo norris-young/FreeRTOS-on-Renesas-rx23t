@@ -16,7 +16,7 @@ void pid_init(struct pid_param *pp, struct pid_cfg *pc)
     pp->kp          = DEFAULT_KP;
     pp->ki          = DEFAULT_KI;
     pp->kd          = DEFAULT_KD;
-    pp->dt          = (float)(1/DEFAULT_PID_FREQ);
+    pp->dt          = 1.0 / (float)DEFAULT_PID_FREQ;
     pp->d_lpf_alpha = DEFAULT_LPFITER;
     pp->i_max       = DEFAULT_I_MAX;
     pp->out_max     = DEFAULT_OUT_MAX;
@@ -56,7 +56,7 @@ void pid_update(struct pid_param *pp, struct pid_cfg *pc)
         pc->derivative = pp->kd * (pc->error - pc->last_error) / pp->dt;
         // discrete low pass filter, cuts out the
         // high frequency noise that can drive the controller crazy.
-        pc->derivative = pc->last_derivative + pp->d_lpf_alpha * (pc->derivative - pc->last_derivative);
+        pc->derivative = pc->last_derivative + pp->dt / (pp->d_lpf_alpha + pp->dt) * (pc->derivative - pc->last_derivative);
         // update state
         pc->last_error = pc->error;
         pc->last_derivative = pc->derivative;
