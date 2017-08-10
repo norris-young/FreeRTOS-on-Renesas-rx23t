@@ -205,7 +205,7 @@ static void alt_hold(const float dest_Height)
 
     /* arrives the destination height, start position control & hold for x milliseconds. */
     send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
-    vTaskDelay(pdMS_TO_TICKS(10000));
+    vTaskDelay(pdMS_TO_TICKS(5000));
 
     /* drop down & disarm. */
     send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);

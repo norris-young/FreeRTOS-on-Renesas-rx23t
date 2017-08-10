@@ -8,10 +8,10 @@
 #ifndef COMPONENTS_CAM_COMMU_H_
 #define COMPONENTS_CAM_COMMU_H_
 
-#define CAMERA_W            80
-#define CAMERA_H            58
-#define CAMERA_MID_X        39
-#define CAMERA_MID_Y        28
+#define CAMERA_W            160
+#define CAMERA_H            120
+#define CAMERA_MID_X        79
+#define CAMERA_MID_Y        59
 
 #define COMMUNI_STX         0xFE
 #define CAM_BUFFER_LENGTH   3
