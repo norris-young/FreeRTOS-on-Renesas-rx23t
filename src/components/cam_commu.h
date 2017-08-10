@@ -21,9 +21,9 @@
 #define CAM_MODE_BLACK      1
 #define CAM_MODE_GREEN      0
 
-extern volatile int finded_object;
 extern volatile uint8_t mid_x, mid_y;
 
 extern void cam_commu_init(void);
+extern void try_to_find(void);
 
 #endif /* COMPONENTS_CAM_COMMU_H_ */

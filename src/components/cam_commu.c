@@ -14,14 +14,15 @@
 /*-----------------------------------------------------------*/
 /* User include files. */
 #include "cam_commu.h"
+#include "mission.h"
 
 /*-----------------------------------------------------------*/
 /* private variables, */
 static uint8_t cam_rx_buffer[2][CAM_BUFFER_LENGTH];
 static int cam_rx_buffer_pointer = 0;
 static int cam_rx_pointer = 0;
-static volatile bool start_receive = false;
-volatile int finded_object = 0;
+static volatile bool start_receive = pdFALSE;
+static volatile bool finded_object = pdFALSE;
 
 static TaskHandle_t cam_commu_taskhandle;
 
@@ -51,6 +52,11 @@ void cam_commu_init()
     R_SCI5_Start();
 }
 
+void try_to_find(void)
+{
+    finded_object = 0;
+}
+
 void u_sci5_receiveend_callback(void)
 {
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
@@ -70,7 +76,7 @@ static void cam_commu_task_entry(void *pvParameters)
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         for (int i = 0; i < CAM_BUFFER_LENGTH; i++) {
             if (cam_rx_buffer[cam_rx_buffer_pointer][i] == COMMUNI_STX) {
-                start_receive = true;
+                start_receive = pdTRUE;
                 continue;
             }
             if (start_receive) {
@@ -80,15 +86,18 @@ static void cam_commu_task_entry(void *pvParameters)
                         mid_x = cam_rx_buffer[cam_rx_buffer_pointer][i];
                     } else {
                         cam_rx_pointer = 0;
-                        start_receive = false;
+                        start_receive = pdFALSE;
                     }
                 } else if (cam_rx_pointer == 2) {
                     if (cam_rx_buffer[cam_rx_buffer_pointer][i] < CAMERA_H) {
                         mid_y = cam_rx_buffer[cam_rx_buffer_pointer][i];
-                        finded_object = 1;
+                        if (!finded_object) {
+                            camera_finded();
+                            finded_object = pdTRUE;
+                        }
                     }
                     cam_rx_pointer = 0;
-                    start_receive = false;
+                    start_receive = pdFALSE;
                 }
             }
         }
