@@ -5,6 +5,11 @@
         <peripheralInfo>
             <peripheralName>portb</peripheralName>
             <pinInfo>
+                <pinName>PB7</pinName>
+                <pinPort>PB7</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
                 <pinName>PB4</pinName>
                 <pinPort>PB4</pinPort>
                 <pinOption>FIXED</pinOption>

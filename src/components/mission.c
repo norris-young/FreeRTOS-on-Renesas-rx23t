@@ -10,14 +10,17 @@
 #include "task.h"
 #include "platform.h"
 #include "r_cg_icu.h"
+#include "r_cg_port.h"
 
 /*-----------------------------------------------------------*/
 /* User include files. */
 #include "mavlink_receive.h"
 #include "danger_check.h"
 #include "ppm_encoder.h"
+#include "alt_control.h"
 #include "pos_control.h"
 #include "matrix_key.h"
+#include "cam_commu.h"
 #include "mission.h"
 #include "io.h"
 
@@ -34,8 +37,10 @@ static volatile float mission_kp, mission_ki, mission_kd;
 static void mission_task_entry(void *pvParameters);
 static void arm(uint16_t flight_mode);
 static void disarm(void);
-static void alt_hold(const float dest_Height);
-static void red_led_warning();
+static void red_led_warning(void);
+
+static void mission_1(const float dest_Height);
+static void mission_2(const float dest_Height);
 
 /*-----------------------------------------------------------*/
 /* global functions definition. */
@@ -119,7 +124,7 @@ static void mission_task_entry(void *pvParameters)
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
             red_led_warning();
             start_mission_timer();
-            alt_hold(dest_Height);
+            mission_1(dest_Height);
             stop_mission_timer();
             break;
         case MISSION_2:
@@ -129,6 +134,7 @@ static void mission_task_entry(void *pvParameters)
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
             red_led_warning();
             start_mission_timer();
+            mission_2(dest_Height);
             stop_mission_timer();
             break;
         case MISSION_3:
@@ -182,10 +188,10 @@ static void disarm(void)
  * PID control won't be influenced.
  *
  * --------------------------------------------------------*/
-static void alt_hold(const float dest_Height)
+static void mission_1(const float dest_Height)
 {
     float up_throttle;
-
+    U_PORT_Camera_mode_select(CAM_MODE_BLACK);
     /* arm & clime up. */
     arm(Alt_Hold);
     send_ppm(0,0,channel_percent(20),0,Alt_Hold,0);
@@ -205,8 +211,9 @@ static void alt_hold(const float dest_Height)
 
     /* arrives the destination height, start position control & hold for x milliseconds. */
     send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
+    alt_ctl_start(dest_Height);
     vTaskDelay(pdMS_TO_TICKS(5000));
-
+    alt_ctl_stop();
     /* drop down & disarm. */
     send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);
     while(current_Height > 0.1);
@@ -221,4 +228,42 @@ static void red_led_warning()
     LED2 = LED_ON;
     vTaskDelay(pdMS_TO_TICKS(10000));
     LED2 = LED_OFF;
+}
+
+static void mission_2(const float dest_Height)
+{
+    float up_throttle;
+    U_PORT_Camera_mode_select(CAM_MODE_GREEN);
+    /* arm & clime up. */
+    arm(Alt_Hold);
+    send_ppm(0,0,channel_percent(20),0,Alt_Hold,0);
+    vTaskDelay(pdMS_TO_TICKS(500));
+    send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
+    vTaskDelay(pdMS_TO_TICKS(500));
+    send_ppm(0,0,channel_percent(55),0,Alt_Hold,0);
+    vTaskDelay(pdMS_TO_TICKS(500));
+    send_ppm(0,0,channel_percent(60),0,Alt_Hold,0);
+    vTaskDelay(pdMS_TO_TICKS(500));
+
+    while(current_Height + DEST_HEIGHT_CUSHION < dest_Height) {
+        up_throttle = (1.0 - current_Height / dest_Height) * channel_val_RANGE * 3 / 100;
+        send_ppm(0,channel_percent(50) - 20,channel_percent(60) + (uint16_t)up_throttle,0,Alt_Hold,0);
+        if (finded_object) position_ctl_start(pdFALSE, mission_kp, mission_ki, mission_kd);
+    }
+    /* arrives the destination height, start position control & hold for x milliseconds. */
+    send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
+    if (!finded_object) position_ctl_start(pdFALSE, mission_kp, mission_ki, mission_kd);
+    vTaskDelay(pdMS_TO_TICKS(5000));
+
+    /* back to black hole & drop down & disarm. */
+    position_ctl_suspend();
+    U_PORT_Camera_mode_select(CAM_MODE_BLACK);
+    send_ppm(0,0,channel_percent(50) + 20,0,Alt_Hold,0);
+    vTaskDelay(pdMS_TO_TICKS(1000));
+    position_ctl_resume();
+    vTaskDelay(pdMS_TO_TICKS(2000));
+    send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);
+    while(current_Height > 0.1);
+    position_ctl_stop();
+    disarm();
 }
