@@ -16,6 +16,7 @@
 #include "printf-stdarg.h"
 
 volatile size_t xFreeHeapSpace;
+volatile int idle_times = 0;
 
 /* Prototypes for the standard FreeRTOS callback/hook functions implemented
 within this file. */
@@ -63,6 +64,7 @@ void vApplicationIdleHook( void )
     configTOTAL_HEAP_SIZE value in FreeRTOSConfig.h can be reduced to free up
     RAM. */
     xFreeHeapSpace = xPortGetFreeHeapSize();
+    idle_times++;
 
     /* Remove compiler warning about xFreeHeapSpace being set but never used. */
     ( void ) xFreeHeapSpace;

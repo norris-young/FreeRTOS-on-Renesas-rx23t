@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for SCI module.
-* Creation Date: 17.8.10
+* Creation Date: 17.8.11
 ***********************************************************************************************************************/
 #ifndef SCI_H
 #define SCI_H
