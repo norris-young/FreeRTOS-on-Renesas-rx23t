@@ -37,6 +37,7 @@ struct pid_param {
 };
 
 struct pid_cfg {
+    float destination;
     float last_error;
     float error;
     float error_min;

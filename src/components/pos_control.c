@@ -39,6 +39,8 @@ void position_ctl_start(int use_Default_PID, float kp, float ki, float kd)
 
     pos_pid_init(&position_x_pp, &position_x_pc);
     pos_pid_init(&position_y_pp, &position_y_pc);
+    position_x_pc.destination = (float)CAMERA_MID_X;
+    position_y_pc.destination = (float)CAMERA_MID_Y;
     position_x_pc.error_min = (float)POS_X_ERROR_MIN;
     position_y_pc.error_min = (float)POS_Y_ERROR_MIN;
     if (!use_Default_PID) {
@@ -59,16 +61,10 @@ void position_ctl_start(int use_Default_PID, float kp, float ki, float kd)
     configASSERT(ret == pdPASS);
 }
 
-void position_ctl_suspend(void)
+void position_ctl_dest_set(int x_dest, int y_dest)
 {
-    vTaskSuspend(pos_ctl_taskhandle);
-}
-
-void position_ctl_resume(void)
-{
-    position_x_pc.integrator = 0.0f;
-    position_y_pc.integrator = 0.0f;
-    vTaskResume(pos_ctl_taskhandle);
+    position_x_pc.destination = (float)x_dest;
+    position_y_pc.destination = (float)y_dest;
 }
 
 void position_ctl_stop(void)
@@ -87,8 +83,8 @@ static void pos_ctl_task_entry(void *pvParameters)
     while (1) {
         if(current_Height > POS_CTL_MIN_HEIGHT) {
             LED0 = LED_ON;
-            position_x_pc.error = (float)(mid_x - CAMERA_MID_X) * PIXEL_TO_DISTANCE_X;
-            position_y_pc.error = (float)(mid_y - CAMERA_MID_Y) * PIXEL_TO_DISTANCE_Y;
+            position_x_pc.error = ((float)mid_x - position_x_pc.destination) * PIXEL_TO_DISTANCE_X;
+            position_y_pc.error = ((float)mid_y - position_y_pc.destination) * PIXEL_TO_DISTANCE_Y;
 
             pid_update(&position_x_pp, &position_x_pc);
             pid_update(&position_y_pp, &position_y_pc);

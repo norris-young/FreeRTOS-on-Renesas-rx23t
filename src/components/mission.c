@@ -40,7 +40,7 @@ static void disarm(void);
 static void red_led_warning(void);
 
 static void mission_1(const float dest_Height);
-static void mission_2(const float dest_Height);
+static void mission_3(const float dest_Height);
 
 /*-----------------------------------------------------------*/
 /* global functions definition. */
@@ -139,7 +139,6 @@ static void mission_task_entry(void *pvParameters)
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
             red_led_warning();
             start_mission_timer();
-            mission_2(dest_Height);
             stop_mission_timer();
             break;
         case MISSION_3:
@@ -149,6 +148,7 @@ static void mission_task_entry(void *pvParameters)
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
             red_led_warning();
             start_mission_timer();
+            mission_3(dest_Height);
             stop_mission_timer();
             break;
         default:
@@ -235,10 +235,9 @@ static void red_led_warning()
     LED2 = LED_OFF;
 }
 
-static void mission_2(const float dest_Height)
+static void mission_3(const float dest_Height)
 {
     float up_throttle;
-    uint32_t ret;
     U_PORT_Camera_mode_select(CAM_MODE_BLACK);
     /* arm & clime up. */
     arm(Alt_Hold);
@@ -252,6 +251,7 @@ static void mission_2(const float dest_Height)
     vTaskDelay(pdMS_TO_TICKS(500));
 
     position_ctl_start(pdFALSE, mission_kp, mission_ki, mission_kd);
+    position_ctl_dest_set(CAMERA_MID_X, CAMERA_H);
     while(current_Height + DEST_HEIGHT_CUSHION < dest_Height) {
         up_throttle = (1.0 - current_Height / dest_Height / 2) * channel_val_RANGE * 3 / 100;
         send_ppm(0,0,channel_percent(60) + (uint16_t)up_throttle,0,Alt_Hold,0);
@@ -260,24 +260,17 @@ static void mission_2(const float dest_Height)
     vTaskDelay(pdMS_TO_TICKS(1000));
 
     /* go forward to find green car. */
-    position_ctl_stop();
     U_PORT_Camera_mode_select(CAM_MODE_GREEN);
-    send_ppm(channel_val_MID + 10,channel_val_MID - 30,0,0,Alt_Hold,0);
-    vTaskDelay(pdMS_TO_TICKS(500));
-    xTaskNotifyStateClear(NULL);
-    try_to_find();
-    ret = ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(3000));
-
-    /* if find green car, locate at it. */
-    if (ret > 0) {
-        position_ctl_start(pdFALSE, mission_kp, mission_ki, mission_kd);
-        send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
-        vTaskDelay(pdMS_TO_TICKS(10000));
-        position_ctl_stop();
-    }
+    mid_y = 0;
+    position_ctl_dest_set(CAMERA_MID_X, CAMERA_MID_Y);
+    vTaskDelay(pdMS_TO_TICKS(10000));
 
     /* go forward & drop down & disarm. */
+    send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);
+    position_ctl_dest_set(CAMERA_MID_X, CAMERA_H / 10 * 9);
+    while(current_Height > 0.5);
+    position_ctl_stop();
     send_ppm(0,channel_val_MID - 25,channel_percent(38),0,Alt_Hold,0);
-    while(current_Height > 0.1);
+    while(current_Height > 0.1)
     disarm();
 }

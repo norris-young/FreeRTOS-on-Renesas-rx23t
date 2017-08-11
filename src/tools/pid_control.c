@@ -21,6 +21,7 @@ void pid_init(struct pid_param *pp, struct pid_cfg *pc)
     pp->i_max       = DEFAULT_I_MAX;
     pp->out_max     = DEFAULT_OUT_MAX;
 
+    pc->destination     = 0.0;
     pc->last_error      = 0.0;
     pc->error           = 0.0;
     pc->error_min       = DEFAULT_ERROR_MIN;
