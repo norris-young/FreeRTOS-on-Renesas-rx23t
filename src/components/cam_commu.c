@@ -22,7 +22,7 @@ static uint8_t cam_rx_buffer[2][CAM_BUFFER_LENGTH];
 static int cam_rx_buffer_pointer = 0;
 static int cam_rx_pointer = 0;
 static volatile bool start_receive = pdFALSE;
-static volatile bool finded_object = pdFALSE;
+static volatile bool try_to_find_new = pdFALSE;
 
 static TaskHandle_t cam_commu_taskhandle;
 
@@ -54,7 +54,7 @@ void cam_commu_init()
 
 void try_to_find(void)
 {
-    finded_object = 0;
+    try_to_find_new = pdTRUE;
 }
 
 void u_sci5_receiveend_callback(void)
@@ -91,9 +91,9 @@ static void cam_commu_task_entry(void *pvParameters)
                 } else if (cam_rx_pointer == 2) {
                     if (cam_rx_buffer[cam_rx_buffer_pointer][i] < CAMERA_H) {
                         mid_y = cam_rx_buffer[cam_rx_buffer_pointer][i];
-                        if (!finded_object) {
+                        if (try_to_find_new) {
                             camera_finded();
-                            finded_object = pdTRUE;
+                            try_to_find_new = pdFALSE;
                         }
                     }
                     cam_rx_pointer = 0;

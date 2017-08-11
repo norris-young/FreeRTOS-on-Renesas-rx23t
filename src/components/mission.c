@@ -210,14 +210,14 @@ static void mission_1(const float dest_Height)
 
     position_ctl_start(pdFALSE, mission_kp, mission_ki, mission_kd);
     while(current_Height + DEST_HEIGHT_CUSHION < dest_Height) {
-        up_throttle = (1.0 - current_Height / dest_Height) * channel_val_RANGE * 3 / 100;
+        up_throttle = (1.0 - current_Height / dest_Height / 2) * channel_val_RANGE * 3 / 100;
         send_ppm(0,0,channel_percent(60) + (uint16_t)up_throttle,0,Alt_Hold,0);
     }
 
     /* arrives the destination height, start position control & hold for x milliseconds. */
     send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
     alt_ctl_start(dest_Height);
-    vTaskDelay(pdMS_TO_TICKS(5000));
+    vTaskDelay(pdMS_TO_TICKS(7000));
     alt_ctl_stop();
     /* drop down & disarm. */
     send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);
@@ -253,42 +253,31 @@ static void mission_2(const float dest_Height)
 
     position_ctl_start(pdFALSE, mission_kp, mission_ki, mission_kd);
     while(current_Height + DEST_HEIGHT_CUSHION < dest_Height) {
-        up_throttle = (1.0 - current_Height / dest_Height) * channel_val_RANGE * 3 / 100;
+        up_throttle = (1.0 - current_Height / dest_Height / 2) * channel_val_RANGE * 3 / 100;
         send_ppm(0,0,channel_percent(60) + (uint16_t)up_throttle,0,Alt_Hold,0);
     }
     send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
-    vTaskDelay(pdMS_TO_TICKS(3000));
+    vTaskDelay(pdMS_TO_TICKS(1000));
 
     /* go forward to find green car. */
-    position_ctl_suspend();
+    position_ctl_stop();
     U_PORT_Camera_mode_select(CAM_MODE_GREEN);
-    send_ppm(channel_val_MID,channel_val_MID - 20,0,0,Alt_Hold,0);
+    send_ppm(channel_val_MID,channel_val_MID - 30,0,0,Alt_Hold,0);
+    vTaskDelay(pdMS_TO_TICKS(500));
     xTaskNotifyStateClear(NULL);
     try_to_find();
     ret = ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(3000));
 
     /* if find green car, locate at it. */
     if (ret > 0) {
-        position_ctl_resume();
+        position_ctl_start(pdFALSE, mission_kp, mission_ki, mission_kd);
         send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
-        vTaskDelay(pdMS_TO_TICKS(5000));
-        position_ctl_suspend();
+        vTaskDelay(pdMS_TO_TICKS(10000));
+        position_ctl_stop();
     }
 
-    /* back to black hole & drop down & disarm. */
-    U_PORT_Camera_mode_select(CAM_MODE_BLACK);
-    send_ppm(channel_val_MID,channel_val_MID + 20,0,0,Alt_Hold,0);
-    xTaskNotifyStateClear(NULL);
-    try_to_find();
-    ret = ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(3000));
-    if (ret > 0) {
-        position_ctl_resume();
-        vTaskDelay(pdMS_TO_TICKS(2000));
-    } else {
-        send_ppm(channel_val_MID,channel_val_MID,0,0,Alt_Hold,0);
-    }
-    send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);
+    /* go forward & drop down & disarm. */
+    send_ppm(0,channel_val_MID - 25,channel_percent(38),0,Alt_Hold,0);
     while(current_Height > 0.1);
-    position_ctl_stop();
     disarm();
 }

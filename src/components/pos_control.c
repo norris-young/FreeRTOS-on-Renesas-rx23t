@@ -66,14 +66,15 @@ void position_ctl_suspend(void)
 
 void position_ctl_resume(void)
 {
-    position_x_pc.integrator = 0;
-    position_y_pc.integrator = 0;
+    position_x_pc.integrator = 0.0f;
+    position_y_pc.integrator = 0.0f;
     vTaskResume(pos_ctl_taskhandle);
 }
 
 void position_ctl_stop(void)
 {
     vTaskDelete(pos_ctl_taskhandle);
+    send_ppm(channel_val_MID, channel_val_MID, 0, 0, 0, 0);
 }
 
 /*-----------------------------------------------------------*/
