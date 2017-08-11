@@ -217,7 +217,7 @@ static void mission_1(const float dest_Height)
     /* arrives the destination height, start position control & hold for x milliseconds. */
     send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
     alt_ctl_start(dest_Height);
-    vTaskDelay(pdMS_TO_TICKS(7000));
+    vTaskDelay(pdMS_TO_TICKS(10000));
     alt_ctl_stop();
     /* drop down & disarm. */
     send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);
@@ -262,7 +262,7 @@ static void mission_2(const float dest_Height)
     /* go forward to find green car. */
     position_ctl_stop();
     U_PORT_Camera_mode_select(CAM_MODE_GREEN);
-    send_ppm(channel_val_MID,channel_val_MID - 30,0,0,Alt_Hold,0);
+    send_ppm(channel_val_MID + 10,channel_val_MID - 30,0,0,Alt_Hold,0);
     vTaskDelay(pdMS_TO_TICKS(500));
     xTaskNotifyStateClear(NULL);
     try_to_find();
