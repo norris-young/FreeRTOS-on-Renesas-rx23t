@@ -188,9 +188,9 @@ static void arm(uint16_t flight_mode)
  * --------------------------------------------------------*/
 static void disarm(void)
 {
-    send_ppm(channel_val_MID,channel_val_MID,channel_val_MIN,channel_val_MIN,Stabilize,0);
+    send_ppm(channel_val_MID,channel_val_MID,channel_val_MIN,channel_val_MIN,Stabilize,EMERGENCY_ON);
     vTaskDelay(pdMS_TO_TICKS(5000));
-    send_ppm(channel_val_MID,channel_val_MID,channel_val_MIN,channel_val_MID,Stabilize,0);
+    send_ppm(channel_val_MID,channel_val_MID,channel_val_MIN,channel_val_MID,Stabilize,EMERGENCY_OFF);
 }
 
 /* ----------------------------------------------------------
@@ -225,7 +225,7 @@ static void mission_1(const float dest_Height)
     /* arrives the destination height, start position control & hold for x milliseconds. */
     send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
     alt_ctl_start(dest_Height);
-    vTaskDelay(pdMS_TO_TICKS(10000));
+    vTaskDelay(pdMS_TO_TICKS(8000));
     alt_ctl_stop();
     /* drop down & disarm. */
     send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);
@@ -268,12 +268,14 @@ static void mission_3(const float dest_Height)
     vTaskDelay(pdMS_TO_TICKS(100));
     mid_y = 0;
     position_ctl_dest_set(CAMERA_MID_X, CAMERA_MID_Y);
-    vTaskDelay(pdMS_TO_TICKS(20000));
+    vTaskDelay(pdMS_TO_TICKS(8000));
 
     /* go forward & drop down & disarm. */
     position_ctl_stop();
-    send_ppm(channel_val_MID,channel_val_MID + 15,channel_percent(38),0,Alt_Hold,0);
-    while(current_Height > 0.1);
+    send_ppm(channel_val_MID,channel_val_MID - 18,channel_percent(38),0,Alt_Hold,0);
+    while(current_Height > 0.3);
+    send_ppm(channel_val_MID,channel_val_MID,channel_percent(38),0,Alt_Hold,0);
+    while(current_Height > 0.2);
     disarm();
 }
 
@@ -310,7 +312,7 @@ static void mission_4(const float dest_Height)
     /* go forward & drop down & disarm. */
     position_ctl_stop();
     send_ppm(channel_val_MID,channel_val_MID + 15,channel_percent(38),0,Alt_Hold,0);
-    while(current_Height > 0.1);
+    while(current_Height > 0.2);
     disarm();
 }
 

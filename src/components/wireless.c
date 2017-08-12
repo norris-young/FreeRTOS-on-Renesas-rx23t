@@ -38,6 +38,9 @@ void car_commu_init(void)
 {
     BaseType_t ret;
 
+    R_SCI5_Serial_Receive(&car_rx_buffer, 1);
+    R_SCI5_Start();
+
     ret = xTaskCreate(car_commu_task_entry,
                       "car_commu",
                       configMINIMAL_STACK_SIZE,
@@ -45,9 +48,6 @@ void car_commu_init(void)
                       CAR_COMMU_TASK_PRI,
                       &car_commu_taskhandle);
     configASSERT(ret == pdPASS);
-
-    R_SCI5_Serial_Receive(&car_rx_buffer, 1);
-    R_SCI5_Start();
 }
 
 void camera_finded(void)

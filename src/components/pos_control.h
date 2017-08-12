@@ -10,7 +10,7 @@
 
 #define POS_KP          1.5f
 #define POS_KI          0.0f
-#define POS_KD          0.42f
+#define POS_KD          0.38f
 #define POS_I_MAX       15.0f
 #define POS_OUT_MAX     25.0f
 #define POS_PID_FREQ    50
