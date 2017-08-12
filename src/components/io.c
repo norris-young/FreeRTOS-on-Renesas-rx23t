@@ -32,7 +32,8 @@ static uint8_t pageNum = MISSION_SELECT_PAGE;
 static uint8_t ScreenStr[3][8][30] = {
                                       {"Mission 1",
                                        "Mission 2",
-                                       "Mission 3",},
+                                       "Mission 3",
+                                       "Mission 4"},
                                       {"Height:",
                                        "pos kp:",
                                        "pos ki:",

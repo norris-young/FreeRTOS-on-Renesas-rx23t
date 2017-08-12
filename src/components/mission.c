@@ -40,7 +40,9 @@ static void disarm(void);
 static void red_led_warning(void);
 
 static void mission_1(const float dest_Height);
+static void mission_2();
 static void mission_3(const float dest_Height);
+static void mission_4(const float dest_Height);
 
 /*-----------------------------------------------------------*/
 /* global functions definition. */
@@ -84,17 +86,17 @@ void send_mission_params(int8_t _mission, float _dest_Height, float kp, float ki
     mission_kp = kp;
     mission_ki = ki;
     mission_kd = kd;
-    xTaskNotifyGive(mission_taskhandle);
+    xTaskNotify(mission_taskhandle, NOTIFY_INPUT_OVER, eSetBits);
 }
 
-void camera_finded(void)
+void wireless_start_mission(void)
 {
-    xTaskNotifyGive(mission_taskhandle);
+    xTaskNotify(mission_taskhandle, NOTIFY_START_MISSION, eSetBits);
 }
 
 void car_stop(void)
 {
-    xTaskNotifyGive(mission_taskhandle);
+    xTaskNotify(mission_taskhandle, NOTIFY_CAR_STOP, eSetBits);
 }
 
 /* ----------------------------------------------------------
@@ -125,7 +127,7 @@ static void mission_task_entry(void *pvParameters)
 {
     while(1) {
         io_input();
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        xTaskNotifyWait(NOTIFY_INPUT_OVER, NOTIFY_INPUT_OVER, NULL ,portMAX_DELAY);
         switch (mission) {
         case MISSION_1:
             LED2 = LED_ON;
@@ -138,13 +140,7 @@ static void mission_task_entry(void *pvParameters)
             stop_mission_timer();
             break;
         case MISSION_2:
-            LED2 = LED_ON;
-            /* wait for start signal from IRQ which connected to a remote control. */
-            xTaskNotifyStateClear(NULL);
-            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-            red_led_warning();
-            start_mission_timer();
-            stop_mission_timer();
+            mission_2();
             break;
         case MISSION_3:
             LED2 = LED_ON;
@@ -156,7 +152,17 @@ static void mission_task_entry(void *pvParameters)
             mission_3(dest_Height);
             stop_mission_timer();
             break;
-        default:
+        case MISSION_4:
+            LED2 = LED_ON;
+            /* wait for start signal from IRQ which connected to a remote control. */
+            xTaskNotifyStateClear(NULL);
+            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+            red_led_warning();
+            start_mission_timer();
+            mission_4(dest_Height);
+            stop_mission_timer();
+            break;
+            default:
             /* select a mission number which does not exist. */
             break;
         }
@@ -231,13 +237,10 @@ static void mission_1(const float dest_Height)
     disarm();
 }
 
-static void red_led_warning()
+static void mission_2()
 {
-    LED2 = LED_OFF;
+    U_PORT_Camera_mode_select(CAM_MODE_GREEN);
     vTaskDelay(pdMS_TO_TICKS(2000));
-    LED2 = LED_ON;
-    vTaskDelay(pdMS_TO_TICKS(10000));
-    LED2 = LED_OFF;
 }
 
 static void mission_3(const float dest_Height)
@@ -262,21 +265,65 @@ static void mission_3(const float dest_Height)
         send_ppm(0,0,channel_percent(60) + (uint16_t)up_throttle,0,Alt_Hold,0);
     }
     send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
-    vTaskDelay(pdMS_TO_TICKS(1000));
 
     /* go forward to find green car. */
     U_PORT_Camera_mode_select(CAM_MODE_GREEN);
-    vTaskDelay(pdMS_TO_TICKS(500));
+    vTaskDelay(pdMS_TO_TICKS(100));
     mid_y = 0;
     position_ctl_dest_set(CAMERA_MID_X, CAMERA_MID_Y);
     vTaskDelay(pdMS_TO_TICKS(20000));
 
     /* go forward & drop down & disarm. */
     send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);
-    position_ctl_dest_set(CAMERA_MID_X, CAMERA_H / 10 * 1);
-    while(current_Height > 0.5);
     position_ctl_stop();
-    send_ppm(channel_val_MID,channel_val_MID + 25,channel_percent(38),0,Alt_Hold,0);
+    send_ppm(channel_val_MID,channel_val_MID + 15,channel_percent(38),0,Alt_Hold,0);
     while(current_Height > 0.1);
     disarm();
+}
+
+static void mission_4(const float dest_Height)
+{
+    float up_throttle;
+    U_PORT_Camera_mode_select(CAM_MODE_BLACK);
+    /* arm & clime up. */
+    arm(Alt_Hold);
+    send_ppm(0,0,channel_percent(20),0,Alt_Hold,0);
+    vTaskDelay(pdMS_TO_TICKS(500));
+    send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
+    vTaskDelay(pdMS_TO_TICKS(500));
+    send_ppm(0,0,channel_percent(55),0,Alt_Hold,0);
+    vTaskDelay(pdMS_TO_TICKS(500));
+    send_ppm(0,0,channel_percent(60),0,Alt_Hold,0);
+    vTaskDelay(pdMS_TO_TICKS(500));
+
+    position_ctl_start(pdFALSE, mission_kp, mission_ki, mission_kd);
+    position_ctl_dest_set(CAMERA_MID_X, CAMERA_H);
+    while(current_Height + DEST_HEIGHT_CUSHION < dest_Height) {
+        up_throttle = (1.0 - current_Height / dest_Height / 2) * channel_val_RANGE * 3 / 100;
+        send_ppm(0,0,channel_percent(60) + (uint16_t)up_throttle,0,Alt_Hold,0);
+    }
+    send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
+
+    /* go forward to find green car. */
+    U_PORT_Camera_mode_select(CAM_MODE_GREEN);
+    vTaskDelay(pdMS_TO_TICKS(100));
+    mid_y = 0;
+    position_ctl_dest_set(CAMERA_MID_X, CAMERA_MID_Y);
+    xTaskNotifyWait(NOTIFY_CAR_STOP, NOTIFY_CAR_STOP, NULL ,portMAX_DELAY);
+
+    /* go forward & drop down & disarm. */
+    send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);
+    position_ctl_stop();
+    send_ppm(channel_val_MID,channel_val_MID + 15,channel_percent(38),0,Alt_Hold,0);
+    while(current_Height > 0.1);
+    disarm();
+}
+
+static void red_led_warning()
+{
+    LED2 = LED_OFF;
+    vTaskDelay(pdMS_TO_TICKS(2000));
+    LED2 = LED_ON;
+    vTaskDelay(pdMS_TO_TICKS(10000));
+    LED2 = LED_OFF;
 }

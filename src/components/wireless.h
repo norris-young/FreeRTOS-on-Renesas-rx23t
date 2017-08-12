@@ -9,6 +9,8 @@
 #define COMPONENTS_WIRELESS_H_
 
 #define SOUND_LIGHT 0x25
+#define START_CMD   0x32
+#define EMERGENCY   0xAA
 #define LAND        0x38
 
 #define CAR_COMMU_TASK_PRI  4

@@ -157,4 +157,9 @@ void U_PORT_Camera_mode_select(unsigned char mode)
     if (mode == CAM_MODE_BLACK || mode == CAM_MODE_GREEN)
         PORTB.PODR.BIT.B7 = mode;
 }
+
+unsigned char U_PORT_Camera_mode_read(void)
+{
+    return PORTB.PODR.BIT.B7;
+}
 /* End user code. Do not edit comment generated here */

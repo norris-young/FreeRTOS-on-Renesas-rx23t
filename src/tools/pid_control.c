@@ -51,6 +51,7 @@ void pid_update(struct pid_param *pp, struct pid_cfg *pc)
     } else {
         pc->integrator = 0;
     }
+    if (pc->error * pc->last_error < 0) pc->integrator = 0;
 
     // calculate instantaneous derivative.
     if((pp->kd != 0) && (pp->dt != 0)) {

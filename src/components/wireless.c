@@ -5,6 +5,7 @@
  *      Author: Cotyledon
  */
 
+#include <math.h>
 /*-----------------------------------------------------------*/
 /* RTOS & rx23t include files. */
 #include "FreeRTOS.h"
@@ -14,12 +15,15 @@
 #include "r_cg_mtu3.h"
 
 #include "wireless.h"
+#include "cam_commu.h"
+#include "pos_control.h"
 #include "mission.h"
 #include "sonar.h"
 
 static TaskHandle_t car_commu_taskhandle;
 static unsigned char car_rx_buffer = 0;
 static unsigned char car_tx_buffer = LAND;
+static bool car_in_sight = pdFALSE;
 
 /*-----------------------------------------------------------*/
 /* private functions declaration. */
@@ -45,6 +49,11 @@ void car_commu_init(void)
     R_SCI5_Start();
 }
 
+void camera_finded(void)
+{
+    car_in_sight = pdTRUE;
+}
+
 void u_sci5_receiveend_callback(void)
 {
     R_SCI5_Serial_Receive(&car_rx_buffer, 1);
@@ -65,16 +74,29 @@ static void car_commu_task_entry(void *pvParameters)
     while (1) {
         if (car_rx_buffer == LAND) {
             car_stop();
-            car_rx_buffer = 0;
+        } else if (car_rx_buffer == EMERGENCY) {
+            is_emergency_now();
+        } else if (car_rx_buffer == START_CMD) {
+            wireless_start_mission();
         }
+        car_rx_buffer = 0;
 
-        if (current_Height > 0.49 && current_Height < 1.51) {
-            R_SCI5_Serial_Send(&car_tx_buffer, 1);
-            ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(50));
-            sound_light(1);
+        if (car_in_sight) {
+            float distance = sqrt(current_Height * current_Height
+                                      + ((float)(mid_x - CAMERA_MID_X) * PIXEL_TO_DISTANCE_X / 100) * ((float)(mid_x - CAMERA_MID_X) * PIXEL_TO_DISTANCE_X / 100)
+                                      + ((float)(mid_y - CAMERA_MID_Y) * PIXEL_TO_DISTANCE_Y / 100) * ((float)(mid_y - CAMERA_MID_Y) * PIXEL_TO_DISTANCE_Y / 100));
+            if (distance < 1.51f && distance > 0.49f) {
+//                R_SCI5_Serial_Send(&car_tx_buffer, 1);
+//                ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(50));
+                sound_light(1);
+            } else {
+                sound_light(0);
+            }
         } else {
             sound_light(0);
         }
+        car_in_sight = pdFALSE;
+        try_to_find();
 
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000/WIRELESS_FREQ));
     }
@@ -83,7 +105,7 @@ static void car_commu_task_entry(void *pvParameters)
 static void sound_light(int open)
 {
     if (open) {
-        LED3 = ~LED3;
+        LED3 = LED_ON;
         R_MTU3_C0_Start();
     } else {
         LED3 = LED_OFF;

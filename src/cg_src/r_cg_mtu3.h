@@ -605,9 +605,9 @@ Macro definitions
 /* PWM1 TGRA value */
 #define _0009_TGRA_VALUE                   (0x0009U)
 /* PWM1 TGRB value */
-#define _8009_TGRB_VALUE                   (0x8009U)
+#define _1F49_TGRB_VALUE                   (0x1F49U)
 /* PWM1 TGRC value */
-#define _0063_TGRC_VALUE                   (0x0063U)
+#define _3E7F_TGRC_VALUE                   (0x3E7FU)
 /* PWM1 TGRD value */
 #define _0063_TGRD_VALUE                   (0x0063U)
 /* PWM1 TGRE value */

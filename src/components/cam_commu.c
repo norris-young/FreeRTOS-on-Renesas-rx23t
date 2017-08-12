@@ -92,7 +92,7 @@ static void cam_commu_task_entry(void *pvParameters)
                 } else if (cam_rx_pointer == 2) {
                     if (cam_rx_buffer[cam_rx_buffer_pointer][i] < CAMERA_H) {
                         mid_y = cam_rx_buffer[cam_rx_buffer_pointer][i];
-                        if (try_to_find_new) {
+                        if (try_to_find_new && U_PORT_Camera_mode_read() == CAM_MODE_GREEN) {
                             camera_finded();
                             try_to_find_new = pdFALSE;
                         }
