@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for ICU module.
-* Creation Date: 17.8.11
+* Creation Date: 17.8.12
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -81,22 +81,6 @@ static void r_icu_irq1_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
     IRQ1_IntHandler();
-    /* End user code. Do not edit comment generated here */
-}
-/***********************************************************************************************************************
-* Function Name: r_icu_irq2_interrupt
-* Description  : None
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-#if FAST_INTERRUPT_VECTOR == VECT_ICU_IRQ2
-#pragma interrupt r_icu_irq2_interrupt(vect=VECT(ICU,IRQ2),fint)
-#else
-#pragma interrupt r_icu_irq2_interrupt(vect=VECT(ICU,IRQ2))
-#endif
-static void r_icu_irq2_interrupt(void)
-{
-    /* Start user code. Do not edit comment generated here */
     /* End user code. Do not edit comment generated here */
 }
 

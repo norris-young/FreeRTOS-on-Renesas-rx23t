@@ -7,12 +7,11 @@
 
 /* System include files. */
 /* RTOS include files. */
+#include <wireless.h>
 #include "FreeRTOS.h"
 #include "platform.h"
 #include "task.h"
 /* User include files. */
-#include "mavlink_receive.h"
-/* Tool include files. */
 #include "printf-stdarg.h"
 
 volatile size_t xFreeHeapSpace;

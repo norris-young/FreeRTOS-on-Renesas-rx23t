@@ -48,8 +48,8 @@ void cam_commu_init()
     configASSERT(ret == pdPASS);
 
     cam_rx_buffer_pointer = 0;
-    R_SCI5_Serial_Receive(cam_rx_buffer[0], CAM_BUFFER_LENGTH);
-    R_SCI5_Start();
+    R_SCI1_Serial_Receive(cam_rx_buffer[0], CAM_BUFFER_LENGTH);
+    R_SCI1_Start();
 }
 
 void try_to_find(void)
@@ -57,14 +57,14 @@ void try_to_find(void)
     try_to_find_new = pdTRUE;
 }
 
-void u_sci5_receiveend_callback(void)
+void u_sci1_receiveend_callback(void)
 {
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     vTaskNotifyGiveFromISR(cam_commu_taskhandle, &xHigherPriorityTaskWoken);
     if (cam_rx_buffer_pointer == 1)
-        R_SCI5_Serial_Receive(cam_rx_buffer[0], CAM_BUFFER_LENGTH);
+        R_SCI1_Serial_Receive(cam_rx_buffer[0], CAM_BUFFER_LENGTH);
     else
-        R_SCI5_Serial_Receive(cam_rx_buffer[1], CAM_BUFFER_LENGTH);
+        R_SCI1_Serial_Receive(cam_rx_buffer[1], CAM_BUFFER_LENGTH);
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
@@ -77,6 +77,7 @@ static void cam_commu_task_entry(void *pvParameters)
         for (int i = 0; i < CAM_BUFFER_LENGTH; i++) {
             if (cam_rx_buffer[cam_rx_buffer_pointer][i] == COMMUNI_STX) {
                 start_receive = pdTRUE;
+                LED1 = LED_ON;
                 continue;
             }
             if (start_receive) {
@@ -95,6 +96,7 @@ static void cam_commu_task_entry(void *pvParameters)
                             camera_finded();
                             try_to_find_new = pdFALSE;
                         }
+                        LED1 = LED_OFF;
                     }
                     cam_rx_pointer = 0;
                     start_receive = pdFALSE;

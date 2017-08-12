@@ -14,7 +14,6 @@
 
 /*-----------------------------------------------------------*/
 /* User include files. */
-#include "mavlink_receive.h"
 #include "danger_check.h"
 #include "mission.h"
 
@@ -108,8 +107,6 @@ void IRQ0_IntHandler(void)
 static void danger_check_task_entry(void *pvParameters)
 {
     while(1) {
-        if(current_Roll>45.0 || current_Roll<-45.0 || current_Pitch>45.0 || current_Pitch<-45.0)
-            is_emergency_now();
         if(ulTaskNotifyTake(pdTRUE, DANGER_CHECK_TIME) != 0)
             is_emergency_now();
     }

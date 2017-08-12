@@ -14,7 +14,6 @@
 
 /*-----------------------------------------------------------*/
 /* User include files. */
-#include "mavlink_receive.h"
 #include "danger_check.h"
 #include "ppm_encoder.h"
 #include "alt_control.h"
@@ -22,6 +21,7 @@
 #include "matrix_key.h"
 #include "cam_commu.h"
 #include "mission.h"
+#include "sonar.h"
 #include "io.h"
 
 /*-----------------------------------------------------------*/
@@ -221,7 +221,7 @@ static void mission_1(const float dest_Height)
     alt_ctl_stop();
     /* drop down & disarm. */
     send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);
-    while(current_Height > 0.1);
+    while(current_Height > 0.2);
     position_ctl_stop();
     disarm();
 }
@@ -261,16 +261,17 @@ static void mission_3(const float dest_Height)
 
     /* go forward to find green car. */
     U_PORT_Camera_mode_select(CAM_MODE_GREEN);
+    vTaskDelay(pdMS_TO_TICKS(500));
     mid_y = 0;
     position_ctl_dest_set(CAMERA_MID_X, CAMERA_MID_Y);
-    vTaskDelay(pdMS_TO_TICKS(10000));
+    vTaskDelay(pdMS_TO_TICKS(20000));
 
     /* go forward & drop down & disarm. */
     send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);
-    position_ctl_dest_set(CAMERA_MID_X, CAMERA_H / 10 * 9);
+    position_ctl_dest_set(CAMERA_MID_X, CAMERA_H / 10 * 1);
     while(current_Height > 0.5);
     position_ctl_stop();
-    send_ppm(0,channel_val_MID - 25,channel_percent(38),0,Alt_Hold,0);
-    while(current_Height > 0.1)
+    send_ppm(channel_val_MID,channel_val_MID + 25,channel_percent(38),0,Alt_Hold,0);
+    while(current_Height > 0.1);
     disarm();
 }

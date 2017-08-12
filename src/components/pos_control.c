@@ -12,7 +12,7 @@
 
 /*-----------------------------------------------------------*/
 /* User include files. */
-#include "mavlink_receive.h"
+#include "sonar.h"
 #include "cam_commu.h"
 #include "ppm_encoder.h"
 #include "pid_control.h"

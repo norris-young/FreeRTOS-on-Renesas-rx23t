@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for ICU module.
-* Creation Date: 17.8.11
+* Creation Date: 17.8.12
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -79,16 +79,12 @@ void R_ICU_Create(void)
     /* Set IRQ settings */
     ICU.IRQCR[0].BYTE = _08_ICU_IRQ_EDGE_RISING;
     ICU.IRQCR[1].BYTE = _08_ICU_IRQ_EDGE_RISING;
-    ICU.IRQCR[2].BYTE = _00_ICU_IRQ_EDGE_LOW_LEVEL;
 
     /* Set IRQ0 priority level */
     IPR(ICU,IRQ0) = _05_ICU_PRIORITY_LEVEL5;
 
     /* Set IRQ1 priority level */
     IPR(ICU,IRQ1) = _05_ICU_PRIORITY_LEVEL5;
-
-    /* Set IRQ2 priority level */
-    IPR(ICU,IRQ2) = _05_ICU_PRIORITY_LEVEL5;
 
     /* Set IRQ0 pin */
     MPC.P10PFS.BYTE = 0x40U;
@@ -99,11 +95,6 @@ void R_ICU_Create(void)
     MPC.P11PFS.BYTE = 0x40U;
     PORT1.PDR.BYTE &= 0xFDU;
     PORT1.PMR.BYTE &= 0xFDU;
-
-    /* Set IRQ2 pin */
-    MPC.PB1PFS.BYTE = 0x40U;
-    PORTB.PDR.BYTE &= 0xFDU;
-    PORTB.PMR.BYTE &= 0xFDU;
 }
 /***********************************************************************************************************************
 * Function Name: R_ICU_IRQ0_Start
@@ -148,28 +139,6 @@ void R_ICU_IRQ1_Stop(void)
 {
     /* Disable IRQ1 interrupt */
     IEN(ICU,IRQ1) = 0U; 
-}
-/***********************************************************************************************************************
-* Function Name: R_ICU_IRQ2_Start
-* Description  : This function enables IRQ2 interrupt.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-void R_ICU_IRQ2_Start(void)
-{
-    /* Enable IRQ2 interrupt */
-    IEN(ICU,IRQ2) = 1U; 
-}
-/***********************************************************************************************************************
-* Function Name: R_ICU_IRQ2_Stop
-* Description  : This function disables IRQ2 interrupt.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-void R_ICU_IRQ2_Stop(void)
-{
-    /* Disable IRQ2 interrupt */
-    IEN(ICU,IRQ2) = 0U; 
 }
 
 /* Start user code for adding. Do not edit comment generated here */

@@ -13,7 +13,7 @@
 /*-----------------------------------------------------------*/
 /* User include files. */
 #include "alt_control.h"
-#include "mavlink_receive.h"
+#include "sonar.h"
 #include "ppm_encoder.h"
 
 static TaskHandle_t alt_ctl_taskhandle;
