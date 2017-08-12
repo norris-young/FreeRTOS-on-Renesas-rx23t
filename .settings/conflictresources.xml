@@ -13,6 +13,11 @@
         <peripheralInfo>
             <peripheralName>mtu3_u0</peripheralName>
             <pinInfo>
+                <pinName>MTIOC0A</pinName>
+                <pinPort>PB3</pinPort>
+                <pinOption>FIXED</pinOption>
+            </pinInfo>
+            <pinInfo>
                 <pinName>MTIC5U</pinName>
                 <pinPort>P24</pinPort>
                 <pinOption>FIXED</pinOption>

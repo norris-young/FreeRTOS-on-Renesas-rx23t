@@ -602,6 +602,18 @@ Macro definitions (Register bit)
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
+/* PWM1 TGRA value */
+#define _0009_TGRA_VALUE                   (0x0009U)
+/* PWM1 TGRB value */
+#define _8009_TGRB_VALUE                   (0x8009U)
+/* PWM1 TGRC value */
+#define _0063_TGRC_VALUE                   (0x0063U)
+/* PWM1 TGRD value */
+#define _0063_TGRD_VALUE                   (0x0063U)
+/* PWM1 TGRE value */
+#define _0063_TGRE_VALUE                   (0x0063U)
+/* PWM1 TGRF value */
+#define _0064_TGRF_VALUE                   (0x0064U)
 /* MTU5.TGRV value */
 #define _0F9F_TGRV_VALUE                   (0x0F9FU)
 /* MTU5.TGRW value */
@@ -615,6 +627,8 @@ Typedef definitions
 Global functions
 ***********************************************************************************************************************/
 void R_MTU3_Create(void);
+void R_MTU3_C0_Start(void);
+void R_MTU3_C0_Stop(void);
 void R_MTU3_C5_Start(void);
 void R_MTU3_C5_Stop(void);
 

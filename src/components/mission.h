@@ -23,5 +23,6 @@ extern void is_emergency_now();
 extern void mission_init(void);
 extern void send_mission_params(int8_t _mission, float _dest_Height, float kp, float ki, float kd);
 extern void camera_finded(void);
+extern void car_stop(void);
 
 #endif /* COMPONENTS_MISSION_H_ */

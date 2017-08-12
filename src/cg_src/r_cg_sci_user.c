@@ -55,6 +55,7 @@ extern uint16_t  g_sci5_rx_length;                  /* SCI5 receive data length 
 /* Start user code for global. Do not edit comment generated here */
 extern void u_sci1_receiveend_callback(void);
 extern void u_sci5_receiveend_callback(void);
+extern void u_sci5_transmitend_callback(void);
 /* End user code. Do not edit comment generated here */
 
 
@@ -218,6 +219,7 @@ static void r_sci5_receiveerror_interrupt(void)
 static void r_sci5_callback_transmitend(void)
 {
     /* Start user code. Do not edit comment generated here */
+    u_sci5_transmitend_callback();
     /* End user code. Do not edit comment generated here */
 }
 /***********************************************************************************************************************

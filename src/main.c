@@ -134,6 +134,7 @@ static void init_task_entry(void *pvParameters)
     io_init();
     sonar_init();
     cam_commu_init();
+    car_commu_init();
     ppm_encoder_init();
     danger_check_init();
     mission_init();

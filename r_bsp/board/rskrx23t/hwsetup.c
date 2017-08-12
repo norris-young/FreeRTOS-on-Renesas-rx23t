@@ -73,11 +73,13 @@ static void output_ports_configure(void)
     LED0 = LED_OFF;
     LED1 = LED_OFF;
     LED2 = LED_OFF;
+    LED3 = LED_OFF;
 
     /* Set LED pins as outputs. */
     LED0_PDR = 1;
     LED1_PDR = 1;
     LED2_PDR = 1;
+    LED3_PDR = 1;
 
     /* Enable switches. */
     /* Set pins as inputs. */

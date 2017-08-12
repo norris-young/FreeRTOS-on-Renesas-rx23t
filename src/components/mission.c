@@ -92,6 +92,11 @@ void camera_finded(void)
     xTaskNotifyGive(mission_taskhandle);
 }
 
+void car_stop(void)
+{
+    xTaskNotifyGive(mission_taskhandle);
+}
+
 /* ----------------------------------------------------------
  *
  * send start signal to the mission task.

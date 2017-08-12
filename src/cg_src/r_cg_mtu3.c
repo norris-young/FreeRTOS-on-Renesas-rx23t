@@ -68,6 +68,23 @@ void R_MTU3_Create(void)
     /* Set interrupt priority level */
     IPR(MTU5, TGIU5) = _0E_MTU_PRIORITY_LEVEL14;
 
+    /* Channel 0 is used as PWM1 mode */
+    MTU0.TCR.BYTE = _02_MTU_PCLK_16 | _00_MTU_CKEG_RISE | _00_MTU_CKCL_DIS;
+    MTU0.TCR2.BYTE = _00_MTU_PCLK_1;
+    MTU.TSYRA.BIT.SYNC0 = 0U;
+    MTU0.TMDR1.BYTE = _02_MTU_PWM1;
+    MTU0.TIORH.BYTE = _70_MTU_IOB_HT | _03_MTU_IOA_LT;
+    MTU0.TIORL.BYTE = _00_MTU_IOC_DISABLE;
+    MTU0.TGRA = _0009_TGRA_VALUE;
+    MTU0.TGRB = _8009_TGRB_VALUE;
+    MTU0.TGRC = _0063_TGRC_VALUE;
+    MTU0.TGRD = _0063_TGRD_VALUE;
+    MTU0.TGRE = _0063_TGRE_VALUE;
+    MTU0.TGRF = _0064_TGRF_VALUE;
+    MTU0.TIER.BYTE = _00_MTU_TGIEA_DISABLE | _00_MTU_TGIEB_DISABLE | _00_MTU_TGIEC_DISABLE | _00_MTU_TGIED_DISABLE | 
+                     _00_MTU_TCIEU_DISABLE | _00_MTU_TCIEV_DISABLE | _00_MTU_TTGE_DISABLE;
+    MTU0.TIER2.BYTE = _00_MTU_TGIEE_DISABLE | _00_MTU_TGIEF_DISABLE | _00_MTU_TTGE2_DISABLE;
+
     /* Channel 5 is used as dead time compensation */
     MTU5.TIER.BYTE = _04_MTU_TGIE5U_ENABLE | _00_MTU_TGIE5V_DISABLE | _00_MTU_TGIE5W_DISABLE;
     MTU5.TCRU.BYTE = _02_MTU_PCLK_16;
@@ -87,9 +104,32 @@ void R_MTU3_Create(void)
     /* Disable read/write to MTU registers */
     MTU.TRWERA.BYTE = _00_MTU_RWE_DISABLE;
 
+    /* Set MTIOC0A pin */
+    MPC.PB3PFS.BYTE = 0x01U;
+    PORTB.PMR.BYTE |= 0x08U;
     /* Set MTIC5U pin */
     MPC.P24PFS.BYTE = 0x01U;
     PORT2.PMR.BYTE |= 0x10U;
+}
+/***********************************************************************************************************************
+* Function Name: R_MTU3_C0_Start
+* Description  : This function starts MTU3 channel 0 counter.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_MTU3_C0_Start(void)
+{
+    MTU.TSTRA.BYTE |= _01_MTU_CST0_ON;
+}
+/***********************************************************************************************************************
+* Function Name: R_MTU3_C0_Stop
+* Description  : This function stops MTU3 channel 0 counter.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_MTU3_C0_Stop(void)
+{
+    MTU.TSTRA.BIT.CST0 = 0U;
 }
 /***********************************************************************************************************************
 * Function Name: R_MTU3_C5_Start
