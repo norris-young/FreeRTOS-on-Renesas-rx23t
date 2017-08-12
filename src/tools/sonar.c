@@ -21,6 +21,7 @@ void sonar_init(void)
 
 void sonar_interrupt(void)
 {
+    setpsw_i();
     if (first_edge) {
         sonar_count = 0;
         MTU5.TGRU = 0;

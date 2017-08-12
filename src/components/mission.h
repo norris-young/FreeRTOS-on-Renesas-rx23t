@@ -16,6 +16,7 @@
 #define NOTIFY_START_MISSION    0x01
 #define NOTIFY_CAR_STOP         0x02
 #define NOTIFY_INPUT_OVER       0x04
+#define NOTIFY_ALL              0xFFFFFFFF
 
 enum {
     MISSION_1 = 0,

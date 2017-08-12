@@ -127,13 +127,12 @@ static void mission_task_entry(void *pvParameters)
 {
     while(1) {
         io_input();
-        xTaskNotifyWait(NOTIFY_INPUT_OVER, NOTIFY_INPUT_OVER, NULL ,portMAX_DELAY);
+        xTaskNotifyWait(NOTIFY_INPUT_OVER, NOTIFY_ALL, NULL ,portMAX_DELAY);
         switch (mission) {
         case MISSION_1:
             LED2 = LED_ON;
             /* wait for start signal from IRQ which connected to a remote control. */
-            xTaskNotifyStateClear(NULL);
-            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+            xTaskNotifyWait(NOTIFY_ALL, NOTIFY_ALL, NULL ,portMAX_DELAY);
             red_led_warning();
             start_mission_timer();
             mission_1(dest_Height);
@@ -145,8 +144,7 @@ static void mission_task_entry(void *pvParameters)
         case MISSION_3:
             LED2 = LED_ON;
             /* wait for start signal from IRQ which connected to a remote control. */
-            xTaskNotifyStateClear(NULL);
-            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+            xTaskNotifyWait(NOTIFY_ALL, NOTIFY_ALL, NULL ,portMAX_DELAY);
             red_led_warning();
             start_mission_timer();
             mission_3(dest_Height);
@@ -155,8 +153,7 @@ static void mission_task_entry(void *pvParameters)
         case MISSION_4:
             LED2 = LED_ON;
             /* wait for start signal from IRQ which connected to a remote control. */
-            xTaskNotifyStateClear(NULL);
-            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+            xTaskNotifyWait(NOTIFY_ALL, NOTIFY_ALL, NULL ,portMAX_DELAY);
             red_led_warning();
             start_mission_timer();
             mission_4(dest_Height);
@@ -274,7 +271,6 @@ static void mission_3(const float dest_Height)
     vTaskDelay(pdMS_TO_TICKS(20000));
 
     /* go forward & drop down & disarm. */
-    send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);
     position_ctl_stop();
     send_ppm(channel_val_MID,channel_val_MID + 15,channel_percent(38),0,Alt_Hold,0);
     while(current_Height > 0.1);
@@ -309,10 +305,9 @@ static void mission_4(const float dest_Height)
     vTaskDelay(pdMS_TO_TICKS(100));
     mid_y = 0;
     position_ctl_dest_set(CAMERA_MID_X, CAMERA_MID_Y);
-    xTaskNotifyWait(NOTIFY_CAR_STOP, NOTIFY_CAR_STOP, NULL ,portMAX_DELAY);
+    xTaskNotifyWait(NOTIFY_CAR_STOP, NOTIFY_ALL, NULL ,portMAX_DELAY);
 
     /* go forward & drop down & disarm. */
-    send_ppm(0,0,channel_percent(38),0,Alt_Hold,0);
     position_ctl_stop();
     send_ppm(channel_val_MID,channel_val_MID + 15,channel_percent(38),0,Alt_Hold,0);
     while(current_Height > 0.1);

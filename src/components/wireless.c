@@ -24,6 +24,7 @@ static TaskHandle_t car_commu_taskhandle;
 static unsigned char car_rx_buffer = 0;
 static unsigned char car_tx_buffer = LAND;
 static bool car_in_sight = pdFALSE;
+static float distance;
 
 /*-----------------------------------------------------------*/
 /* private functions declaration. */
@@ -82,12 +83,12 @@ static void car_commu_task_entry(void *pvParameters)
         car_rx_buffer = 0;
 
         if (car_in_sight) {
-            float distance = sqrt(current_Height * current_Height
+            distance = sqrt(current_Height * current_Height
                                       + ((float)(mid_x - CAMERA_MID_X) * PIXEL_TO_DISTANCE_X / 100) * ((float)(mid_x - CAMERA_MID_X) * PIXEL_TO_DISTANCE_X / 100)
                                       + ((float)(mid_y - CAMERA_MID_Y) * PIXEL_TO_DISTANCE_Y / 100) * ((float)(mid_y - CAMERA_MID_Y) * PIXEL_TO_DISTANCE_Y / 100));
             if (distance < 1.51f && distance > 0.49f) {
-//                R_SCI5_Serial_Send(&car_tx_buffer, 1);
-//                ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(50));
+                R_SCI5_Serial_Send(&car_tx_buffer, 1);
+                ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(50));
                 sound_light(1);
             } else {
                 sound_light(0);
