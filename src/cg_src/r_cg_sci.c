@@ -23,7 +23,7 @@
 * Device(s)    : R5F523T5AxFM
 * Tool-Chain   : CCRX
 * Description  : This file implements device driver for SCI module.
-* Creation Date: 17.8.12
+* Creation Date: 17.8.13
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -184,12 +184,12 @@ void R_SCI5_Create(void)
                     _00_SCI_MULTI_PROCESSOR_DISABLE | _00_SCI_ASYNCHRONOUS_MODE;
     SCI5.SCMR.BYTE = _00_SCI_SERIAL_MODE | _00_SCI_DATA_INVERT_NONE | _00_SCI_DATA_LSB_FIRST | 
                      _10_SCI_DATA_LENGTH_8_OR_7 | _62_SCI_SCMR_DEFAULT;
-    SCI5.SEMR.BYTE = _00_SCI_LOW_LEVEL_START_BIT | _00_SCI_NOISE_FILTER_DISABLE | _10_SCI_8_BASE_CLOCK | 
-                     _40_SCI_BAUDRATE_DOUBLE | _04_SCI_BIT_MODULATION_ENABLE;
+    SCI5.SEMR.BYTE = _00_SCI_LOW_LEVEL_START_BIT | _00_SCI_NOISE_FILTER_DISABLE | _00_SCI_16_BASE_CLOCK | 
+                     _00_SCI_BAUDRATE_SINGLE | _04_SCI_BIT_MODULATION_ENABLE;
 
     /* Set bitrate */
-    SCI5.BRR = 0x26U;
-    SCI5.MDDR = 0xE6U;
+    SCI5.BRR = 0x75U;
+    SCI5.MDDR = 0xE8U;
 
     /* Set RXD5 pin */
     MPC.PB6PFS.BYTE = 0x0AU;
