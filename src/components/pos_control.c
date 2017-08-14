@@ -27,8 +27,6 @@ static struct pid_param position_y_pp;
 static struct pid_cfg   position_y_pc;
 static TaskHandle_t pos_ctl_taskhandle;
 
-static int8_t pos_send_buf[4];
-
 /*-----------------------------------------------------------*/
 /* private functions declaration. */
 static void pos_ctl_task_entry(void *pvParameters);
@@ -99,11 +97,7 @@ static void pos_ctl_task_entry(void *pvParameters)
             send_ppm(channel_val_MID, channel_val_MID, 0, 0, 0, 0);
             LED0 = LED_OFF;
         }
-//        pos_send_buf[0] = (int8_t)position_x_pc.error;
-//        pos_send_buf[1] = (int8_t)position_x_pc.pid_out;
-//        pos_send_buf[2] = (int8_t)position_y_pc.error;
-//        pos_send_buf[3] = (int8_t)position_y_pc.pid_out;
-//        R_SCI5_Serial_Send((uint8_t *)pos_send_buf, 4);
+
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000/POS_PID_FREQ));
     }
 }
