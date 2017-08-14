@@ -264,13 +264,13 @@ static void mission_3(const float dest_Height)
     /* arm & clime up. */
     arm(Alt_Hold);
     send_ppm(0,0,channel_percent(20),0,Alt_Hold,0);
-    vTaskDelay(pdMS_TO_TICKS(500));
+    vTaskDelay(pdMS_TO_TICKS(100));
     send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
-    vTaskDelay(pdMS_TO_TICKS(500));
+    vTaskDelay(pdMS_TO_TICKS(100));
     send_ppm(0,0,channel_percent(55),0,Alt_Hold,0);
-    vTaskDelay(pdMS_TO_TICKS(500));
+    vTaskDelay(pdMS_TO_TICKS(200));
     send_ppm(0,0,channel_percent(60),0,Alt_Hold,0);
-    vTaskDelay(pdMS_TO_TICKS(500));
+    vTaskDelay(pdMS_TO_TICKS(100));
 
     position_ctl_start(pdFALSE, mission_kp, mission_ki, mission_kd);
     position_ctl_dest_set(CAMERA_MID_X, CAMERA_H);
@@ -304,13 +304,13 @@ static void mission_4(const float dest_Height)
     /* arm & clime up. */
     arm(Alt_Hold);
     send_ppm(0,0,channel_percent(20),0,Alt_Hold,0);
-    vTaskDelay(pdMS_TO_TICKS(500));
+    vTaskDelay(pdMS_TO_TICKS(100));
     send_ppm(0,0,channel_percent(50),0,Alt_Hold,0);
-    vTaskDelay(pdMS_TO_TICKS(500));
+    vTaskDelay(pdMS_TO_TICKS(100));
     send_ppm(0,0,channel_percent(55),0,Alt_Hold,0);
-    vTaskDelay(pdMS_TO_TICKS(500));
+    vTaskDelay(pdMS_TO_TICKS(200));
     send_ppm(0,0,channel_percent(60),0,Alt_Hold,0);
-    vTaskDelay(pdMS_TO_TICKS(500));
+    vTaskDelay(pdMS_TO_TICKS(100));
 
     position_ctl_start(pdFALSE, mission_kp, mission_ki, mission_kd);
     position_ctl_dest_set(CAMERA_MID_X, CAMERA_H);
