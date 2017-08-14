@@ -22,7 +22,7 @@
 
 static TaskHandle_t car_commu_taskhandle;
 static unsigned char car_rx_buffer = 0;
-static unsigned char car_tx_buffer = LAND;
+static unsigned char car_tx_buffer = SOUND_LIGHT;
 static bool car_in_sight = pdFALSE;
 static float distance;
 
@@ -73,14 +73,22 @@ static void car_commu_task_entry(void *pvParameters)
     xLastWakeTime = xTaskGetTickCount();
 
     while (1) {
-        if (car_rx_buffer == LAND) {
+        if (car_rx_buffer == CAR_STOP) {
+            car_rx_buffer = 0;
             car_stop();
         } else if (car_rx_buffer == EMERGENCY) {
+            car_rx_buffer = 0;
             is_emergency_now();
-        } else if (car_rx_buffer == START_CMD) {
-            wireless_start_mission();
+        } else if (car_rx_buffer == M5_START) {
+            car_rx_buffer = 0;
+            m5_start();
+        } else if (car_rx_buffer == M5_STOP) {
+            car_rx_buffer = 0;
+            m5_stop();
+        } else if (car_rx_buffer == M5_LEFT) {
+            car_rx_buffer = 0;
+            m5_left();
         }
-        car_rx_buffer = 0;
 
         if (car_in_sight) {
             distance = sqrt(current_Height * current_Height
