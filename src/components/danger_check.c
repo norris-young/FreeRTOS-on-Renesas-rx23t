@@ -120,6 +120,6 @@ static void danger_check_task_entry(void *pvParameters)
  * ----------------------------------------------------------*/
 static void mission_timer_callback(TimerHandle_t mission_timer)
 {
-    xTaskNotifyGive(danger_check_taskhandle);
+    mission_timeout();
 }
 

@@ -8,8 +8,8 @@
 #ifndef COMPONENTS_DANGER_CHECK_H_
 #define COMPONENTS_DANGER_CHECK_H_
 
-#define MISSION_TOUT_TIME   pdMS_TO_TICKS(60000)
-#define DANGER_CHECK_TIME    pdMS_TO_TICKS(250)
+#define MISSION_TOUT_TIME   pdMS_TO_TICKS(120000)
+#define DANGER_CHECK_TIME   pdMS_TO_TICKS(250)
 #define DANGER_TASK_PRI     6
 
 extern void danger_check_init(void);

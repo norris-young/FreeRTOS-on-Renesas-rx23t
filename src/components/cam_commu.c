@@ -10,6 +10,7 @@
 #include "task.h"
 #include "platform.h"
 #include "r_cg_sci.h"
+#include "r_cg_port.h"
 
 /*-----------------------------------------------------------*/
 /* User include files. */
@@ -23,6 +24,8 @@ static int cam_rx_buffer_pointer = 0;
 static int cam_rx_pointer = 0;
 static volatile bool start_receive = pdFALSE;
 static volatile bool try_to_find_new = pdFALSE;
+
+//volatile int mission_dz_count = 0;
 
 static TaskHandle_t cam_commu_taskhandle;
 
@@ -92,6 +95,9 @@ static void cam_commu_task_entry(void *pvParameters)
                 } else if (cam_rx_pointer == 2) {
                     if (cam_rx_buffer[cam_rx_buffer_pointer][i] < CAMERA_H) {
                         mid_y = cam_rx_buffer[cam_rx_buffer_pointer][i];
+//                        if (mid_x < CAMERA_MID_X + MISSION_CAM_DZ_X && mid_x > CAMERA_MID_X - MISSION_CAM_DZ_X && mid_y < CAMERA_MID_Y + MISSION_CAM_DZ_Y && mid_y > CAMERA_MID_Y - MISSION_CAM_DZ_Y) {
+//                            mission_dz_count++;
+//                        }
                         if (try_to_find_new && U_PORT_Camera_mode_read() == CAM_MODE_GREEN) {
                             camera_finded();
                             try_to_find_new = pdFALSE;
