@@ -193,7 +193,7 @@ static void arm(uint16_t flight_mode)
 {
     send_ppm(channel_val_MID,channel_val_MID,channel_val_MIN,channel_val_MAX,flight_mode,EMERGENCY_OFF);
     vTaskDelay(pdMS_TO_TICKS(3000));
-//    send_ppm(channel_val_MID,channel_val_MID,channel_val_MIN,channel_val_MID,flight_mode,EMERGENCY_OFF);
+    send_ppm(channel_val_MID,channel_val_MID,channel_val_MIN,channel_val_MID,flight_mode,EMERGENCY_OFF);
 //    vTaskDelay(pdMS_TO_TICKS(1000));
 }
 
